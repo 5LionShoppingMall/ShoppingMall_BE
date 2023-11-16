@@ -28,14 +28,10 @@ public class User {
     @Column(name = "phone_number", nullable = false)
     private String phoneNumber;
     private String address;
-
     @Column(name = "provider_id")
     private String providerId;
     @Enumerated(EnumType.STRING)
     private SocialProvider provider;
-
-    @OneToMany(mappedBy = "seller")
-    private List<Product> products;
 
     @Column(name = "created_at")
     @Temporal(TemporalType.TIMESTAMP)
@@ -43,5 +39,14 @@ public class User {
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "updated_at")
     private Date updatedAt;
+
+    @OneToMany(mappedBy = "seller")
+    private List<Product> products;
+
+    @OneToMany(mappedBy = "user")
+    private List<Comment> comments;
+
+    @OneToMany(mappedBy = "user")
+    private List<Like> likes;
 
 }

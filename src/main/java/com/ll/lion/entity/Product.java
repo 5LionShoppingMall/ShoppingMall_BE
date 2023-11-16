@@ -9,10 +9,12 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "products")
@@ -33,6 +35,9 @@ public class Product {
     @Column(length = 2000)
     private String description;
 
+    @Enumerated(EnumType.STRING)
+    private ProductStatus status;
+
     @Column(name = "created_at", updatable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private Date createAt;
@@ -41,6 +46,11 @@ public class Product {
     @JoinColumn(name = "seller_id", nullable = false)
     private User seller;
 
-    @Enumerated(EnumType.STRING)
-    private ProductStatus status;
+    @OneToMany(mappedBy = "product")
+    private List<Like> likes;
+
+    @OneToMany(mappedBy = "product")
+    private List<CartItem> cartItems;
+
+
 }
