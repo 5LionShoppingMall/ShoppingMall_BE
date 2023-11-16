@@ -7,6 +7,9 @@ build/
 src/main/resources/application.yml
 *.yml
 
+### application-*.yml ###
+application-db.yml
+
 ### STS ###
 .apt_generated
 .classpath
