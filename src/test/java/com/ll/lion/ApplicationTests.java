@@ -1,4 +1,4 @@
-package com.ll.lion_shoppingmall_be;
+package com.ll.lion;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

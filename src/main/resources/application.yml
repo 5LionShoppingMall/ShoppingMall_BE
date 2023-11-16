@@ -1,0 +1,12 @@
+spring:
+  profiles:
+    group:
+      dev:
+        - db
+server:
+  port: 8082
+logging:
+  level:
+    sql: debug
+
+
