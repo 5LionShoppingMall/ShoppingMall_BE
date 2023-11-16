@@ -1,4 +1,4 @@
-package com.ll.lion_shoppingmall_be;
+package com.ll.lion;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
