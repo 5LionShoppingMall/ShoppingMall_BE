@@ -13,6 +13,8 @@ import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
 import java.util.Date;
 import java.util.List;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 
 @Entity
 @Table(name = "users")
@@ -35,9 +37,11 @@ public class User {
 
     @Column(name = "created_at")
     @Temporal(TemporalType.TIMESTAMP)
+    @CreatedDate
     private Date createdAt;
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "updated_at")
+    @LastModifiedDate
     private Date updatedAt;
 
     @OneToMany(mappedBy = "seller")

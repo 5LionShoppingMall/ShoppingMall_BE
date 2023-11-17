@@ -15,6 +15,7 @@ import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
 import java.util.Date;
 import java.util.List;
+import org.springframework.data.annotation.CreatedDate;
 
 @Entity
 @Table(name = "products")
@@ -40,6 +41,7 @@ public class Product {
 
     @Column(name = "created_at", updatable = false)
     @Temporal(TemporalType.TIMESTAMP)
+    @CreatedDate
     private Date createAt;
 
     @ManyToOne

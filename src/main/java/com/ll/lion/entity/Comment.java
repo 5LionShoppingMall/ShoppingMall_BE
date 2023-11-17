@@ -11,6 +11,7 @@ import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
 import java.util.Date;
+import org.springframework.data.annotation.CreatedDate;
 
 @Entity
 @Table(name = "comments")
@@ -24,6 +25,7 @@ public class Comment {
 
     @Column(name = "created_at", updatable = false)
     @Temporal(TemporalType.TIMESTAMP)
+    @CreatedDate
     private Date createdAt;
 
     @ManyToOne
