@@ -25,13 +25,18 @@ public class User {
 
     @Column(nullable = false, unique = true)
     private String email;
+
     @Column(nullable = false)
     private String password;
+
     @Column(name = "phone_number", nullable = false)
     private String phoneNumber;
+
     private String address;
+
     @Column(name = "provider_id")
     private String providerId;
+
     @Enumerated(EnumType.STRING)
     private SocialProvider provider;
 
@@ -39,6 +44,7 @@ public class User {
     @Temporal(TemporalType.TIMESTAMP)
     @CreatedDate
     private Date createdAt;
+
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "updated_at")
     @LastModifiedDate
