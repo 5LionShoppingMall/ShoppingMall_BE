@@ -66,4 +66,7 @@ public class User {
     @JoinColumn(name = "cart_id")
     private Cart cart;
 
+    @OneToMany(mappedBy = "user")
+    private List<Post> posts;
+
 }
