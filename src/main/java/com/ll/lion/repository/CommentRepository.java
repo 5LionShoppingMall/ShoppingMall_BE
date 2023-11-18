@@ -1,2 +1,7 @@
-package com.ll.lion.repository;public interface CommentRepository {
+package com.ll.lion.repository;
+
+import com.ll.lion.entity.Comment;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface CommentRepository extends JpaRepository<Comment, Long> {
 }
