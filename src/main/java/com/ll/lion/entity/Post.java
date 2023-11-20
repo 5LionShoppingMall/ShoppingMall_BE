@@ -11,6 +11,8 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
+
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 import org.springframework.data.annotation.CreatedDate;
@@ -32,12 +34,12 @@ public class Post {
     @Column(name = "created_at", updatable = false)
     @Temporal(TemporalType.TIMESTAMP)
     @CreatedDate
-    private Date createdAt;
+    private LocalDateTime createdAt;
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "updated_at")
     @LastModifiedDate
-    private Date updatedAt;
+    private LocalDateTime updatedAt;
 
     private Integer viewCount = 0;
 
