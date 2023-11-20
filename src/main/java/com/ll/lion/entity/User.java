@@ -16,6 +16,8 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
+
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 import org.springframework.data.annotation.CreatedDate;
@@ -48,12 +50,12 @@ public class User {
     @Column(name = "created_at")
     @Temporal(TemporalType.TIMESTAMP)
     @CreatedDate
-    private Date createdAt;
+    private LocalDateTime createdAt;
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "updated_at")
     @LastModifiedDate
-    private Date updatedAt;
+    private LocalDateTime updatedAt;
 
     @OneToMany(mappedBy = "seller")
     private List<Product> products;
