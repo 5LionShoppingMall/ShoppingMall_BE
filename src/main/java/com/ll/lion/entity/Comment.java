@@ -33,6 +33,14 @@ public class Comment {
     private User user;
 
     @ManyToOne
+    @JoinColumn(name = "product_id")
+    private Product product;
+
+    @ManyToOne
+    @JoinColumn(name = "post_id")
+    private Post post;
+
+    @ManyToOne
     @JoinColumn(name = "product_id", nullable = false)
     private Product product;
 
