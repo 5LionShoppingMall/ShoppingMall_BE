@@ -28,7 +28,7 @@ public class AuthService {
 
         if (passwordEncoder.matches(password, userDetails.getPassword())) {
             // 로그인 성공 시 JWT 토큰 생성
-            return jwtTokenProvider.createToken(email, List.of("USER"));
+            return jwtTokenProvider.createAccessToken(email, List.of("USER"));
         } else {
             throw new InvalidPasswordException("비밀번호를 확인해주세요."); // 비밀번호가 일치하지 않는 경우
         }
