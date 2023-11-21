@@ -9,4 +9,5 @@ public class RefreshTokenDto {
 
     private String id;
     private String email;
+
 }

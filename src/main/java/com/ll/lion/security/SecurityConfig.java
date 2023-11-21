@@ -43,7 +43,8 @@ public class SecurityConfig extends SecurityConfigurerAdapter<DefaultSecurityFil
                 .authorizeRequests(a -> a
                         .requestMatchers(
                                 new AntPathRequestMatcher("/api/users/register", HttpMethod.POST.toString()),
-                                new AntPathRequestMatcher("/api/auth/login", HttpMethod.POST.toString())
+                                new AntPathRequestMatcher("/api/auth/login", HttpMethod.POST.toString()),
+                                new AntPathRequestMatcher("/api/auth/token/refresh", HttpMethod.POST.toString())
                         ).permitAll()
                         .anyRequest().authenticated()
                 );

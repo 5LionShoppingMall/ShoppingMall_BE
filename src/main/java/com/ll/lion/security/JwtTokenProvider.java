@@ -1,5 +1,7 @@
 package com.ll.lion.security;
 
+import com.ll.lion.common.dto.RefreshTokenDto;
+import com.ll.lion.service.RefreshTokenService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
@@ -7,6 +9,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -28,6 +31,7 @@ public class JwtTokenProvider {
     private long refreshTokenValidityInMilliseconds;
 
     private final UserDetailsServiceImpl userDetailsService;
+    private final RefreshTokenService refreshTokenService;
 
     public String createRefreshToken(String email, List<String> roles) {
         Claims claims = Jwts.claims().setSubject(email);
@@ -44,26 +48,31 @@ public class JwtTokenProvider {
                 .compact();
     }
 
-    public String refreshAccessToken(String refreshToken) {
+    public String refreshAccessToken(String expiredAccessToken, String refreshToken) {
         try {
-            // Refresh Token 검증
+            // Access Token 검증 및 만료 확인
             Claims claims = Jwts.parser()
                     .setSigningKey(secretKey)
-                    .parseClaimsJws(refreshToken)
+                    .parseClaimsJws(expiredAccessToken)
                     .getBody();
 
-            // Refresh Token이 만료되었는지 확인
-            if (claims.getExpiration().before(new Date())) {
-                throw new Exception("Refresh Token이 만료되었습니다.");
+            if (!claims.getExpiration().before(new Date())) {
+                throw new Exception("Access Token이 아직 만료되지 않았습니다.");
             }
 
-            // Access Token 발급
-            String email = claims.getSubject();
-            String accessToken = createAccessToken(email, List.of("USER"));
+            // Redis에서 Refresh Token 확인
+            Optional<RefreshTokenDto> foundRefreshToken = refreshTokenService.getToken(refreshToken);
+            if (foundRefreshToken.isEmpty()) {
+                throw new Exception("유효하지 않은 Refresh Token입니다.");
+            }
 
-            return accessToken;
+            // 새로운 Access Token 발급
+            String email = claims.getSubject();
+            String newAccessToken = createAccessToken(email, List.of("USER"));
+
+            return newAccessToken;
         } catch (Exception e) {
-            // Refresh Token 검증 실패 또는 만료된 경우
+            // Access Token 검증 실패 또는 만료되지 않은 경우, 또는 Refresh Token이 유효하지 않은 경우
             e.printStackTrace();
             return null;
         }

@@ -1,6 +1,7 @@
 package com.ll.lion.service;
 
 import com.ll.lion.common.dto.LoginResponseDto;
+import com.ll.lion.common.dto.RefreshTokenDto;
 import com.ll.lion.security.InvalidPasswordException;
 import com.ll.lion.security.JwtTokenProvider;
 import com.ll.lion.security.UserDetailsServiceImpl;
@@ -18,6 +19,7 @@ public class AuthService {
     private final UserDetailsServiceImpl userDetailsService;
     private final JwtTokenProvider jwtTokenProvider;
     private final PasswordEncoder passwordEncoder;
+    private final RefreshTokenService refreshTokenService;
 
     public LoginResponseDto authenticate(String email, String password) {
         UserDetails userDetails;
@@ -42,10 +44,8 @@ public class AuthService {
     }
 
     private void saveRefreshToken(String email, String refreshToken) {
-        // RefreshToken을 저장하는 로직을 구현합니다.
-        // 예를 들어, DB에 저장하거나 Redis 등의 Cache에 저장할 수 있습니다.
-        // 이 예시에서는 단순히 콘솔에 출력하는 예시를 보여드립니다.
-        System.out.println("Save RefreshToken: email=" + email + ", refreshToken=" + refreshToken);
+        RefreshTokenDto refreshTokenDto = new RefreshTokenDto(refreshToken, email);
+        refreshTokenService.saveToken(refreshTokenDto);
     }
 
 }

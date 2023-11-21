@@ -2,6 +2,8 @@ package com.ll.lion.controller;
 
 import com.ll.lion.common.dto.LoginRequestDto;
 import com.ll.lion.common.dto.LoginResponseDto;
+import com.ll.lion.common.dto.RefreshTokenRequestDto;
+import com.ll.lion.security.JwtTokenProvider;
 import com.ll.lion.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthController {
 
     private final AuthService authService;
+    private final JwtTokenProvider jwtTokenProvider;
 
     @PostMapping("/login")
     public ResponseEntity<LoginResponseDto> login(@RequestBody LoginRequestDto loginRequestDto) {
@@ -33,6 +36,14 @@ public class AuthController {
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
+    }
+
+    @PostMapping("/token/refresh")
+    public ResponseEntity<String> refreshAccessToken(@RequestBody RefreshTokenRequestDto refreshTokenRequestDto) {
+        String expiredAccessToken = refreshTokenRequestDto.getAccessToken();
+        String refreshToken = refreshTokenRequestDto.getRefreshToken();
+        String newAccessToken = jwtTokenProvider.refreshAccessToken(expiredAccessToken, refreshToken);
+        return ResponseEntity.ok(newAccessToken);
     }
 
     @PostMapping("/check")
