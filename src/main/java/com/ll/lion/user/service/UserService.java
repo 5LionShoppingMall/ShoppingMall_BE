@@ -21,11 +21,14 @@ public class UserService {
             throw new IllegalArgumentException("이미 가입된 이메일입니다.");
         }
 
-        User user = new User();
-        user.setEmail(userRegisterDto.getEmail());
-        user.setPassword(passwordEncoder.encode(userRegisterDto.getPassword()));
-        user.setCreatedAt(LocalDateTime.now());
-        user.setRole("USER");
+        User user = User.builder()
+                .email(userRegisterDto.getEmail())
+                .password(passwordEncoder.encode(userRegisterDto.getPassword()))
+                .phoneNumber(userRegisterDto.getPhoneNumber())
+                .address(userRegisterDto.getAddress())
+                .createdAt(LocalDateTime.now())
+                .role("USER")
+                .build();
 
         return userRepository.save(user);
     }
