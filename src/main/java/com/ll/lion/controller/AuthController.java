@@ -24,13 +24,12 @@ public class AuthController {
         String password = loginRequestDto.getPassword();
 
         // 로그인 인증 및 Access Token, Refresh Token 발급
-        String accessToken = authService.authenticate(email, password);
-        String refreshToken = authService.generateRefreshToken();
+        LoginResponseDto loginResp = authService.authenticate(email, password);
+        String accessToken = loginResp.getAccessToken();
 
         if (accessToken != null) {
             // 클라이언트에게 Access Token과 Refresh Token을 전달
-            LoginResponseDto responseDto = new LoginResponseDto(accessToken, refreshToken);
-            return ResponseEntity.ok(responseDto);
+            return ResponseEntity.ok(loginResp);
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
