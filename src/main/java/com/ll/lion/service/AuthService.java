@@ -1,15 +1,12 @@
 package com.ll.lion.service;
 
+import com.ll.lion.security.InvalidPasswordException;
 import com.ll.lion.security.JwtTokenProvider;
 import com.ll.lion.security.UserDetailsServiceImpl;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -33,7 +30,7 @@ public class AuthService {
             // 로그인 성공 시 JWT 토큰 생성
             return jwtTokenProvider.createToken(email, List.of("USER"));
         } else {
-            return null; // 비밀번호가 일치하지 않는 경우
+            throw new InvalidPasswordException("비밀번호를 확인해주세요."); // 비밀번호가 일치하지 않는 경우
         }
     }
 

@@ -77,4 +77,7 @@ public class User {
     @OneToMany(mappedBy = "user")
     private List<Post> posts;
 
+    @OneToOne(mappedBy = "user")
+    private RefreshToken refreshToken;
+
 }
