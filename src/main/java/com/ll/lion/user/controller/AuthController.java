@@ -5,7 +5,10 @@ import com.ll.lion.user.dto.LoginResponseDto;
 import com.ll.lion.user.dto.RefreshTokenRequestDto;
 import com.ll.lion.user.security.JwtTokenProvider;
 import com.ll.lion.user.service.AuthService;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.web.server.Cookie.SameSite;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,7 +25,7 @@ public class AuthController {
     private final JwtTokenProvider jwtTokenProvider;
 
     @PostMapping("/login")
-    public ResponseEntity<LoginResponseDto> login(@RequestBody LoginRequestDto loginRequestDto) {
+    public ResponseEntity<LoginResponseDto> login(@RequestBody LoginRequestDto loginRequestDto, HttpServletResponse response) {
         String email = loginRequestDto.getEmail();
         String password = loginRequestDto.getPassword();
 
@@ -32,6 +35,8 @@ public class AuthController {
 
         if (accessToken != null) {
             // 클라이언트에게 Access Token과 Refresh Token을 전달
+
+            authService.setTokenInCookie(accessToken, loginResp.getRefreshToken(), response);
             return ResponseEntity.ok(loginResp);
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();

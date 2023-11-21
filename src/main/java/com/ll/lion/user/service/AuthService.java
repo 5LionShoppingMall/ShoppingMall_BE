@@ -5,6 +5,8 @@ import com.ll.lion.user.dto.RefreshTokenDto;
 import com.ll.lion.user.security.InvalidPasswordException;
 import com.ll.lion.user.security.JwtTokenProvider;
 import com.ll.lion.user.security.UserDetailsServiceImpl;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -41,6 +43,25 @@ public class AuthService {
         } else {
             throw new InvalidPasswordException("비밀번호를 확인해주세요."); // 비밀번호가 일치하지 않는 경우
         }
+    }
+
+    public void setTokenInCookie(String accessToken, String refreshToken, HttpServletResponse response) {
+        Cookie accessTokenCookie = new Cookie("accessToken", accessToken);
+        accessTokenCookie.setHttpOnly(true);
+        accessTokenCookie.setPath("/");
+        String accessTokenCookieHeader = accessTokenCookie.getName() + "=" + accessTokenCookie.getValue()
+                + "; HttpOnly; Secure; SameSite=None"; // SameSite 설정
+
+
+        Cookie refreshTokenCookie = new Cookie("refreshToken", refreshToken);
+        refreshTokenCookie.setHttpOnly(true);
+        refreshTokenCookie.setPath("/");
+        String refreshTokenCookieHeader = refreshTokenCookie.getName() + "=" + refreshTokenCookie.getValue()
+                + "; HttpOnly; Secure; SameSite=None"; // SameSite 설정
+
+
+        response.addHeader("Set-Cookie", accessTokenCookieHeader);
+        response.addHeader("Set-Cookie", refreshTokenCookieHeader);
     }
 
     private void saveRefreshToken(String email, String refreshToken) {

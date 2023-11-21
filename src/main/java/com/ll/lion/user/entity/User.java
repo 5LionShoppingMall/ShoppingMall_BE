@@ -22,6 +22,7 @@ import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
 import java.time.LocalDateTime;
 import java.util.List;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -32,6 +33,9 @@ import org.springframework.data.annotation.LastModifiedDate;
 @Entity
 @Table(name = "users")
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -83,6 +87,5 @@ public class User {
     @OneToMany(mappedBy = "user")
     private List<Post> posts;
 
-    public User() {
-    }
+
 }
