@@ -1,19 +1,13 @@
 package com.ll.lion.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToOne;
+import org.springframework.data.redis.core.RedisHash;
 
-@Entity
+@RedisHash("Token")
 public class RefreshToken {
+
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private String id;  // 토큰 자체를 ID로 사용합니다.
+    private String userInfo;  // 사용자 정보
 
-    private String token;
-
-    @OneToOne
-    private User user;
 }
