@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class CorsCheckController {
     @GetMapping("/check")
-    String corsCheck(){
+    String corsCheck() {
         return "Hello World";
-    }
+}
 }
