@@ -1,9 +1,12 @@
 package com.ll.lion.common.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
-public class LoginReponseDto {
+@AllArgsConstructor
+public class LoginResponseDto {
     private String accessToken;
     private String refreshToken;
+
 }

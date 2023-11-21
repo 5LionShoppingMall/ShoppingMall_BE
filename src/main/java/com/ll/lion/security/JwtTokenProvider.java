@@ -44,6 +44,31 @@ public class JwtTokenProvider {
                 .compact();
     }
 
+    public String refreshAccessToken(String refreshToken) {
+        try {
+            // Refresh Token 검증
+            Claims claims = Jwts.parser()
+                    .setSigningKey(secretKey)
+                    .parseClaimsJws(refreshToken)
+                    .getBody();
+
+            // Refresh Token이 만료되었는지 확인
+            if (claims.getExpiration().before(new Date())) {
+                throw new Exception("Refresh Token이 만료되었습니다.");
+            }
+
+            // Access Token 발급
+            String email = claims.getSubject();
+            String accessToken = createAccessToken(email, List.of("USER"));
+
+            return accessToken;
+        } catch (Exception e) {
+            // Refresh Token 검증 실패 또는 만료된 경우
+            e.printStackTrace();
+            return null;
+        }
+    }
+
     public String createAccessToken(String email, List<String> roles) {
 
         Claims claims = Jwts.claims().setSubject(email);
@@ -59,6 +84,21 @@ public class JwtTokenProvider {
                 .signWith(SignatureAlgorithm.HS256, secretKey)
                 .compact();
     }
+
+    public String createRefreshToken(String email) {
+
+        Claims claims = Jwts.claims().setSubject(email);
+
+        // Refresh Token 생성
+        String refreshToken = Jwts.builder()
+                .setClaims(claims) // 필요한 정보를 클레임에 담습니다.
+                .setExpiration(new Date(System.currentTimeMillis() + refreshTokenValidityInMilliseconds))
+                .signWith(SignatureAlgorithm.HS256, secretKey)
+                .compact();
+
+        return refreshToken;
+    }
+
 
     public Authentication getAuthentication(String token) {
         UserDetails userDetails = this.userDetailsService.loadUserByUsername(getEmail(token));

@@ -1,6 +1,7 @@
 package com.ll.lion.controller;
 
 import com.ll.lion.common.dto.LoginRequestDto;
+import com.ll.lion.common.dto.LoginResponseDto;
 import com.ll.lion.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -18,16 +19,20 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody LoginRequestDto loginRequestDto) {
+    public ResponseEntity<LoginResponseDto> login(@RequestBody LoginRequestDto loginRequestDto) {
         String email = loginRequestDto.getEmail();
         String password = loginRequestDto.getPassword();
 
-        String token = authService.authenticate(email, password);
+        // 로그인 인증 및 Access Token, Refresh Token 발급
+        String accessToken = authService.authenticate(email, password);
+        String refreshToken = authService.generateRefreshToken();
 
-        if (token != null) {
-            return ResponseEntity.ok(token);
+        if (accessToken != null) {
+            // 클라이언트에게 Access Token과 Refresh Token을 전달
+            LoginResponseDto responseDto = new LoginResponseDto(accessToken, refreshToken);
+            return ResponseEntity.ok(responseDto);
         } else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인 실패");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
     }
 
