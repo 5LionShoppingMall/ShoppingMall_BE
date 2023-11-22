@@ -1,6 +1,7 @@
 package com.ll.lion.user.service;
 
 import com.ll.lion.user.dto.UserRegisterDto;
+import com.ll.lion.user.entity.RefreshToken;
 import com.ll.lion.user.entity.User;
 import com.ll.lion.user.repository.UserRepository;
 import java.time.LocalDateTime;
@@ -31,5 +32,27 @@ public class UserService {
                 .build();
 
         return userRepository.save(user);
+    }
+
+    public boolean hasRefreshToken(String email) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new IllegalArgumentException("유저가 존재하지 않습니다."));
+        return user.getRefreshToken() != null;
+    }
+
+    public void saveRefreshToken(String email, String tokenKey) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new IllegalArgumentException("유저가 존재하지 않습니다."));
+
+        RefreshToken refreshToken = RefreshToken.builder()
+                .key(tokenKey)
+                .user(user)
+                .build();
+
+        user = user.toBuilder()
+                .refreshToken(refreshToken)
+                .build();
+
+        userRepository.save(user);
     }
 }

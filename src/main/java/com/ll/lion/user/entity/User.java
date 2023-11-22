@@ -32,7 +32,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 
 @Entity
 @Table(name = "users")
-@Builder
+@Builder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
@@ -83,6 +83,10 @@ public class User {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "cart_id")
     private Cart cart;
+
+    @OneToOne(cascade = CascadeType.REMOVE)
+    @JoinColumn(name = "token_id")
+    private RefreshToken refreshToken;
 
     @OneToMany(mappedBy = "user")
     private List<Post> posts;

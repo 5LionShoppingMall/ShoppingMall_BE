@@ -22,6 +22,7 @@ public class AuthService {
     private final JwtTokenProvider jwtTokenProvider;
     private final PasswordEncoder passwordEncoder;
     private final RefreshTokenService refreshTokenService;
+    private final UserService userService;
 
     public LoginResponseDto authenticate(String email, String password) {
         UserDetails userDetails;
@@ -34,7 +35,9 @@ public class AuthService {
         if (passwordEncoder.matches(password, userDetails.getPassword())) {
             // 로그인 성공 시 JWT 토큰 생성
             String accessToken = jwtTokenProvider.createAccessToken(email, List.of("USER"));
+
             String refreshToken = jwtTokenProvider.createRefreshToken(email, List.of("USER"));
+
 
             // RefreshToken 저장
             saveRefreshToken(email, refreshToken);
