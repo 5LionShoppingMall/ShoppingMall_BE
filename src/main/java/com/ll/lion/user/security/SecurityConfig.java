@@ -36,11 +36,9 @@ public class SecurityConfig extends SecurityConfigurerAdapter<DefaultSecurityFil
                 .csrf(c -> c.disable())
                 .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
-                .authorizeRequests(a -> a
+                .authorizeHttpRequests(a -> a
                         .requestMatchers(
-                                new AntPathRequestMatcher("/api/users/register", HttpMethod.POST.toString()),
-                                new AntPathRequestMatcher("/api/auth/login", HttpMethod.POST.toString()),
-                                new AntPathRequestMatcher("/api/auth/token/refresh", HttpMethod.POST.toString())
+                                "/api/users/register", "/api/auth/login","/api/auth/token/refresh"
                         ).permitAll()
                         .anyRequest().authenticated()
                 );

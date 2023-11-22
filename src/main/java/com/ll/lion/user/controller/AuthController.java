@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.boot.web.server.Cookie.SameSite;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,6 +25,7 @@ public class AuthController {
     private final AuthService authService;
     private final JwtTokenProvider jwtTokenProvider;
 
+    @PreAuthorize("permitAll()")
     @PostMapping("/login")
     public ResponseEntity<LoginResponseDto> login(@RequestBody LoginRequestDto loginRequestDto, HttpServletResponse response) {
         String email = loginRequestDto.getEmail();
@@ -43,13 +45,6 @@ public class AuthController {
         }
     }
 
-    @PostMapping("/token/refresh")
-    public ResponseEntity<String> refreshAccessToken(@RequestBody RefreshTokenRequestDto refreshTokenRequestDto) {
-        String expiredAccessToken = refreshTokenRequestDto.getAccessToken();
-        String refreshToken = refreshTokenRequestDto.getRefreshToken();
-        String newAccessToken = jwtTokenProvider.refreshAccessToken(expiredAccessToken, refreshToken);
-        return ResponseEntity.ok(newAccessToken);
-    }
 
     @PostMapping("/check")
     public String check(){

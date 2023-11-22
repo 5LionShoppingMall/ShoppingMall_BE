@@ -61,8 +61,16 @@ public class JwtTokenProvider {
                 throw new Exception("Access Token이 아직 만료되지 않았습니다.");
             }
 
+            // Refresh Token에서 id 추출
+            Claims refreshClaims = Jwts.parser()
+                    .setSigningKey(secretKey)
+                    .parseClaimsJws(refreshToken)
+                    .getBody();
+
+            String id = refreshClaims.getSubject();
+
             // Redis에서 Refresh Token 확인
-            Optional<RefreshTokenDto> foundRefreshToken = refreshTokenService.getToken(refreshToken);
+            Optional<RefreshTokenDto> foundRefreshToken = refreshTokenService.getToken(id);
             if (foundRefreshToken.isEmpty()) {
                 throw new Exception("유효하지 않은 Refresh Token입니다.");
             }
@@ -124,15 +132,15 @@ public class JwtTokenProvider {
             Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token);
             return true;
         } catch (JwtException | IllegalArgumentException e) {
-            throw new InvalidJwtAuthenticationException("유효하지 않은 JWT Token입니다.");
+            throw new JwtException("유효하지 않은 JWT Token입니다.");
         }
     }
 
-    public String resolveToken(HttpServletRequest req) {
+    public String resolveToken(HttpServletRequest req, String tokenName) {
         Cookie[] cookies = req.getCookies();
         if (cookies != null) {
             for (Cookie cookie : cookies) {
-                if ("accessToken".equals(cookie.getName())) {
+                if (tokenName.equals(cookie.getName())) {
                     return cookie.getValue();
                 }
             }
