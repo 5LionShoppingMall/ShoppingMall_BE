@@ -7,10 +7,8 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import org.aspectj.weaver.patterns.IfPointcut.IfFalsePointcut;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -18,26 +16,26 @@ import org.springframework.web.filter.OncePerRequestFilter;
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
-    private final JwtTokenProvider jwtTokenProvider;
+    private final JwtTokenUtil jwtTokenUtil;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
 
-        String accessToken = jwtTokenProvider.resolveToken(request, "accessToken");
-        String refreshToken = jwtTokenProvider.resolveToken(request, "refreshToken");
+        String accessToken = jwtTokenUtil.resolveToken(request, "accessToken");
+        String refreshToken = jwtTokenUtil.resolveToken(request, "refreshToken");
 
         try {
-            if (accessToken != null && jwtTokenProvider.validateToken(accessToken)) {
-                Authentication auth = jwtTokenProvider.getAuthentication(accessToken);
+            if (accessToken != null && jwtTokenUtil.validateToken(accessToken)) {
+                Authentication auth = jwtTokenUtil.getAuthentication(accessToken);
                 SecurityContextHolder.getContext().setAuthentication(auth);
             } else {
                 throw new JwtException("로그인을 안한 유저의 요청");
             }
         } catch (JwtException ex) {
-            if (refreshToken != null && jwtTokenProvider.validateToken(refreshToken)) {
-                String email = jwtTokenProvider.getEmail(refreshToken);
-                String newAccessToken = jwtTokenProvider.createAccessToken(email, List.of("USER"));
+            if (refreshToken != null && jwtTokenUtil.validateToken(refreshToken)) {
+                String email = jwtTokenUtil.getEmail(refreshToken);
+                String newAccessToken = jwtTokenUtil.createAccessToken(email, List.of("USER"));
                 Cookie newAccessTokenCookie = new Cookie("accessToken", newAccessToken);
                 newAccessTokenCookie.setHttpOnly(true);
                 newAccessTokenCookie.setPath("/");
@@ -47,7 +45,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 response.addHeader("Set-Cookie", accessTokenCookieHeader);
 
 
-                Authentication auth = jwtTokenProvider.getAuthentication(newAccessToken);
+                Authentication auth = jwtTokenUtil.getAuthentication(newAccessToken);
                 SecurityContextHolder.getContext().setAuthentication(auth);
             } else {
                 // Here you can add some response to the client about no token

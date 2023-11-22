@@ -2,17 +2,13 @@ package com.ll.lion.user.controller;
 
 import com.ll.lion.user.dto.LoginRequestDto;
 import com.ll.lion.user.dto.LoginResponseDto;
-import com.ll.lion.user.dto.RefreshTokenRequestDto;
-import com.ll.lion.user.security.JwtTokenProvider;
+import com.ll.lion.user.security.JwtTokenUtil;
 import com.ll.lion.user.service.AuthService;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.boot.web.server.Cookie.SameSite;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthController {
 
     private final AuthService authService;
-    private final JwtTokenProvider jwtTokenProvider;
+    private final JwtTokenUtil jwtTokenUtil;
 
 
     @PostMapping("/login")

@@ -17,7 +17,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class JwtTokenProvider {
+public class JwtTokenUtil {
 
     @Value(value = "${jwt.access-token-secret}")
     private String accessTokenSecret;

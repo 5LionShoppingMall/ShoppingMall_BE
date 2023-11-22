@@ -2,7 +2,7 @@ package com.ll.lion.user.service;
 
 import com.ll.lion.user.dto.LoginResponseDto;
 import com.ll.lion.user.entity.RefreshToken;
-import com.ll.lion.user.security.JwtTokenProvider;
+import com.ll.lion.user.security.JwtTokenUtil;
 import com.ll.lion.user.security.UserDetailsServiceImpl;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -20,7 +20,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class AuthService {
     private final UserDetailsServiceImpl userDetailsService;
-    private final JwtTokenProvider jwtTokenProvider;
+    private final JwtTokenUtil jwtTokenUtil;
     private final PasswordEncoder passwordEncoder;
     private final UserService userService;
 
@@ -35,13 +35,13 @@ public class AuthService {
 
         if (passwordEncoder.matches(password, userDetails.getPassword())) {
             // 로그인 성공 시 JWT 토큰 생성
-            String accessToken = jwtTokenProvider.createAccessToken(email, List.of("USER"));
+            String accessToken = jwtTokenUtil.createAccessToken(email, List.of("USER"));
 
             RefreshToken foundRefreshToken = userService.findRefreshToken(email);
             if (foundRefreshToken != null) {
                 refreshToken = foundRefreshToken.getKeyValue();
             } else {
-                refreshToken = jwtTokenProvider.createRefreshToken(email, List.of("USER"));
+                refreshToken = jwtTokenUtil.createRefreshToken(email, List.of("USER"));
                 userService.saveRefreshToken(email, refreshToken);
             }
 
