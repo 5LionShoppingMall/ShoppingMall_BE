@@ -1,6 +1,7 @@
 package com.ll.lion.community.entity;
 
 
+import com.ll.lion.community.dto.post.PostReqDto;
 import com.ll.lion.user.entity.User;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -15,9 +16,12 @@ import jakarta.persistence.TemporalType;
 
 import java.time.LocalDateTime;
 import java.util.List;
+
+import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
+@NoArgsConstructor
 @Entity
 public class Post {
 
@@ -29,7 +33,6 @@ public class Post {
 
     @Column(length = 2000)
     private String content;
-
 
     @Column(name = "created_at", updatable = false)
     @Temporal(TemporalType.TIMESTAMP)
@@ -50,4 +53,9 @@ public class Post {
     @OneToMany(mappedBy = "post")
     private List<Comment> comments;
 
+    public Post(PostReqDto postReqDto, User user) {
+        this.title = postReqDto.getTitle();
+        this.content = postReqDto.getContent();
+        this.user = user;
+    }
 }
