@@ -9,12 +9,17 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
+
+    @Value(value = "${jwt.token-secret}")
+    private String tokenSecret;
+
 
     private final JwtTokenUtil jwtTokenUtil;
 
@@ -27,7 +32,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         try {
             if (accessToken != null && jwtTokenUtil.validateToken(accessToken)) {
-                Authentication auth = jwtTokenUtil.getAuthentication(accessToken);
+                Authentication auth = jwtTokenUtil.getAuthentication(accessToken, tokenSecret);
                 SecurityContextHolder.getContext().setAuthentication(auth);
             } else {
                 throw new JwtException("로그인을 안한 유저의 요청");
@@ -45,7 +50,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 response.addHeader("Set-Cookie", accessTokenCookieHeader);
 
 
-                Authentication auth = jwtTokenUtil.getAuthentication(newAccessToken);
+                Authentication auth = jwtTokenUtil.getAuthentication(newAccessToken, tokenSecret);
                 SecurityContextHolder.getContext().setAuthentication(auth);
             } else {
                 // Here you can add some response to the client about no token

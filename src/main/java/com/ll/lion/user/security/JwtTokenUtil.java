@@ -19,11 +19,8 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class JwtTokenUtil {
 
-    @Value(value = "${jwt.access-token-secret}")
-    private String accessTokenSecret;
-
-    @Value(value = "${jwt.refresh-token-secret}")
-    private String refreshTokenSecret;
+    @Value(value = "${jwt.token-secret}")
+    private String tokenSecret;
 
     @Value(value = "${jwt.access-token-time}")
     private long accessTokenValidityInMilliseconds;
@@ -44,7 +41,7 @@ public class JwtTokenUtil {
                 .setClaims(claims)
                 .setIssuedAt(now)
                 .setExpiration(validity)
-                .signWith(SignatureAlgorithm.HS256, refreshTokenSecret)
+                .signWith(SignatureAlgorithm.HS256, tokenSecret)
                 .compact();
     }
 
@@ -61,23 +58,23 @@ public class JwtTokenUtil {
                 .setClaims(claims)
                 .setIssuedAt(now)
                 .setExpiration(validity)
-                .signWith(SignatureAlgorithm.HS256, accessTokenSecret)
+                .signWith(SignatureAlgorithm.HS256, tokenSecret)
                 .compact();
     }
 
 
-    public Authentication getAuthentication(String token) {
+    public Authentication getAuthentication(String token, String secretKey) {
         UserDetails userDetails = this.userDetailsService.loadUserByUsername(getEmail(token));
         return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
     }
 
     public String getEmail(String token) {
-        return Jwts.parser().setSigningKey(accessTokenSecret).parseClaimsJws(token).getBody().getSubject();
+        return Jwts.parser().setSigningKey(tokenSecret).parseClaimsJws(token).getBody().getSubject();
     }
 
     public boolean validateToken(String token) {
         try {
-            Jwts.parser().setSigningKey(accessTokenSecret).parseClaimsJws(token);
+            Jwts.parser().setSigningKey(tokenSecret).parseClaimsJws(token);
             return true;
         } catch (JwtException | IllegalArgumentException e) {
             throw new JwtException("유효하지 않은 JWT Token입니다.");
