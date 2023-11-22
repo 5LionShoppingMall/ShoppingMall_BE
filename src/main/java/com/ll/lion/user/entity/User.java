@@ -84,8 +84,8 @@ public class User {
     @JoinColumn(name = "cart_id")
     private Cart cart;
 
-    @OneToOne(cascade = CascadeType.REMOVE)
-    @JoinColumn(name = "token_id")
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "refresh_token_id", referencedColumnName = "id")
     private RefreshToken refreshToken;
 
     @OneToMany(mappedBy = "user")

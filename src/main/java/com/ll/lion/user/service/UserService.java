@@ -3,7 +3,9 @@ package com.ll.lion.user.service;
 import com.ll.lion.user.dto.UserRegisterDto;
 import com.ll.lion.user.entity.RefreshToken;
 import com.ll.lion.user.entity.User;
+import com.ll.lion.user.repository.RefreshTokenRepository;
 import com.ll.lion.user.repository.UserRepository;
+import java.sql.Ref;
 import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -15,7 +17,7 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-
+    private final RefreshTokenRepository refreshTokenRepository;
 
     public User register(UserRegisterDto userRegisterDto) {
         if (userRepository.existsByEmail(userRegisterDto.getEmail())) {
@@ -34,10 +36,10 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    public boolean hasRefreshToken(String email) {
+    public RefreshToken findRefreshToken(String email) {
         User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new IllegalArgumentException("유저가 존재하지 않습니다."));
-        return user.getRefreshToken() != null;
+                .orElseThrow(() -> new IllegalArgumentException("유저가 존재하지 않습니다"));
+        return user.getRefreshToken();
     }
 
     public void saveRefreshToken(String email, String tokenKey) {
@@ -45,9 +47,10 @@ public class UserService {
                 .orElseThrow(() -> new IllegalArgumentException("유저가 존재하지 않습니다."));
 
         RefreshToken refreshToken = RefreshToken.builder()
-                .key(tokenKey)
-                .user(user)
+                .keyValue(tokenKey)
                 .build();
+
+        refreshTokenRepository.save(refreshToken);
 
         user = user.toBuilder()
                 .refreshToken(refreshToken)

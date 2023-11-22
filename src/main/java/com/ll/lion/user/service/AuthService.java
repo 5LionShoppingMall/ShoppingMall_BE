@@ -2,6 +2,7 @@ package com.ll.lion.user.service;
 
 import com.ll.lion.user.dto.LoginResponseDto;
 import com.ll.lion.user.dto.RefreshTokenDto;
+import com.ll.lion.user.entity.RefreshToken;
 import com.ll.lion.user.security.InvalidPasswordException;
 import com.ll.lion.user.security.JwtTokenProvider;
 import com.ll.lion.user.security.UserDetailsServiceImpl;
@@ -26,6 +27,7 @@ public class AuthService {
 
     public LoginResponseDto authenticate(String email, String password) {
         UserDetails userDetails;
+        String refreshToken;
         try {
             userDetails = userDetailsService.loadUserByUsername(email);
         } catch (UsernameNotFoundException e) {
@@ -36,11 +38,13 @@ public class AuthService {
             // 로그인 성공 시 JWT 토큰 생성
             String accessToken = jwtTokenProvider.createAccessToken(email, List.of("USER"));
 
-            String refreshToken = jwtTokenProvider.createRefreshToken(email, List.of("USER"));
-
-
-            // RefreshToken 저장
-            saveRefreshToken(email, refreshToken);
+            RefreshToken foundRefreshToken = userService.findRefreshToken(email);
+            if (foundRefreshToken != null) {
+                refreshToken = foundRefreshToken.getKeyValue();
+            } else {
+                refreshToken = jwtTokenProvider.createRefreshToken(email, List.of("USER"));
+                userService.saveRefreshToken(email, refreshToken);
+            }
 
             return new LoginResponseDto(accessToken, refreshToken);
         } else {
@@ -56,14 +60,12 @@ public class AuthService {
         String accessTokenCookieHeader = accessTokenCookie.getName() + "=" + accessTokenCookie.getValue()
                 + "; HttpOnly; Secure; SameSite=None"; // SameSite 설정
 
-
         Cookie refreshTokenCookie = new Cookie("refreshToken", refreshToken);
         refreshTokenCookie.setHttpOnly(true);
         refreshTokenCookie.setPath("/");
         refreshTokenCookie.setSecure(true);
         String refreshTokenCookieHeader = refreshTokenCookie.getName() + "=" + refreshTokenCookie.getValue()
                 + "; HttpOnly; Secure; SameSite=None"; // SameSite 설정
-
 
         response.addHeader("Set-Cookie", accessTokenCookieHeader);
         response.addHeader("Set-Cookie", refreshTokenCookieHeader);
