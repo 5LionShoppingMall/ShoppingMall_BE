@@ -1,7 +1,7 @@
 package com.ll.lion.product.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.ll.lion.common.endtity.DateEntity;
+import com.ll.lion.common.entity.DateEntity;
 import com.ll.lion.community.entity.Like;
 import com.ll.lion.user.entity.User;
 import jakarta.persistence.Column;
@@ -15,16 +15,12 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import jakarta.persistence.Temporal;
-import jakarta.persistence.TemporalType;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.CreatedDate;
 
 @Entity
 @Getter

@@ -1,4 +1,4 @@
-package com.ll.lion.common.endtity;
+package com.ll.lion.common.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
