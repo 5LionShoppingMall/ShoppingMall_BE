@@ -30,7 +30,7 @@ public class UserController {
         return new ResponseEntity<>(user, HttpStatus.CREATED);
     }
 
-    @GetMapping("/info")
+    @PostMapping("/info")
     public ResponseEntity<UserInfoDto> getUserInfo(HttpServletRequest request) {
         // request에서 accessToken 추출
         String accessToken = jwtTokenUtil.resolveToken(request, "accessToken");

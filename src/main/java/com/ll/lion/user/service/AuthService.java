@@ -56,14 +56,14 @@ public class AuthService {
         accessTokenCookie.setPath("/");
         accessTokenCookie.setSecure(true);
         String accessTokenCookieHeader = accessTokenCookie.getName() + "=" + accessTokenCookie.getValue()
-                + "; HttpOnly; Secure; SameSite=None"; // SameSite 설정
+                + "; Path=/; HttpOnly; Secure; SameSite=None"; // SameSite 설정
 
         Cookie refreshTokenCookie = new Cookie("refreshToken", refreshToken);
         refreshTokenCookie.setHttpOnly(true);
         refreshTokenCookie.setPath("/");
         refreshTokenCookie.setSecure(true);
         String refreshTokenCookieHeader = refreshTokenCookie.getName() + "=" + refreshTokenCookie.getValue()
-                + "; HttpOnly; Secure; SameSite=None"; // SameSite 설정
+                + ";  Path=/; HttpOnly; Secure; SameSite=None"; // SameSite 설정
 
         response.addHeader("Set-Cookie", accessTokenCookieHeader);
         response.addHeader("Set-Cookie", refreshTokenCookieHeader);
@@ -80,7 +80,7 @@ public class AuthService {
                     cookie.setHttpOnly(true);
                     String deleteCookie = cookie.getName() + "="
                             + "; Expires=Thu, 01 Jan 1970 00:00:00 GMT"
-                            + "; Max-Age=0; HttpOnly; Secure; SameSite=None";
+                            + "; Max-Age=0; Path=/; HttpOnly; Secure; SameSite=None";
                     response.addHeader("Set-Cookie", deleteCookie);
                 }
             }
