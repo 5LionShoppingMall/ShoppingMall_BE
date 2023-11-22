@@ -49,6 +49,7 @@ public class AuthService {
         Cookie accessTokenCookie = new Cookie("accessToken", accessToken);
         accessTokenCookie.setHttpOnly(true);
         accessTokenCookie.setPath("/");
+        accessTokenCookie.setSecure(true);
         String accessTokenCookieHeader = accessTokenCookie.getName() + "=" + accessTokenCookie.getValue()
                 + "; HttpOnly; Secure; SameSite=None"; // SameSite 설정
 
@@ -56,6 +57,7 @@ public class AuthService {
         Cookie refreshTokenCookie = new Cookie("refreshToken", refreshToken);
         refreshTokenCookie.setHttpOnly(true);
         refreshTokenCookie.setPath("/");
+        refreshTokenCookie.setSecure(true);
         String refreshTokenCookieHeader = refreshTokenCookie.getName() + "=" + refreshTokenCookie.getValue()
                 + "; HttpOnly; Secure; SameSite=None"; // SameSite 설정
 

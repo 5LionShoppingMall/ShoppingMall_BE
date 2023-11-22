@@ -27,6 +27,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         } catch (InvalidJwtAuthenticationException ex) {
             // In case of failed JWT validation, we don't want to go further down the request processing
             // Here you can add some response to the client about invalid token
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.getWriter().write("유효하지 않은 토큰입니다");
             return;
         }
 
