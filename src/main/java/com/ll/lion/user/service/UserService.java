@@ -1,5 +1,6 @@
 package com.ll.lion.user.service;
 
+import com.ll.lion.user.dto.UserInfoDto;
 import com.ll.lion.user.dto.UserRegisterDto;
 import com.ll.lion.user.entity.RefreshToken;
 import com.ll.lion.user.entity.User;
@@ -7,6 +8,7 @@ import com.ll.lion.user.repository.RefreshTokenRepository;
 import com.ll.lion.user.repository.UserRepository;
 import java.sql.Ref;
 import java.time.LocalDateTime;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -57,5 +59,18 @@ public class UserService {
                 .build();
 
         userRepository.save(user);
+    }
+
+    public UserInfoDto getUserByEmailAndMakeDto(String email) {
+        Optional<User> userByEmail = userRepository.findByEmail(email);
+        return userByEmail.map(this::userToUserDTO).orElse(null);
+    }
+
+    private UserInfoDto userToUserDTO(User user) {
+        UserInfoDto userDTO = new UserInfoDto();
+        userDTO.setEmail(user.getEmail());
+        userDTO.setAddress(user.getAddress());
+        userDTO.setPhoneNumber(user.getPhoneNumber());
+        return userDTO;
     }
 }

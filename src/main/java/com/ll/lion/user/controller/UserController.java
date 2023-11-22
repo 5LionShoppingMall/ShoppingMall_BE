@@ -1,5 +1,6 @@
 package com.ll.lion.user.controller;
 
+import com.ll.lion.user.dto.UserInfoDto;
 import com.ll.lion.user.dto.UserRegisterDto;
 import com.ll.lion.user.entity.User;
 import com.ll.lion.user.security.JwtTokenUtil;
@@ -29,15 +30,13 @@ public class UserController {
         return new ResponseEntity<>(user, HttpStatus.CREATED);
     }
 
-
-
     @GetMapping("/info")
-    public ResponseEntity<User> getUserInfo(HttpServletRequest request) {
-        // refreshToken을 쿠키에서 가져옵니다.
-        String refreshToken = jwtTokenUtil.resolveToken(request, "refreshToken");
-        // refreshToken에서 이메일을 추출합니다.
-        String email = jwtTokenUtil.getEmail(refreshToken);
-        User user = userService.getUserbyEmail(email);
-        return ResponseEntity.ok(user);
+    public ResponseEntity<UserInfoDto> getUserInfo(HttpServletRequest request) {
+        // request에서 accessToken 추출
+        String accessToken = jwtTokenUtil.resolveToken(request, "accessToken");
+        // accessToken에서 이메일을 추출
+        String email = jwtTokenUtil.getEmail(accessToken);
+        UserInfoDto userInfoDto = userService.getUserByEmailAndMakeDto(email);
+        return ResponseEntity.ok(userInfoDto);
     }
 }
