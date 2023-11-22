@@ -19,8 +19,11 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class JwtTokenProvider {
 
-    @Value(value = "${jwt.secret}")
-    private String secretKey;
+    @Value(value = "${jwt.access-token-secret}")
+    private String accessTokenSecret;
+
+    @Value(value = "${jwt.refresh-token-secret}")
+    private String refreshTokenSecret;
 
     @Value(value = "${jwt.access-token-time}")
     private long accessTokenValidityInMilliseconds;
@@ -41,7 +44,7 @@ public class JwtTokenProvider {
                 .setClaims(claims)
                 .setIssuedAt(now)
                 .setExpiration(validity)
-                .signWith(SignatureAlgorithm.HS256, secretKey)
+                .signWith(SignatureAlgorithm.HS256, refreshTokenSecret)
                 .compact();
     }
 
@@ -58,7 +61,7 @@ public class JwtTokenProvider {
                 .setClaims(claims)
                 .setIssuedAt(now)
                 .setExpiration(validity)
-                .signWith(SignatureAlgorithm.HS256, secretKey)
+                .signWith(SignatureAlgorithm.HS256, accessTokenSecret)
                 .compact();
     }
 
@@ -69,12 +72,12 @@ public class JwtTokenProvider {
     }
 
     public String getEmail(String token) {
-        return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().getSubject();
+        return Jwts.parser().setSigningKey(accessTokenSecret).parseClaimsJws(token).getBody().getSubject();
     }
 
     public boolean validateToken(String token) {
         try {
-            Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token);
+            Jwts.parser().setSigningKey(accessTokenSecret).parseClaimsJws(token);
             return true;
         } catch (JwtException | IllegalArgumentException e) {
             throw new JwtException("유효하지 않은 JWT Token입니다.");
