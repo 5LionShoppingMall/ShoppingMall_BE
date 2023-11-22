@@ -3,7 +3,10 @@ spring:
     group:
       dev:
         - db
-        - security
+  #        - security
+  jackson:
+    serialization:
+      fail-on-empty-beans: false
 server:
   port: 8082
 logging:

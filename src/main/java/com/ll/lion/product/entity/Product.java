@@ -1,5 +1,7 @@
 package com.ll.lion.product.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.ll.lion.common.endtity.DateEntity;
 import com.ll.lion.community.entity.Like;
 import com.ll.lion.user.entity.User;
 import jakarta.persistence.Column;
@@ -18,12 +20,17 @@ import jakarta.persistence.TemporalType;
 
 import java.time.LocalDateTime;
 import java.util.List;
+
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 
 @Entity
+@Getter
+@NoArgsConstructor
 @Table(name = "products")
-public class Product {
-
+public class Product extends DateEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -34,7 +41,7 @@ public class Product {
     private Long price;
 
     @Column(name = "image_url")
-    private String ImageUrl;
+    private String imageUrl;
 
     @Column(length = 2000)
     private String description;
@@ -42,11 +49,7 @@ public class Product {
     @Enumerated(EnumType.STRING)
     private ProductStatus status;
 
-    @Column(name = "created_at", updatable = false)
-    @Temporal(TemporalType.TIMESTAMP)
-    @CreatedDate
-    private LocalDateTime createAt;
-
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "seller_id", nullable = false)
     private User seller;
@@ -57,4 +60,16 @@ public class Product {
     @OneToMany(mappedBy = "product")
     private List<CartItem> cartItems;
 
+    @Builder
+    public Product(Long id, String name, Long price, String imageUrl, String description, ProductStatus status, User seller, List<Like> likes, List<CartItem> cartItems) {
+        this.id = id;
+        this.name = name;
+        this.price = price;
+        this.imageUrl = imageUrl;
+        this.description = description;
+        this.status = status;
+        this.seller = seller;
+        this.likes = likes;
+        this.cartItems = cartItems;
+    }
 }
