@@ -38,7 +38,7 @@ public class SecurityConfig extends SecurityConfigurerAdapter<DefaultSecurityFil
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .authorizeHttpRequests(a -> a
                         .requestMatchers(
-                                "/api/users/register", "/api/auth/login","/api/auth/token/refresh"
+                                "/api/users/register", "/api/auth/login", "/api/auth/logout","/api/auth/token/refresh"
                         ).permitAll()
                         .anyRequest().authenticated()
                 );
