@@ -21,7 +21,8 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         Optional<User> userByEmail = userRepository.findByEmail(email);
 
         if (userByEmail.isPresent()) {
-            User user = userByEmail.get();
+            User user = userByEmail.get(); //users Table에서 Email로 찾은 row의 정보를 담은 객체
+            //UserDetails의 구현체를 만들어서 return
             return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(),
                     Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + user.getRole())));
         }

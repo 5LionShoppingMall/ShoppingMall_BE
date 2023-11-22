@@ -22,6 +22,7 @@ public class AuthService {
     private final RefreshTokenService refreshTokenService;
 
     public LoginResponseDto authenticate(String email, String password) {
+        //Spring Security에서 제공+사용하는 UserDetails인터페이스 구현 객체
         UserDetails userDetails;
         try {
             userDetails = userDetailsService.loadUserByUsername(email);
@@ -31,6 +32,7 @@ public class AuthService {
 
         if (passwordEncoder.matches(password, userDetails.getPassword())) {
             // 로그인 성공 시 JWT 토큰 생성
+            //user의 권한(Role)인 "USER"을 List에 담아서 매개변수로 전달
             String accessToken = jwtTokenProvider.createAccessToken(email, List.of("USER"));
             String refreshToken = jwtTokenProvider.createRefreshToken(email, List.of("USER"));
 
@@ -45,6 +47,7 @@ public class AuthService {
 
     private void saveRefreshToken(String email, String refreshToken) {
         RefreshTokenDto refreshTokenDto = new RefreshTokenDto(refreshToken, email);
+        //Redis에 key-value쌍을 저장하는 메서드 호출
         refreshTokenService.saveToken(refreshTokenDto);
     }
 

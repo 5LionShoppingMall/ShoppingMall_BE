@@ -21,7 +21,7 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class JwtTokenProvider {
 
-    @Value(value = "${jwt.secret}")
+    @Value(value = "${jwt.secret}") // properties파일에서 jwt.secret라는 키로 저장된 값을 가져오겠다는 의미
     private String secretKey;
 
     @Value(value = "${jwt.access-token-time}")
@@ -80,6 +80,7 @@ public class JwtTokenProvider {
 
     public String createAccessToken(String email, List<String> roles) {
 
+        //Claims객체에 유저 이메일과 role를 주입
         Claims claims = Jwts.claims().setSubject(email);
         claims.put("roles", roles);
 
@@ -89,8 +90,8 @@ public class JwtTokenProvider {
         return Jwts.builder()
                 .setClaims(claims)
                 .setIssuedAt(now)
-                .setExpiration(validity)
-                .signWith(SignatureAlgorithm.HS256, secretKey)
+                .setExpiration(validity) //토큰 수명을 결정
+                .signWith(SignatureAlgorithm.HS256, secretKey) //암호화된 키를 제공해서 무결성을 보장
                 .compact();
     }
 
@@ -127,8 +128,10 @@ public class JwtTokenProvider {
         }
     }
 
+    //요청의 헤더에서 토큰을 가져오는 메서드
     public String resolveToken(HttpServletRequest request) {
         String bearerToken = request.getHeader("Authorization");
+        //일반적으로 토큰을 전달할 때는 Bearer 다음에 실제 토큰의 값을 적어둔다.
         if (bearerToken != null && bearerToken.startsWith("Bearer ")) {
             return bearerToken.substring(7);
         }

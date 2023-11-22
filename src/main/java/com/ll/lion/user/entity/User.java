@@ -82,5 +82,4 @@ public class User {
     @OneToMany(mappedBy = "user")
     private List<Post> posts;
 
-
 }

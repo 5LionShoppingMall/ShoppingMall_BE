@@ -26,11 +26,12 @@ public class SecurityConfig extends SecurityConfigurerAdapter<DefaultSecurityFil
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        //요청이 들어올 때마다 JWT인증을 수행한다.
         JwtAuthenticationFilter jwtAuthenticationFilter = new JwtAuthenticationFilter(jwtTokenProvider);
         http
-                .csrf(c -> c.disable())
-                .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+                .csrf(c -> c.disable()) //csrf 보호 기능 비활성화
+                .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) //세션관리 기능 비활성화 (JWT를 사용하기 때문)
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class) //토큰먼저 확인하겠다는 의미
                 .authorizeRequests(a -> a
                         .requestMatchers(
                                 new AntPathRequestMatcher("/api/users/register", HttpMethod.POST.toString()),

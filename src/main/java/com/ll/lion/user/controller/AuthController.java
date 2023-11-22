@@ -38,6 +38,9 @@ public class AuthController {
         }
     }
 
+    //Access토큰이 만료되면 클라이언트는 401 Unauthorized 응답을 받게 되고
+    //프론트에서 이 응답에 대한 처리로 /refresh로 post요청을 보냄
+    //해당 메서드는 그 요청을 받고 처리함
     @PostMapping("/token/refresh")
     public ResponseEntity<String> refreshAccessToken(@RequestBody RefreshTokenRequestDto refreshTokenRequestDto) {
         String expiredAccessToken = refreshTokenRequestDto.getAccessToken();
