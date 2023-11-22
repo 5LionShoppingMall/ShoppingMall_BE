@@ -1,7 +1,5 @@
 package com.ll.lion.user.security;
 
-import com.ll.lion.user.dto.RefreshTokenDto;
-import com.ll.lion.user.service.RefreshTokenService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
@@ -10,7 +8,6 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -32,7 +29,6 @@ public class JwtTokenProvider {
     private long refreshTokenValidityInMilliseconds;
 
     private final UserDetailsServiceImpl userDetailsService;
-    private final RefreshTokenService refreshTokenService;
 
     public String createRefreshToken(String email, List<String> roles) {
         Claims claims = Jwts.claims().setSubject(email);
@@ -49,43 +45,6 @@ public class JwtTokenProvider {
                 .compact();
     }
 
-    public String refreshAccessToken(String expiredAccessToken, String refreshToken) {
-        try {
-            // Access Token 검증 및 만료 확인
-            Claims claims = Jwts.parser()
-                    .setSigningKey(secretKey)
-                    .parseClaimsJws(expiredAccessToken)
-                    .getBody();
-
-            if (!claims.getExpiration().before(new Date())) {
-                throw new Exception("Access Token이 아직 만료되지 않았습니다.");
-            }
-
-            // Refresh Token에서 id 추출
-            Claims refreshClaims = Jwts.parser()
-                    .setSigningKey(secretKey)
-                    .parseClaimsJws(refreshToken)
-                    .getBody();
-
-            String id = refreshClaims.getSubject();
-
-            // Redis에서 Refresh Token 확인
-            Optional<RefreshTokenDto> foundRefreshToken = refreshTokenService.getToken(id);
-            if (foundRefreshToken.isEmpty()) {
-                throw new Exception("유효하지 않은 Refresh Token입니다.");
-            }
-
-            // 새로운 Access Token 발급
-            String email = claims.getSubject();
-            String newAccessToken = createAccessToken(email, List.of("USER"));
-
-            return newAccessToken;
-        } catch (Exception e) {
-            // Access Token 검증 실패 또는 만료되지 않은 경우, 또는 Refresh Token이 유효하지 않은 경우
-            e.printStackTrace();
-            return null;
-        }
-    }
 
     public String createAccessToken(String email, List<String> roles) {
 
@@ -101,20 +60,6 @@ public class JwtTokenProvider {
                 .setExpiration(validity)
                 .signWith(SignatureAlgorithm.HS256, secretKey)
                 .compact();
-    }
-
-    public String createRefreshToken(String email) {
-
-        Claims claims = Jwts.claims().setSubject(email);
-
-        // Refresh Token 생성
-        String refreshToken = Jwts.builder()
-                .setClaims(claims) // 필요한 정보를 클레임에 담습니다.
-                .setExpiration(new Date(System.currentTimeMillis() + refreshTokenValidityInMilliseconds))
-                .signWith(SignatureAlgorithm.HS256, secretKey)
-                .compact();
-
-        return refreshToken;
     }
 
 

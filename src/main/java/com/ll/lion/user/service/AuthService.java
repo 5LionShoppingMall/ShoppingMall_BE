@@ -1,9 +1,7 @@
 package com.ll.lion.user.service;
 
 import com.ll.lion.user.dto.LoginResponseDto;
-import com.ll.lion.user.dto.RefreshTokenDto;
 import com.ll.lion.user.entity.RefreshToken;
-import com.ll.lion.user.security.InvalidPasswordException;
 import com.ll.lion.user.security.JwtTokenProvider;
 import com.ll.lion.user.security.UserDetailsServiceImpl;
 import jakarta.servlet.http.Cookie;
@@ -22,7 +20,6 @@ public class AuthService {
     private final UserDetailsServiceImpl userDetailsService;
     private final JwtTokenProvider jwtTokenProvider;
     private final PasswordEncoder passwordEncoder;
-    private final RefreshTokenService refreshTokenService;
     private final UserService userService;
 
     public LoginResponseDto authenticate(String email, String password) {
@@ -47,9 +44,8 @@ public class AuthService {
             }
 
             return new LoginResponseDto(accessToken, refreshToken);
-        } else {
-            throw new InvalidPasswordException("비밀번호를 확인해주세요."); // 비밀번호가 일치하지 않는 경우
         }
+        return null;
     }
 
     public void setTokenInCookie(String accessToken, String refreshToken, HttpServletResponse response) {
@@ -69,11 +65,6 @@ public class AuthService {
 
         response.addHeader("Set-Cookie", accessTokenCookieHeader);
         response.addHeader("Set-Cookie", refreshTokenCookieHeader);
-    }
-
-    private void saveRefreshToken(String email, String refreshToken) {
-        RefreshTokenDto refreshTokenDto = new RefreshTokenDto(refreshToken, email);
-        refreshTokenService.saveToken(refreshTokenDto);
     }
 
 }

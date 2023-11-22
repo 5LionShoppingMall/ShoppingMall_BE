@@ -51,11 +51,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 SecurityContextHolder.getContext().setAuthentication(auth);
             } else {
                 // Here you can add some response to the client about no token
-                ex.printStackTrace();
+                logger.info("로그인을 안한 유저의 요청");
             }
         }
 
         filterChain.doFilter(request, response);
-
     }
 }
