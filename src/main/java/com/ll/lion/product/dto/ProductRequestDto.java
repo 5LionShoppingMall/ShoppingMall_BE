@@ -8,7 +8,7 @@ import lombok.Data;
 @Data
 @Builder
 public class ProductRequestDto {
-    private String name;
+    private String title;
     private Long price;
     private String imageUrl;
     private String description;

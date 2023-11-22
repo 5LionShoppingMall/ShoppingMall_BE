@@ -15,10 +15,10 @@ import org.springframework.stereotype.Service;
 public class UserService {
 
     private final UserRepository userRepository;
-    //private final PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
 
 
-    /*public User register(UserRegisterDto userRegisterDto) {
+    public User register(UserRegisterDto userRegisterDto) {
         if (userRepository.existsByEmail(userRegisterDto.getEmail())) {
             throw new IllegalArgumentException("이미 가입된 이메일입니다.");
         }
@@ -30,5 +30,5 @@ public class UserService {
         user.setRole("USER");
 
         return userRepository.save(user);
-    }*/
+    }
 }

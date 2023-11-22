@@ -3,7 +3,7 @@ spring:
     group:
       dev:
         - db
-  #        - security
+        - security
   jackson:
     serialization:
       fail-on-empty-beans: false

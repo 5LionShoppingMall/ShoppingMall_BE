@@ -14,7 +14,7 @@ import java.util.List;
 @Data
 public class ProductDto {
     private Long id;
-    private String name;
+    private String title;
     private Long price;
     private String imageUrl;
     private String description;
@@ -25,9 +25,9 @@ public class ProductDto {
     private List<CartItem> cartItems;
 
     @Builder
-    public ProductDto(Long id, String name, Long price, String imageUrl, String description, ProductStatus status, LocalDateTime createdAt, User seller, List<Like> likes, List<CartItem> cartItems) {
+    public ProductDto(Long id, String title, Long price, String imageUrl, String description, ProductStatus status, LocalDateTime createdAt, User seller, List<Like> likes, List<CartItem> cartItems) {
         this.id = id;
-        this.name = name;
+        this.title = title;
         this.price = price;
         this.imageUrl = imageUrl;
         this.description = description;
@@ -39,7 +39,7 @@ public class ProductDto {
     }
 
     public ProductDto(final ProductRequestDto dto) {
-        this.name = dto.getName();
+        this.title = dto.getTitle();
         this.price = dto.getPrice();
         this.imageUrl = dto.getImageUrl();
         this.description = dto.getDescription();
@@ -50,7 +50,7 @@ public class ProductDto {
     public static ProductDto toDto(final Product entity) {
         return ProductDto.builder()
                 .id(entity.getId())
-                .name(entity.getName())
+                .title(entity.getTitle())
                 .price(entity.getPrice())
                 .imageUrl(entity.getImageUrl())
                 .description(entity.getDescription())
@@ -65,7 +65,7 @@ public class ProductDto {
     public static Product toEntity(final ProductDto dto) {
         return Product.builder()
                 .id(dto.getId())
-                .name(dto.getName())
+                .title(dto.getTitle())
                 .price(dto.getPrice())
                 .imageUrl(dto.getImageUrl())
                 .description(dto.getDescription())
@@ -78,7 +78,7 @@ public class ProductDto {
 
     public static Product toEntity(final ProductRequestDto dto) {
         return Product.builder()
-                .name(dto.getName())
+                .title(dto.getTitle())
                 .price(dto.getPrice())
                 .imageUrl(dto.getImageUrl())
                 .description(dto.getDescription())

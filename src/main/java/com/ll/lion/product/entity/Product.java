@@ -34,8 +34,9 @@ public class Product extends DateEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @Column(nullable = false)
-    private String name;
+    private String title;
 
     @Column(nullable = false)
     private Long price;
@@ -61,9 +62,9 @@ public class Product extends DateEntity {
     private List<CartItem> cartItems;
 
     @Builder
-    public Product(Long id, String name, Long price, String imageUrl, String description, ProductStatus status, User seller, List<Like> likes, List<CartItem> cartItems) {
+    public Product(Long id, String title, Long price, String imageUrl, String description, ProductStatus status, User seller, List<Like> likes, List<CartItem> cartItems) {
         this.id = id;
-        this.name = name;
+        this.title = title;
         this.price = price;
         this.imageUrl = imageUrl;
         this.description = description;

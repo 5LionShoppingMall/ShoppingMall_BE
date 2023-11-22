@@ -20,8 +20,10 @@ import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
+
 import java.time.LocalDateTime;
 import java.util.List;
+
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
@@ -66,7 +68,7 @@ public class User {
     @Column(nullable = false)
     private String role;
 
-    @OneToMany(mappedBy = "seller")
+    @OneToMany(mappedBy = "seller", cascade = CascadeType.ALL)
     private List<Product> products;
 
     @OneToMany(mappedBy = "user")
@@ -81,6 +83,4 @@ public class User {
 
     @OneToMany(mappedBy = "user")
     private List<Post> posts;
-
-
 }
