@@ -15,7 +15,11 @@ public class CartService {
 
     private final CartRepository cartRepository;
     public Optional<Cart> getCart(User user) {
-        return Optional.ofNullable(cartRepository.findByUser(user));
+        Optional<Cart> opcart = Optional.ofNullable(cartRepository.findByUser(user));
+        if (opcart.isEmpty()){
+            save();
+            return Optional.of(cartRepository.findByUser(user));
+        }else return opcart;
     }
 
     public void save() {
