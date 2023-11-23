@@ -1,5 +1,6 @@
 package com.ll.lion.product.entity;
 
+import com.ll.lion.common.entity.DateEntity;
 import com.ll.lion.community.entity.Like;
 import com.ll.lion.user.entity.User;
 import jakarta.persistence.Column;
@@ -22,7 +23,7 @@ import org.springframework.data.annotation.CreatedDate;
 
 @Entity
 @Table(name = "products")
-public class Product {
+public class Product extends DateEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -41,11 +42,6 @@ public class Product {
 
     @Enumerated(EnumType.STRING)
     private ProductStatus status;
-
-    @Column(name = "created_at", updatable = false)
-    @Temporal(TemporalType.TIMESTAMP)
-    @CreatedDate
-    private LocalDateTime createAt;
 
     @ManyToOne
     @JoinColumn(name = "seller_id", nullable = false)
