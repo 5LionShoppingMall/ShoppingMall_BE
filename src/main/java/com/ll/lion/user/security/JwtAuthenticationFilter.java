@@ -1,11 +1,17 @@
 package com.ll.lion.user.security;
 
+import io.jsonwebtoken.JwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+
 import java.io.IOException;
+import java.util.List;
+
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -13,24 +19,47 @@ import org.springframework.web.filter.OncePerRequestFilter;
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
-    private final JwtTokenProvider jwtTokenProvider;
+    @Value(value = "${jwt.token-secret}")
+    private String tokenSecret;
+
+
+    private final JwtTokenUtil jwtTokenUtil;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
-        String token = jwtTokenProvider.resolveToken(request);
+
+        String accessToken = jwtTokenUtil.resolveToken(request, "accessToken");
+        String refreshToken = jwtTokenUtil.resolveToken(request, "refreshToken");
+
         try {
-            if (token != null && jwtTokenProvider.validateToken(token)) {
-                Authentication auth = jwtTokenProvider.getAuthentication(token);
+            if (accessToken != null && jwtTokenUtil.validateToken(accessToken)) {
+                Authentication auth = jwtTokenUtil.getAuthentication(accessToken, tokenSecret);
                 SecurityContextHolder.getContext().setAuthentication(auth);
+            } else {
+                throw new JwtException("로그인을 안한 유저의 요청");
             }
-        } catch (InvalidJwtAuthenticationException ex) {
-            // In case of failed JWT validation, we don't want to go further down the request processing
-            // Here you can add some response to the client about invalid token
-            return;
+        } catch (JwtException ex) {
+            if (refreshToken != null && jwtTokenUtil.validateToken(refreshToken)) {
+                String email = jwtTokenUtil.getEmail(refreshToken);
+                String newAccessToken = jwtTokenUtil.createAccessToken(email, List.of("USER"));
+                Cookie newAccessTokenCookie = new Cookie("accessToken", newAccessToken);
+                newAccessTokenCookie.setHttpOnly(true);
+                newAccessTokenCookie.setPath("/");
+                newAccessTokenCookie.setSecure(true);
+                String accessTokenCookieHeader = newAccessTokenCookie.getName() + "=" + newAccessTokenCookie.getValue()
+                        + "; HttpOnly; Secure; SameSite=None"; // SameSite 설정
+                response.addHeader("Set-Cookie", accessTokenCookieHeader);
+
+
+                Authentication auth = jwtTokenUtil.getAuthentication(newAccessToken, tokenSecret);
+                SecurityContextHolder.getContext().setAuthentication(auth);
+            } else {
+                // Here you can add some response to the client about no token
+                logger.info("로그인을 안한 유저의 요청");
+            }
         }
 
         filterChain.doFilter(request, response);
-
     }
 }

@@ -36,6 +36,7 @@ public class ProductController {
 
     @PostMapping("/register")
     public ResponseEntity<?> registerProduct(@Valid @RequestBody ProductRequestDto reqDto) {
+        log.info(reqDto.toString());
         ResponseDto<ProductDto> responseDto;
         try {
             Product productEntity = productService.create(ProductDto.toEntity(new ProductDto(reqDto)));
