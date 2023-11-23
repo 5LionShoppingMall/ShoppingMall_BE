@@ -24,7 +24,7 @@ public class ProductController {
         ResponseDto<ProductDto> responseDto;
         try {
             List<Product> productEntities = productService.findListAll();
-            List<ProductDto> productDtos = productEntities.stream().map(ProductDto::toDto).toList();
+            List<ProductDto> productDtos = productEntities.stream().map(ProductDto::new).toList();
             responseDto = ResponseDto.<ProductDto>builder().listData(productDtos).build();
             return ResponseEntity.ok(responseDto);
         } catch (Exception e) {
@@ -35,13 +35,10 @@ public class ProductController {
 
     @PostMapping("/register")
     public ResponseEntity<?> registerProduct(@RequestBody ProductRequestDto reqDto) {
-        log.info(reqDto.toString());
         ResponseDto<ProductDto> responseDto;
         try {
             Product productEntity = productService.create(ProductDto.toEntity(reqDto.requestObjectValidate(reqDto)));
-            log.info(productEntity.toString());
-            ProductDto productDto = ProductDto.toDto(productEntity);
-            responseDto = ResponseDto.<ProductDto>builder().objData(productDto).build();
+            responseDto = ResponseDto.<ProductDto>builder().objData(new ProductDto(productEntity)).build();
             return ResponseEntity.ok(responseDto);
         } catch (Exception e) {
             responseDto = ResponseDto.<ProductDto>builder().error(e.getMessage()).build();

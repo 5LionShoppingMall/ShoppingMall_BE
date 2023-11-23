@@ -20,6 +20,6 @@ public class ProductRequestDto {
     public ProductDto requestObjectValidate(final ProductRequestDto dto) {
         return Optional.ofNullable(dto)
                 .map(ProductDto::new)
-                .orElseThrow(() -> new IllegalArgumentException("Entity가 비었습니다."));
+                .orElseThrow(() -> new IllegalArgumentException("요청받은 데이터가 없습니다."));
     }
 }

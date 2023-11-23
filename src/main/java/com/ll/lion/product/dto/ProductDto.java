@@ -47,19 +47,17 @@ public class ProductDto {
         this.seller = dto.getSeller();
     }
 
-    public static ProductDto toDto(final Product entity) {
-        return ProductDto.builder()
-                .id(entity.getId())
-                .title(entity.getTitle())
-                .price(entity.getPrice())
-                .imageUrl(entity.getImageUrl())
-                .description(entity.getDescription())
-                .status(entity.getStatus())
-                .createdAt(entity.getCreatedAt())
-                .seller(entity.getSeller())
-                .likes(entity.getLikes())
-                .cartItems(entity.getCartItems())
-                .build();
+    public ProductDto(final Product entity) {
+        this.id = entity.getId();
+        this.title = entity.getTitle();
+        this.price = entity.getPrice();
+        this.imageUrl = entity.getImageUrl();
+        this.description = entity.getDescription();
+        this.status = entity.getStatus();
+        this.createdAt = entity.getCreatedAt();
+        this.seller = entity.getSeller();
+        this.likes = entity.getLikes();
+        this.cartItems = entity.getCartItems();
     }
 
     public static Product toEntity(final ProductDto dto) {
@@ -73,17 +71,6 @@ public class ProductDto {
                 .seller(dto.getSeller())
                 .likes(dto.getLikes())
                 .cartItems(dto.getCartItems())
-                .build();
-    }
-
-    public static Product toEntity(final ProductRequestDto dto) {
-        return Product.builder()
-                .title(dto.getTitle())
-                .price(dto.getPrice())
-                .imageUrl(dto.getImageUrl())
-                .description(dto.getDescription())
-                .status(dto.getStatus())
-                .seller(dto.getSeller())
                 .build();
     }
 }
