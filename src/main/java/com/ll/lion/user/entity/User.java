@@ -51,6 +51,9 @@ public class User {
 
     private String address;
 
+    @Column(name = "profile_url")
+    private String profilePhotoUrl;
+
     @Column(name = "provider_id")
     private String providerId;
 

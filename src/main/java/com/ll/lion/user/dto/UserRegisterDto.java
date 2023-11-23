@@ -8,4 +8,5 @@ public class UserRegisterDto {
     private String password;
     private String phoneNumber;
     private String address;
+    private String profilePictureUrl;
 }

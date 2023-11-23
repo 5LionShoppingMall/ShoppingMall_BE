@@ -30,6 +30,7 @@ public class UserService {
                 .password(passwordEncoder.encode(userRegisterDto.getPassword()))
                 .phoneNumber(userRegisterDto.getPhoneNumber())
                 .address(userRegisterDto.getAddress())
+                .profilePhotoUrl(userRegisterDto.getProfilePictureUrl())
                 .createdAt(LocalDateTime.now())
                 .role("USER")
                 .build();
