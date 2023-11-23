@@ -5,6 +5,7 @@ import com.ll.lion.product.dto.ProductDto;
 import com.ll.lion.product.dto.ProductRequestDto;
 import com.ll.lion.product.entity.Product;
 import com.ll.lion.product.service.ProductService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.ResponseEntity;
@@ -34,10 +35,10 @@ public class ProductController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<?> registerProduct(@RequestBody ProductRequestDto reqDto) {
+    public ResponseEntity<?> registerProduct(@Valid @RequestBody ProductRequestDto reqDto) {
         ResponseDto<ProductDto> responseDto;
         try {
-            Product productEntity = productService.create(ProductDto.toEntity(reqDto.requestObjectValidate(reqDto)));
+            Product productEntity = productService.create(ProductDto.toEntity(new ProductDto(reqDto)));
             responseDto = ResponseDto.<ProductDto>builder().objData(new ProductDto(productEntity)).build();
             return ResponseEntity.ok(responseDto);
         } catch (Exception e) {
