@@ -73,6 +73,8 @@ public class User {
     @Column(nullable = false)
     private String role;
 
+    private boolean emailVerified;
+
     @OneToMany(mappedBy = "seller")
     private List<Product> products;
 
@@ -93,4 +95,7 @@ public class User {
     @OneToMany(mappedBy = "user")
     private List<Post> posts;
 
+    public void verifyEmail() {
+        this.emailVerified = true;
+    }
 }

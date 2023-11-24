@@ -4,10 +4,13 @@ import com.ll.lion.user.dto.UserInfoDto;
 import com.ll.lion.user.dto.UserRegisterDto;
 import com.ll.lion.user.entity.RefreshToken;
 import com.ll.lion.user.entity.User;
+import com.ll.lion.user.entity.VerificationToken;
 import com.ll.lion.user.repository.RefreshTokenRepository;
 import com.ll.lion.user.repository.UserRepository;
+import com.ll.lion.user.repository.VerificationTokenRepository;
 import java.time.LocalDateTime;
 import java.util.Optional;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -19,6 +22,8 @@ public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final RefreshTokenRepository refreshTokenRepository;
+    private final EmailService emailService; // 가상의 이메일 서비스
+    private final VerificationTokenRepository verificationTokenRepository;
 
     public User register(UserRegisterDto userRegisterDto) {
         if (userRepository.existsByEmail(userRegisterDto.getEmail())) {
@@ -33,9 +38,17 @@ public class UserService {
                 .profilePhotoUrl(userRegisterDto.getProfilePictureUrl())
                 .createdAt(LocalDateTime.now())
                 .role("USER")
+                .emailVerified(false)
                 .build();
 
-        return userRepository.save(user);
+        User savedUser = userRepository.save(user);
+
+        String token = UUID.randomUUID().toString();
+        VerificationToken verificationToken = new VerificationToken(token, savedUser);
+        verificationTokenRepository.save(verificationToken);
+        emailService.sendVerificationEmail(savedUser.getEmail(), token);
+
+        return savedUser;
     }
 
     public RefreshToken findRefreshToken(String email) {
@@ -61,16 +74,25 @@ public class UserService {
         userRepository.save(user);
     }
 
-    public UserInfoDto getUserByEmailAndMakeDto(String email) {
-        Optional<User> userByEmail = userRepository.findByEmail(email);
-        return userByEmail.map(this::userToUserDTO).orElse(null);
+    public void verifyEmail(User user) {
+        user.verifyEmail();
+        userRepository.save(user);
     }
 
-    private UserInfoDto userToUserDTO(User user) {
+    public Optional<User> getUserByEmail(String email) {
+        return userRepository.findByEmail(email);
+    }
+
+    public UserInfoDto userToUserDTO(String email) {
+        Optional<User> userByEmail = getUserByEmail(email);
         UserInfoDto userDTO = new UserInfoDto();
-        userDTO.setEmail(user.getEmail());
-        userDTO.setAddress(user.getAddress());
-        userDTO.setPhoneNumber(user.getPhoneNumber());
+
+        if (userByEmail.isPresent()){
+            User user = userByEmail.get();
+            userDTO.setEmail(user.getEmail());
+            userDTO.setAddress(user.getAddress());
+            userDTO.setPhoneNumber(user.getPhoneNumber());
+        }
         return userDTO;
     }
 }

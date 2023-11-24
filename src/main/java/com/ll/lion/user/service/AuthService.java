@@ -2,14 +2,19 @@ package com.ll.lion.user.service;
 
 import com.ll.lion.user.dto.LoginResponseDto;
 import com.ll.lion.user.entity.RefreshToken;
+import com.ll.lion.user.entity.User;
+import com.ll.lion.user.entity.VerificationToken;
+import com.ll.lion.user.repository.VerificationTokenRepository;
 import com.ll.lion.user.security.JwtTokenUtil;
 import com.ll.lion.user.security.UserDetailsServiceImpl;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -23,31 +28,43 @@ public class AuthService {
     private final JwtTokenUtil jwtTokenUtil;
     private final PasswordEncoder passwordEncoder;
     private final UserService userService;
+    private final VerificationTokenRepository verificationTokenRepository;
 
     public LoginResponseDto authenticate(String email, String password) {
-        UserDetails userDetails;
+        Optional<User> userByEmail = userService.getUserByEmail(email);
+        if (!userByEmail.isPresent()) {
+            throw new UsernameNotFoundException("사용자를 찾을 수 없습니다."); // 사용자가 존재하지 않는 경우
+        }
+
+        User user = userByEmail.get();
+        if (!passwordEncoder.matches(password, user.getPassword())) {
+            throw new BadCredentialsException("비밀번호가 틀립니다."); // 비밀번호가 틀린 경우
+        }
+
+        if (!user.isEmailVerified()) {
+            throw new IllegalArgumentException("이메일이 아직 인증되지 않았습니다."); // 이메일이 인증되지 않은 경우
+        }
+
+        // 로그인 성공 시 JWT 토큰 생성
+        String accessToken = jwtTokenUtil.createAccessToken(email, List.of("USER"));
+
+        RefreshToken foundRefreshToken = userService.findRefreshToken(email);
         String refreshToken;
-        try {
-            userDetails = userDetailsService.loadUserByUsername(email);
-        } catch (UsernameNotFoundException e) {
-            return null; // 사용자가 존재하지 않는 경우
+        if (foundRefreshToken != null) {
+            refreshToken = foundRefreshToken.getKeyValue();
+        } else {
+            refreshToken = jwtTokenUtil.createRefreshToken(email, List.of("USER"));
+            userService.saveRefreshToken(email, refreshToken);
         }
 
-        if (passwordEncoder.matches(password, userDetails.getPassword())) {
-            // 로그인 성공 시 JWT 토큰 생성
-            String accessToken = jwtTokenUtil.createAccessToken(email, List.of("USER"));
+        return new LoginResponseDto(accessToken, refreshToken);
+    }
 
-            RefreshToken foundRefreshToken = userService.findRefreshToken(email);
-            if (foundRefreshToken != null) {
-                refreshToken = foundRefreshToken.getKeyValue();
-            } else {
-                refreshToken = jwtTokenUtil.createRefreshToken(email, List.of("USER"));
-                userService.saveRefreshToken(email, refreshToken);
-            }
+    public void confirmAccount(String token) {
+        VerificationToken verificationToken = verificationTokenRepository.findByToken(token)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid token"));
 
-            return new LoginResponseDto(accessToken, refreshToken);
-        }
-        return null;
+        userService.verifyEmail(verificationToken.getUser());
     }
 
     public void setTokenInCookie(String accessToken, String refreshToken, HttpServletResponse response) {

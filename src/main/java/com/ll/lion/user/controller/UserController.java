@@ -36,7 +36,7 @@ public class UserController {
         String accessToken = jwtTokenUtil.resolveToken(request, "accessToken");
         // accessToken에서 이메일을 추출
         String email = jwtTokenUtil.getEmail(accessToken);
-        UserInfoDto userInfoDto = userService.getUserByEmailAndMakeDto(email);
+        UserInfoDto userInfoDto = userService.userToUserDTO(email);
         return ResponseEntity.ok(userInfoDto);
     }
 }
