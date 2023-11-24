@@ -6,16 +6,15 @@ import com.ll.lion.user.entity.User;
 import com.ll.lion.user.entity.VerificationToken;
 import com.ll.lion.user.repository.VerificationTokenRepository;
 import com.ll.lion.user.security.JwtTokenUtil;
-import com.ll.lion.user.security.UserDetailsServiceImpl;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -24,7 +23,6 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class AuthService {
-    private final UserDetailsServiceImpl userDetailsService;
     private final JwtTokenUtil jwtTokenUtil;
     private final PasswordEncoder passwordEncoder;
     private final UserService userService;
@@ -68,22 +66,22 @@ public class AuthService {
     }
 
     public void setTokenInCookie(String accessToken, String refreshToken, HttpServletResponse response) {
-        Cookie accessTokenCookie = new Cookie("accessToken", accessToken);
-        accessTokenCookie.setHttpOnly(true);
-        accessTokenCookie.setPath("/");
-        accessTokenCookie.setSecure(true);
-        String accessTokenCookieHeader = accessTokenCookie.getName() + "=" + accessTokenCookie.getValue()
-                + "; Path=/; HttpOnly; Secure; SameSite=None"; // SameSite 설정
+        ResponseCookie accessTokenCookie = ResponseCookie.from("accessToken", accessToken)
+                .httpOnly(true)
+                .path("/")
+                .secure(true)
+                .sameSite("None") // SameSite 설정
+                .build();
 
-        Cookie refreshTokenCookie = new Cookie("refreshToken", refreshToken);
-        refreshTokenCookie.setHttpOnly(true);
-        refreshTokenCookie.setPath("/");
-        refreshTokenCookie.setSecure(true);
-        String refreshTokenCookieHeader = refreshTokenCookie.getName() + "=" + refreshTokenCookie.getValue()
-                + ";  Path=/; HttpOnly; Secure; SameSite=None"; // SameSite 설정
+        ResponseCookie refreshTokenCookie = ResponseCookie.from("refreshToken", refreshToken)
+                .httpOnly(true)
+                .path("/")
+                .secure(true)
+                .sameSite("None") // SameSite 설정
+                .build();
 
-        response.addHeader("Set-Cookie", accessTokenCookieHeader);
-        response.addHeader("Set-Cookie", refreshTokenCookieHeader);
+        response.addHeader("Set-Cookie", accessTokenCookie.toString());
+        response.addHeader("Set-Cookie", refreshTokenCookie.toString());
     }
 
     public ResponseEntity<?> logout(HttpServletRequest request, HttpServletResponse response) {
@@ -92,13 +90,15 @@ public class AuthService {
         if (cookies != null) {
             for (Cookie cookie : cookies) {
                 if (cookie.getName().equals("accessToken") || cookie.getName().equals("refreshToken")) {
-                    cookie.setMaxAge(0);
-                    cookie.setPath("/");
-                    cookie.setHttpOnly(true);
-                    String deleteCookie = cookie.getName() + "="
-                            + "; Expires=Thu, 01 Jan 1970 00:00:00 GMT"
-                            + "; Max-Age=0; Path=/; HttpOnly; Secure; SameSite=None";
-                    response.addHeader("Set-Cookie", deleteCookie);
+                    ResponseCookie deleteCookie = ResponseCookie.from(cookie.getName(), "")
+                            .httpOnly(true)
+                            .path("/")
+                            .secure(true)
+                            .sameSite("None") // SameSite 설정
+                            .maxAge(0) // 쿠키의 유효기간을 0으로 설정하여 쿠키를 삭제
+                            .build();
+
+                    response.addHeader("Set-Cookie", deleteCookie.toString());
                 }
             }
         }

@@ -37,8 +37,5 @@ public class VerificationToken {
         this.expiryDate = new Date(System.currentTimeMillis() + 24 * 60 * 60 * 1000);
     }
 
-    public void verifyUserEmail() {
-        user.verifyEmail();
-    }
 
 }
