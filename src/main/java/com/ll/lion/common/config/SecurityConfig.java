@@ -35,7 +35,7 @@ public class SecurityConfig {
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .authorizeHttpRequests(a -> a
                         .requestMatchers(
-                                "/api/users/register", "/api/auth/login", "/api/auth/logout","/api/auth/token/refresh"
+                                "/api/users/register", "/api/auth/login", "/api/auth/logout","/api/auth/token/refresh, ","/api/auth/sendVerificationEmail"
                         ).permitAll()
                         .anyRequest().authenticated()
                 );

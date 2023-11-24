@@ -2,8 +2,10 @@ package com.ll.lion.user.controller;
 
 import com.ll.lion.user.dto.LoginRequestDto;
 import com.ll.lion.user.dto.LoginResponseDto;
+import com.ll.lion.user.dto.VerificationRequestDto;
 import com.ll.lion.user.security.JwtTokenUtil;
 import com.ll.lion.user.service.AuthService;
+import com.ll.lion.user.service.EmailService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +23,7 @@ public class AuthController {
 
     private final AuthService authService;
     private final JwtTokenUtil jwtTokenUtil;
+    private final EmailService emailService;
 
 
     @PostMapping("/login")
@@ -48,6 +51,15 @@ public class AuthController {
     @PostMapping("/logout")
     public ResponseEntity<?> logout(HttpServletRequest request, HttpServletResponse response) {
         return authService.logout(request, response);
+    }
+
+    @PostMapping("/sendVerificationEmail")
+    public ResponseEntity<?> sendVerificationEmail(@RequestBody VerificationRequestDto verificationRequestDto) {
+        String email = verificationRequestDto.getEmail();
+
+        emailService.sendVerificationEmail(email);
+
+        return ResponseEntity.ok().build();
     }
 
 
