@@ -107,4 +107,15 @@ public class AuthService {
         return ResponseEntity.ok().body("로그아웃 성공");
     }
 
+    public String generateHtmlResponse(String message, String imageUrl) {
+        return "<html>"
+                + "<head>"
+                + "<meta charset='UTF-8'>"
+                + "</head>"
+                + "<body>"
+                + "<h1>" + message + "</h1>"
+                + "<img src='" + imageUrl + "' alt='Lion Image'>"
+                + "</body>"
+                + "</html>";
+    }
 }

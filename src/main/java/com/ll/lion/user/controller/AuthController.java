@@ -11,7 +11,9 @@ import com.ll.lion.user.service.EmailService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -58,12 +60,18 @@ public class AuthController {
     }
 
     @GetMapping("/confirm-account")
-    public ResponseEntity<Void> confirmAccount(@RequestParam String token) {
+    public ResponseEntity<String> confirmAccount(@RequestParam String token) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.TEXT_HTML);
+
         try {
             authService.confirmAccount(token);
-            return ResponseEntity.ok().build();
+
+            String successHtml = authService.generateHtmlResponse("이메일 인증이 완료되었습니다!", "https://previews.123rf.com/images/lineartestpilot/lineartestpilot1803/lineartestpilot180307030/96672834-%EC%9B%83%EB%8A%94-%EC%82%AC%EC%9E%90-%EB%A7%8C%ED%99%94.jpg");
+            return new ResponseEntity<>(successHtml, headers, HttpStatus.OK);
         } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().build();
+            String failureHtml = authService.generateHtmlResponse("이메일 인증에 실패하였습니다.", "https://us.123rf.com/450wm/marconi/marconi0807/marconi080700010/3322493-%EC%9A%B0%EB%8A%94-%EC%82%AC%EC%9E%90.jpg");
+            return new ResponseEntity<>(failureHtml, headers, HttpStatus.BAD_REQUEST);
         }
     }
 
