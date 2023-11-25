@@ -6,6 +6,10 @@ import com.ll.lion.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import com.ll.lion.user.dto.UserInfoDto;
+import com.ll.lion.user.security.JwtTokenUtil;
+import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,10 +21,21 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserController {
 
     private final UserService userService;
+    private final JwtTokenUtil jwtTokenUtil;
 
     @PostMapping("/register")
     public ResponseEntity<User> register(@RequestBody UserRegisterDto userRegisterDto) {
         User user = userService.register(userRegisterDto);
         return new ResponseEntity<>(user, HttpStatus.CREATED);
+    }
+
+    @GetMapping("/info")
+    public ResponseEntity<UserInfoDto> getUserInfo(HttpServletRequest request) {
+        // request에서 accessToken 추출
+        String accessToken = jwtTokenUtil.resolveToken(request, "accessToken");
+        // accessToken에서 이메일을 추출
+        String email = jwtTokenUtil.getEmail(accessToken);
+        UserInfoDto userInfoDto = userService.getUserByEmailAndMakeDto(email);
+        return ResponseEntity.ok(userInfoDto);
     }
 }

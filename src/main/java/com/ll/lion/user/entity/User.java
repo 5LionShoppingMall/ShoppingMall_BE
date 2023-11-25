@@ -20,17 +20,23 @@ import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
+
 import java.time.LocalDateTime;
 import java.util.List;
+
 import lombok.Getter;
-import lombok.Setter;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
 @Entity
 @Table(name = "users")
+@Builder(toBuilder = true)
+@NoArgsConstructor
+@AllArgsConstructor
 @Getter
-@Setter
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -79,8 +85,10 @@ public class User {
     @JoinColumn(name = "cart_id")
     private Cart cart;
 
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "refresh_token_id", referencedColumnName = "id")
+    private RefreshToken refreshToken;
+
     @OneToMany(mappedBy = "user")
     private List<Post> posts;
-
-
 }
