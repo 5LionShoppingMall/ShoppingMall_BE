@@ -1,6 +1,5 @@
 package com.ll.lion.community.entity;
 
-
 import com.ll.lion.common.entity.DateEntity;
 import com.ll.lion.community.dto.post.PostReqDto;
 import com.ll.lion.user.entity.User;
@@ -12,15 +11,9 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.Temporal;
-import jakarta.persistence.TemporalType;
-
-import java.time.LocalDateTime;
 import java.util.List;
 
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
 
 @NoArgsConstructor
 @Entity

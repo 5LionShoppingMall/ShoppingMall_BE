@@ -8,6 +8,7 @@ import com.ll.lion.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -21,5 +22,9 @@ public class PostService {
 
         Post post = new Post(postReqDto, user);
         return postRepository.save(post);
+    }
+
+    public List<Post> postList() {
+        return postRepository.findAll();
     }
 }

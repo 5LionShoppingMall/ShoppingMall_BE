@@ -10,6 +10,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/post")
@@ -22,5 +24,12 @@ public class PostController {
         // TODO 로그인된 사용자 여부 체크
         Post post = postService.postSave(postReqDto);
         return new ResponseEntity<>(postReqDto, HttpStatus.CREATED);
+    }
+
+    // 게시글 모두 조회
+    @GetMapping("/list")
+    public ResponseEntity<?> postList() {
+        List<Post> postList = postService.postList();
+        return new ResponseEntity<>(postList, HttpStatus.OK);
     }
 }
