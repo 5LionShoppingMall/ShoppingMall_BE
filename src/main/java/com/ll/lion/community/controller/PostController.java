@@ -32,4 +32,11 @@ public class PostController {
         List<Post> postList = postService.postList();
         return new ResponseEntity<>(postList, HttpStatus.OK);
     }
+
+    // 게시글 1개 조회
+    @GetMapping("/detail/{id}")
+    public ResponseEntity<?> getPost(@PathVariable Long id) {
+        Post post = postService.getPost(id);
+        return new ResponseEntity<>(post, HttpStatus.OK);
+    }
 }

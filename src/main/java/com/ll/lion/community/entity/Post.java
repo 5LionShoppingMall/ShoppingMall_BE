@@ -3,14 +3,8 @@ package com.ll.lion.community.entity;
 import com.ll.lion.common.entity.DateEntity;
 import com.ll.lion.community.dto.post.PostReqDto;
 import com.ll.lion.user.entity.User;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
+
 import java.util.List;
 
 import lombok.NoArgsConstructor;
@@ -34,7 +28,7 @@ public class Post extends DateEntity {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @OneToMany(mappedBy = "post")
+    @OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE)
     private List<Comment> comments;
 
     public Post(PostReqDto postReqDto, User user) {
