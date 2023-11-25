@@ -16,10 +16,10 @@ public class PostService {
     private final PostRepository postRepository;
     private final UserRepository userRepository;
 
-    public Post postSave(PostReqDto postReqDto) {
-        // TODO .get() 사용하면 안되는지 알아보기
-        User findUser = userRepository.findByEmail(postReqDto.getEmail()).get();
-        Post post = new Post(postReqDto, findUser);
+    public Post postSave(final PostReqDto postReqDto) {
+        User user = userRepository.findById(1L).get();
+
+        Post post = new Post(postReqDto, user);
         return postRepository.save(post);
     }
 }

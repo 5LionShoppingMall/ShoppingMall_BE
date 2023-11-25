@@ -1,6 +1,7 @@
 package com.ll.lion.community.entity;
 
 
+import com.ll.lion.common.entity.DateEntity;
 import com.ll.lion.community.dto.post.PostReqDto;
 import com.ll.lion.user.entity.User;
 import jakarta.persistence.Column;
@@ -23,7 +24,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 
 @NoArgsConstructor
 @Entity
-public class Post {
+public class Post extends DateEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,16 +34,6 @@ public class Post {
 
     @Column(length = 2000)
     private String content;
-
-    @Column(name = "created_at", updatable = false)
-    @Temporal(TemporalType.TIMESTAMP)
-    @CreatedDate
-    private LocalDateTime createdAt;
-
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "updated_at")
-    @LastModifiedDate
-    private LocalDateTime updatedAt;
 
     private Integer viewCount = 0;
 
