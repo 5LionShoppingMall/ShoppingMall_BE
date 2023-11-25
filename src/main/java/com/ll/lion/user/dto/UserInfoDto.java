@@ -11,4 +11,5 @@ public class UserInfoDto {
     private String email;
     private String phoneNumber;
     private String address;
+    private String profileImageUrl;
 }

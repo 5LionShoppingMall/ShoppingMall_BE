@@ -92,6 +92,7 @@ public class UserService {
             userDTO.setEmail(user.getEmail());
             userDTO.setAddress(user.getAddress());
             userDTO.setPhoneNumber(user.getPhoneNumber());
+            userDTO.setProfileImageUrl(user.getProfilePhotoUrl());
         }
         return userDTO;
     }

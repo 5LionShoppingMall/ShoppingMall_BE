@@ -2,14 +2,10 @@ package com.ll.lion.user.controller;
 
 import com.ll.lion.user.dto.LoginRequestDto;
 import com.ll.lion.user.dto.LoginResponseDto;
-import com.ll.lion.user.dto.VerificationRequestDto;
-import com.ll.lion.user.entity.VerificationToken;
-import com.ll.lion.user.repository.VerificationTokenRepository;
-import com.ll.lion.user.security.JwtTokenUtil;
 import com.ll.lion.user.service.AuthService;
-import com.ll.lion.user.service.EmailService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -32,7 +28,7 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/login")
-    public ResponseEntity<LoginResponseDto> login(@RequestBody LoginRequestDto loginRequestDto,
+    public ResponseEntity<LoginResponseDto> login(@Valid @RequestBody LoginRequestDto loginRequestDto,
                                                   HttpServletResponse response) {
         String email = loginRequestDto.getEmail();
         String password = loginRequestDto.getPassword();
