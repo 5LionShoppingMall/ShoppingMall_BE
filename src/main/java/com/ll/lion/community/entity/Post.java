@@ -7,9 +7,11 @@ import jakarta.persistence.*;
 
 import java.util.List;
 
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
+@Getter
 @Entity
 public class Post extends DateEntity {
 

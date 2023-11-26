@@ -2,14 +2,17 @@ package com.ll.lion.community.controller;
 
 import com.ll.lion.common.dto.ResponseDto;
 import com.ll.lion.community.dto.post.PostReqDto;
+import com.ll.lion.community.dto.post.PostRespDto;
 import com.ll.lion.community.entity.Post;
 import com.ll.lion.community.service.PostService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -30,14 +33,20 @@ public class PostController {
     @GetMapping("/list")
     public ResponseEntity<?> postList() {
         List<Post> postList = postService.postList();
-        return new ResponseEntity<>(postList, HttpStatus.OK);
+        List<PostRespDto> postRespDtoList = new ArrayList<>();
+        for (int i = 0; i < postList.size(); i++) {
+            PostRespDto postRespDto = new PostRespDto(postList.get(i));
+            postRespDtoList.add(postRespDto);
+        }
+        return new ResponseEntity<>(postRespDtoList, HttpStatus.OK);
     }
 
     // 게시글 1개 조회
     @GetMapping("/detail/{id}")
     public ResponseEntity<?> getPost(@PathVariable Long id) {
         Post post = postService.getPost(id);
-        return new ResponseEntity<>(post, HttpStatus.OK);
+        PostRespDto postRespDto = new PostRespDto(post);
+        return new ResponseEntity<>(postRespDto, HttpStatus.OK);
     }
 
     // 게시글 삭제
