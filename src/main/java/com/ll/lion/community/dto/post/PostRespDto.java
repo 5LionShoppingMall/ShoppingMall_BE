@@ -1,12 +1,9 @@
 package com.ll.lion.community.dto.post;
 
-import com.ll.lion.community.entity.Comment;
 import com.ll.lion.community.entity.Post;
-import com.ll.lion.user.entity.User;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Getter
 public class PostRespDto {

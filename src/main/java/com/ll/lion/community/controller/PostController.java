@@ -1,6 +1,5 @@
 package com.ll.lion.community.controller;
 
-import com.ll.lion.common.dto.ResponseDto;
 import com.ll.lion.community.dto.post.PostReqDto;
 import com.ll.lion.community.dto.post.PostRespDto;
 import com.ll.lion.community.entity.Post;
@@ -9,7 +8,6 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
