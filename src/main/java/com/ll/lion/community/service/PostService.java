@@ -33,7 +33,8 @@ public class PostService {
     }
 
     public List<Post> postList() {
-        return postRepository.findAll();
+        return Optional.of(postRepository.findAll())
+                .orElseThrow(() -> new DataNotFoundException("등록된 게시글이 없습니다."));
     }
 
     public Post getPost(Long id) {

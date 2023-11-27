@@ -40,13 +40,16 @@ public class PostController {
     // 게시글 모두 조회
     @GetMapping("/list")
     public ResponseEntity<?> postList() {
-        List<Post> postList = postService.postList();
-        List<PostRespDto> postRespDtoList = new ArrayList<>();
-        for (int i = 0; i < postList.size(); i++) {
-            PostRespDto postRespDto = new PostRespDto(postList.get(i));
-            postRespDtoList.add(postRespDto);
+        ResponseDto<PostDto> responseDto;
+        try {
+            List<Post> postList = postService.postList();
+            List<PostDto> postDtos = postList.stream().map(PostDto::new).toList();
+            responseDto = ResponseDto.<PostDto>builder().listData(postDtos).build();
+            return ResponseEntity.ok(responseDto);
+        } catch (Exception e) {
+            responseDto = ResponseDto.<PostDto>builder().error(e.getMessage()).build();
+            return ResponseEntity.badRequest().body(responseDto);
         }
-        return new ResponseEntity<>(postRespDtoList, HttpStatus.OK);
     }
 
     // 게시글 1개 조회
