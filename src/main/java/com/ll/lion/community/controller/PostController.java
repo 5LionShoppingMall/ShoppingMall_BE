@@ -55,9 +55,15 @@ public class PostController {
     // 게시글 1개 조회
     @GetMapping("/detail/{id}")
     public ResponseEntity<?> getPost(@PathVariable Long id) {
-        Post post = postService.getPost(id);
-        PostRespDto postRespDto = new PostRespDto(post);
-        return new ResponseEntity<>(postRespDto, HttpStatus.OK);
+        ResponseDto<PostDto> responseDto;
+        try {
+            Post post = postService.getPost(id);
+            responseDto = ResponseDto.<PostDto>builder().objData(new PostDto(post)).build();
+            return ResponseEntity.ok(responseDto);
+        } catch (Exception e) {
+            responseDto = ResponseDto.<PostDto>builder().error(e.getMessage()).build();
+            return ResponseEntity.badRequest().body(responseDto);
+        }
     }
 
     // 게시글 삭제

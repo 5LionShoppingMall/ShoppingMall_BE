@@ -38,7 +38,8 @@ public class PostService {
     }
 
     public Post getPost(Long id) {
-        return postRepository.findById(id).get();
+        return postRepository.findById(id)
+                .orElseThrow(() -> new DataNotFoundException("등록된 게시글이 없습니다."));
     }
 
     public void deletePost(Long id) {
