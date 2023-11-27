@@ -1,5 +1,6 @@
 package com.ll.lion.user.controller;
 
+import com.ll.lion.user.dto.CheckUserExistDto;
 import com.ll.lion.user.dto.LoginRequestDto;
 import com.ll.lion.user.dto.LoginResponseDto;
 import com.ll.lion.user.service.AuthService;
@@ -72,8 +73,12 @@ public class AuthController {
     }
 
 
-    @PostMapping("/check")
-    public String check() {
-        return "JWT SUCCESS";
+    @PostMapping("/email-exists")
+    public ResponseEntity<?> emailExist(@Valid @RequestBody CheckUserExistDto checkUserExistDto) {
+        boolean checkUserExist = authService.checkIfEmailExist(checkUserExistDto.getEmail());
+        if (checkUserExist){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

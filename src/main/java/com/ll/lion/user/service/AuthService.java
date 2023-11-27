@@ -118,4 +118,9 @@ public class AuthService {
                 + "</body>"
                 + "</html>";
     }
+
+    public boolean checkIfEmailExist(String email) {
+        Optional<User> userByEmail = userService.getUserByEmail(email);
+        return userByEmail.isPresent();
+    }
 }

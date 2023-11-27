@@ -36,7 +36,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(a -> a
                         .requestMatchers(
                                 "/api/users/register", "/api/auth/login", "/api/auth/logout","/api/auth/token/refresh",
-                                "/api/auth/confirm-account"
+                                "/api/auth/confirm-account", "/api/auth/email-exists"
                         ).permitAll()
                         .anyRequest().authenticated()
                 );

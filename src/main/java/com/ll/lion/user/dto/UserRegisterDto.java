@@ -7,7 +7,6 @@ import lombok.Data;
 @Data
 public class UserRegisterDto {
     @NotEmpty
-    @Email
     private String email;
     @NotEmpty
     private String password;
@@ -15,5 +14,6 @@ public class UserRegisterDto {
     private String phoneNumber;
     @NotEmpty
     private String address;
+
     private String profilePictureUrl;
 }
