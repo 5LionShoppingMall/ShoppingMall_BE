@@ -33,7 +33,6 @@ public class PostService {
     }
 
     public void deletePost(Long id) {
-        Post post = getPost(id);
-        postRepository.delete(post);
+        postRepository.deleteById(id);
     }
 }
