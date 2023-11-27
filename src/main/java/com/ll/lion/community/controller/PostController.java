@@ -69,7 +69,14 @@ public class PostController {
     // 게시글 삭제
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<?> deletePost(@PathVariable Long id) {
-        postService.deletePost(id);
-        return new ResponseEntity<>(HttpStatus.OK);
+        ResponseDto<?> responseDto;
+        try {
+            postService.deletePost(id);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (Exception e) {
+            // HttpStatus.NOT_FOUND (404): 클라이언트가 요청한 자원이 서버에 존재하지 않을 때 사용합니다.
+            responseDto = ResponseDto.builder().error(e.getMessage()).build();
+            return ResponseEntity.badRequest().body(responseDto);
+        }
     }
 }

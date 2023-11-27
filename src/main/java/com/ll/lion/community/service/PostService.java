@@ -43,6 +43,8 @@ public class PostService {
     }
 
     public void deletePost(Long id) {
+        // 게시글 존재하는 지 검사
+        getPost(id);
         postRepository.deleteById(id);
     }
 }
