@@ -1,5 +1,7 @@
 package com.ll.lion.community.service;
 
+import com.ll.lion.common.exception.DataNotFoundException;
+import com.ll.lion.community.dto.post.PostDto;
 import com.ll.lion.community.dto.post.PostReqDto;
 import com.ll.lion.community.entity.Post;
 import com.ll.lion.community.repository.PostRepository;
@@ -18,10 +20,16 @@ public class PostService {
     private final UserRepository userRepository;
 
     public Post postSave(final PostReqDto postReqDto) {
-        User user = userRepository.findById(1L).get();
+        // 사용자 구하기
+        User writer = userRepository.findByEmail(postReqDto.getEmail())
+                .orElseThrow(() -> new IllegalArgumentException("로그인 해주세요."));
 
-        Post post = new Post(postReqDto, user);
-        return postRepository.save(post);
+        // reqDto -> Post
+        Post postEntity = PostDto.toEntity(new PostDto(postReqDto, writer));
+
+        // 게시글 저장하기
+        return Optional.of(postRepository.save(postEntity))
+                .orElseThrow(() -> new DataNotFoundException("게시글 등록에 실패했습니다."));
     }
 
     public List<Post> postList() {

@@ -1,5 +1,7 @@
 package com.ll.lion.community.controller;
 
+import com.ll.lion.common.dto.ResponseDto;
+import com.ll.lion.community.dto.post.PostDto;
 import com.ll.lion.community.dto.post.PostReqDto;
 import com.ll.lion.community.dto.post.PostRespDto;
 import com.ll.lion.community.entity.Post;
@@ -23,8 +25,16 @@ public class PostController {
     @PostMapping("/save")
     public ResponseEntity<?> postSave(@Valid @RequestBody PostReqDto postReqDto) {
         // TODO 로그인된 사용자 여부 체크
-        Post post = postService.postSave(postReqDto);
-        return new ResponseEntity<>(postReqDto, HttpStatus.CREATED);
+
+        ResponseDto<PostDto> responseDto;
+        try {
+            Post post = postService.postSave(postReqDto);
+            responseDto = ResponseDto.<PostDto>builder().objData(new PostDto(post)).build();
+            return ResponseEntity.ok(responseDto);
+        } catch (Exception e) {
+            responseDto = ResponseDto.<PostDto>builder().error(e.getMessage()).build();
+            return ResponseEntity.badRequest().body(responseDto);
+        }
     }
 
     // 게시글 모두 조회
