@@ -7,6 +7,10 @@ build/
 src/main/resources/application.yml
 *.yml
 
+## H2 test
+dev.mv.db
+dev.trace.db
+
 ### application-*.yml ###
 application-db.yml
 

@@ -4,6 +4,9 @@ spring:
       dev:
         - db
         - security
+      test:
+        - db
+        - security
 server:
   port: 8082
 logging:
