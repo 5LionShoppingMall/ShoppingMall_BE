@@ -38,8 +38,14 @@ public class PostService {
     }
 
     public Post getPost(Long id) {
-        return postRepository.findById(id)
+        // TODO 조회수
+        Post post = postRepository.findById(id)
                 .orElseThrow(() -> new DataNotFoundException("등록된 게시글이 없습니다."));
+
+        post.setViewCount(post.getViewCount() +1);
+        postRepository.save(post);
+
+        return post;
     }
 
     public void deletePost(Long id) {

@@ -10,9 +10,11 @@ import java.util.List;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @NoArgsConstructor
 @Getter
+@Setter
 @Entity
 public class Post extends DateEntity {
 
@@ -25,7 +27,7 @@ public class Post extends DateEntity {
     @Column(length = 2000)
     private String content;
 
-    private Integer viewCount = 0;
+    private Integer viewCount;
 
     @JsonIgnore
     @ManyToOne

@@ -38,6 +38,7 @@ public class PostDto {
         this.title = dto.getTitle();
         this.content = dto.getContent();
         this.user = user;
+        this.viewCount = 0;
     }
 
     public PostDto(final Post entity) {
