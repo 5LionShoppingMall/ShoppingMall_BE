@@ -21,6 +21,7 @@ import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
+@Transactional(readOnly = true)
 public class PostService {
     private final PostRepository postRepository;
     private final UserRepository userRepository;
@@ -76,6 +77,7 @@ public class PostService {
     }
 
     // 게시글 삭제
+    @Transactional
     public void deletePost(Long id) {
         // 게시글 존재하는 지 검사
         getPost(id);
