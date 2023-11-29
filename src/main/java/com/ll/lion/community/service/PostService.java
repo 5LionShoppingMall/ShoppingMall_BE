@@ -13,6 +13,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,13 +48,13 @@ public class PostService {
                 .orElseThrow(() -> new DataNotFoundException("등록된 게시글이 없습니다."));
     }
 
+    @Transactional
     public Post getPost(Long id) {
         Post post = postRepository.findById(id)
                 .orElseThrow(() -> new DataNotFoundException("등록된 게시글이 없습니다."));
 
         // 조회수
         post.setViewCount(post.getViewCount() +1);
-        postRepository.save(post);
 
         return post;
     }
