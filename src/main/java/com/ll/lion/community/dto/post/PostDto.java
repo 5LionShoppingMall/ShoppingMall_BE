@@ -34,6 +34,7 @@ public class PostDto {
         this.updatedAt = updatedAt;
     }
 
+    // 요청받은 PostReqDto 타입을 PostDto 타입으로 바꾸기
     public PostDto(final PostReqDto dto, User user) {
         this.title = dto.getTitle();
         this.content = dto.getContent();
@@ -52,6 +53,7 @@ public class PostDto {
         this.updatedAt = entity.getUpdatedAt();
     }
 
+    // PostDto 타입을 Post 타입으로 바꾸기
     public static Post toEntity(final PostDto dto) {
         return Post.builder()
                 .id(dto.getId())

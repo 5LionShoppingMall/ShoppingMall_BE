@@ -1,8 +1,8 @@
 package com.ll.lion.community.controller;
 
 import com.ll.lion.common.dto.ResponseDto;
-import com.ll.lion.community.dto.post.PostDto;
 import com.ll.lion.community.dto.post.PostReqDto;
+import com.ll.lion.community.dto.post.PostRespDto;
 import com.ll.lion.community.entity.Post;
 import com.ll.lion.community.service.PostService;
 import jakarta.validation.Valid;
@@ -12,7 +12,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -26,13 +25,13 @@ public class PostController {
     public ResponseEntity<?> postSave(@Valid @RequestBody PostReqDto postReqDto) {
         // TODO 로그인된 사용자 여부 체크
 
-        ResponseDto<PostDto> responseDto;
+        ResponseDto<PostRespDto> responseDto;
         try {
             Post post = postService.postSave(postReqDto);
-            responseDto = ResponseDto.<PostDto>builder().objData(new PostDto(post)).build();
+            responseDto = ResponseDto.<PostRespDto>builder().objData(new PostRespDto(post)).build();
             return ResponseEntity.ok(responseDto);
         } catch (Exception e) {
-            responseDto = ResponseDto.<PostDto>builder().error(e.getMessage()).build();
+            responseDto = ResponseDto.<PostRespDto>builder().error(e.getMessage()).build();
             return ResponseEntity.badRequest().body(responseDto);
         }
     }
@@ -40,14 +39,14 @@ public class PostController {
     // 게시글 모두 조회
     @GetMapping("/list")
     public ResponseEntity<?> postList(@RequestParam(value = "page", defaultValue = "0") int page) {
-        ResponseDto<PostDto> responseDto;
+        ResponseDto<PostRespDto> responseDto;
         try {
             Page<Post> postList = postService.postList(page);
-            List<PostDto> postDtos = postList.stream().map(PostDto::new).toList();
-            responseDto = ResponseDto.<PostDto>builder().listData(postDtos).build();
+            List<PostRespDto> postDtos = postList.stream().map(PostRespDto::new).toList();
+            responseDto = ResponseDto.<PostRespDto>builder().listData(postDtos).build();
             return ResponseEntity.ok(responseDto);
         } catch (Exception e) {
-            responseDto = ResponseDto.<PostDto>builder().error(e.getMessage()).build();
+            responseDto = ResponseDto.<PostRespDto>builder().error(e.getMessage()).build();
             return ResponseEntity.badRequest().body(responseDto);
         }
     }
@@ -55,13 +54,13 @@ public class PostController {
     // 게시글 1개 조회
     @GetMapping("/detail/{id}")
     public ResponseEntity<?> getPost(@PathVariable Long id) {
-        ResponseDto<PostDto> responseDto;
+        ResponseDto<PostRespDto> responseDto;
         try {
             Post post = postService.getPost(id);
-            responseDto = ResponseDto.<PostDto>builder().objData(new PostDto(post)).build();
+            responseDto = ResponseDto.<PostRespDto>builder().objData(new PostRespDto(post)).build();
             return ResponseEntity.ok(responseDto);
         } catch (Exception e) {
-            responseDto = ResponseDto.<PostDto>builder().error(e.getMessage()).build();
+            responseDto = ResponseDto.<PostRespDto>builder().error(e.getMessage()).build();
             return ResponseEntity.badRequest().body(responseDto);
         }
     }
