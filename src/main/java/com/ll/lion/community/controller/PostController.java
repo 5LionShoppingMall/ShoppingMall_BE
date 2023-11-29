@@ -22,12 +22,12 @@ public class PostController {
 
     // 게시글 등록
     @PostMapping("/save")
-    public ResponseEntity<?> postSave(@Valid @RequestBody PostReqDto postReqDto) {
+    public ResponseEntity<?> postSave(@Valid @RequestBody PostReqDto reqDto) {
         // TODO 로그인된 사용자 여부 체크
 
         ResponseDto<PostRespDto> responseDto;
         try {
-            Post post = postService.postSave(postReqDto);
+            Post post = postService.postSave(reqDto);
             responseDto = ResponseDto.<PostRespDto>builder().objData(new PostRespDto(post)).build();
             return ResponseEntity.ok(responseDto);
         } catch (Exception e) {
@@ -57,6 +57,20 @@ public class PostController {
         ResponseDto<PostRespDto> responseDto;
         try {
             Post post = postService.getPost(id);
+            responseDto = ResponseDto.<PostRespDto>builder().objData(new PostRespDto(post)).build();
+            return ResponseEntity.ok(responseDto);
+        } catch (Exception e) {
+            responseDto = ResponseDto.<PostRespDto>builder().error(e.getMessage()).build();
+            return ResponseEntity.badRequest().body(responseDto);
+        }
+    }
+
+    // 게시글 수정
+    @PutMapping("/modify/{id}")
+    public ResponseEntity<?> modifyPost(@PathVariable Long id, @RequestBody PostReqDto reqDto) {
+        ResponseDto<PostRespDto> responseDto;
+        try {
+            Post post = postService.modifyPost(id, reqDto);
             responseDto = ResponseDto.<PostRespDto>builder().objData(new PostRespDto(post)).build();
             return ResponseEntity.ok(responseDto);
         } catch (Exception e) {

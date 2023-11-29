@@ -25,19 +25,21 @@ public class PostService {
     private final PostRepository postRepository;
     private final UserRepository userRepository;
 
-    public Post postSave(final PostReqDto postReqDto) {
+    // 게시글 등록
+    public Post postSave(final PostReqDto reqDto) {
         // 사용자 구하기
-        User writer = userRepository.findByEmail(postReqDto.getEmail())
+        User writer = userRepository.findByEmail(reqDto.getEmail())
                 .orElseThrow(() -> new IllegalArgumentException("로그인 해주세요."));
 
         // reqDto -> Post
-        Post postEntity = PostDto.toEntity(new PostDto(postReqDto, writer));
+        Post postEntity = PostDto.toEntity(new PostDto(reqDto, writer));
 
         // 게시글 저장하기
         return Optional.of(postRepository.save(postEntity))
                 .orElseThrow(() -> new DataNotFoundException("게시글 등록에 실패했습니다."));
     }
 
+    // 게시글 모두 조회
     public Page<Post> postList(int page) {
         // 정렬 기준
         List<Sort.Order> sorts = new ArrayList<>();
@@ -48,6 +50,7 @@ public class PostService {
                 .orElseThrow(() -> new DataNotFoundException("등록된 게시글이 없습니다."));
     }
 
+    // 게시글 1개 조회
     @Transactional
     public Post getPost(Long id) {
         Post post = postRepository.findById(id)
@@ -59,6 +62,20 @@ public class PostService {
         return post;
     }
 
+    // 게시글 수정
+    @Transactional
+    public Post modifyPost(Long id, PostReqDto reqDto) {
+        // 게시글 찾기
+        Post post = postRepository.findById(id)
+                .orElseThrow(() -> new DataNotFoundException("등록된 게시글이 없습니다."));
+
+        post.setTitle(reqDto.getTitle());
+        post.setContent(reqDto.getContent());
+
+        return post;
+    }
+
+    // 게시글 삭제
     public void deletePost(Long id) {
         // 게시글 존재하는 지 검사
         getPost(id);
