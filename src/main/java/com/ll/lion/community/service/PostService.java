@@ -27,6 +27,7 @@ public class PostService {
     private final UserRepository userRepository;
 
     // 게시글 등록
+    @Transactional
     public Post postSave(final PostReqDto reqDto) {
         // 사용자 구하기
         User writer = userRepository.findByEmail(reqDto.getEmail())
