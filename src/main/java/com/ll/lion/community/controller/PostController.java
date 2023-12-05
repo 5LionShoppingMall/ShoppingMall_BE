@@ -68,7 +68,6 @@ public class PostController {
     @PutMapping("/modify/{id}")
     public ResponseEntity<?> modifyPost(@PathVariable Long id, @RequestBody PostReqDto reqDto,
                                         Principal principal) {
-        System.out.println("principal = " + principal.getName());
         ResponseDto<PostRespDto> responseDto;
         try {
             Post post = postService.modifyPost(id, reqDto, principal.getName());
