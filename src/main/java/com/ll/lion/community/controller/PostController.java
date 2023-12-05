@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -22,12 +23,10 @@ public class PostController {
 
     // 게시글 등록
     @PostMapping("/save")
-    public ResponseEntity<?> postSave(@Valid @RequestBody PostReqDto reqDto) {
-        // TODO 로그인된 사용자 여부 체크
-
+    public ResponseEntity<?> postSave(@Valid @RequestBody PostReqDto reqDto, Principal principal) {
         ResponseDto<PostRespDto> responseDto;
         try {
-            Post post = postService.postSave(reqDto);
+            Post post = postService.postSave(reqDto, principal.getName());
             responseDto = ResponseDto.<PostRespDto>builder().objData(new PostRespDto(post)).build();
             return ResponseEntity.ok(responseDto);
         } catch (Exception e) {
@@ -67,10 +66,12 @@ public class PostController {
 
     // 게시글 수정
     @PutMapping("/modify/{id}")
-    public ResponseEntity<?> modifyPost(@PathVariable Long id, @RequestBody PostReqDto reqDto) {
+    public ResponseEntity<?> modifyPost(@PathVariable Long id, @RequestBody PostReqDto reqDto,
+                                        Principal principal) {
+        System.out.println("principal = " + principal.getName());
         ResponseDto<PostRespDto> responseDto;
         try {
-            Post post = postService.modifyPost(id, reqDto);
+            Post post = postService.modifyPost(id, reqDto, principal.getName());
             responseDto = ResponseDto.<PostRespDto>builder().objData(new PostRespDto(post)).build();
             return ResponseEntity.ok(responseDto);
         } catch (Exception e) {
@@ -81,10 +82,10 @@ public class PostController {
 
     // 게시글 삭제
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<?> deletePost(@PathVariable Long id) {
+    public ResponseEntity<?> deletePost(@PathVariable Long id, Principal principal) {
         ResponseDto<?> responseDto;
         try {
-            postService.deletePost(id);
+            postService.deletePost(id, principal.getName());
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception e) {
             // HttpStatus.NOT_FOUND (404): 클라이언트가 요청한 자원이 서버에 존재하지 않을 때 사용합니다.

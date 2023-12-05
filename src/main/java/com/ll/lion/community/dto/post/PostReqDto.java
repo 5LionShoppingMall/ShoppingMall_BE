@@ -9,6 +9,4 @@ public class PostReqDto {
     private String title;
     @NotNull
     private String content;
-
-    private String email;
 }

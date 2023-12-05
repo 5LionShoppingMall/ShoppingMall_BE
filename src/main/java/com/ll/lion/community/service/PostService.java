@@ -15,6 +15,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -28,9 +29,9 @@ public class PostService {
 
     // 게시글 등록
     @Transactional
-    public Post postSave(final PostReqDto reqDto) {
+    public Post postSave(final PostReqDto reqDto, String userEmail) {
         // 사용자 구하기
-        User writer = userRepository.findByEmail(reqDto.getEmail())
+        User writer = userRepository.findByEmail(userEmail)
                 .orElseThrow(() -> new IllegalArgumentException("로그인 해주세요."));
 
         // reqDto -> Post
@@ -66,10 +67,13 @@ public class PostService {
 
     // 게시글 수정
     @Transactional
-    public Post modifyPost(Long id, PostReqDto reqDto) {
+    public Post modifyPost(Long id, PostReqDto reqDto, String userEmail) {
         // 게시글 찾기
         Post post = postRepository.findById(id)
                 .orElseThrow(() -> new DataNotFoundException("등록된 게시글이 없습니다."));
+
+        // 수정할 회원과 작성한 회원 같은지 확인
+        isAuthor(userEmail, post);
 
         post.setTitle(reqDto.getTitle());
         post.setContent(reqDto.getContent());
@@ -79,9 +83,20 @@ public class PostService {
 
     // 게시글 삭제
     @Transactional
-    public void deletePost(Long id) {
+    public void deletePost(Long id, String userEmail) {
         // 게시글 존재하는 지 검사
-        getPost(id);
+        Post post = getPost(id);
+
+        // 삭제할 회원과 작성한 회원 같은지 확인
+        isAuthor(userEmail, post);
+
         postRepository.deleteById(id);
+    }
+
+    // 접근하려는 사용자가 게시글에 대한 권한이 있는지 확인
+    private static void isAuthor(String userEmail, Post post) {
+        if (!userEmail.equals(post.getUser().getEmail())) {
+            throw new IllegalArgumentException("해당 게시글에 대한 권한이 없습니다.");
+        }
     }
 }
