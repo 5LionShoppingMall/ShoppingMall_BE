@@ -1,10 +1,13 @@
 package com.ll.lion.product.dto;
 
+import com.ll.lion.common.dto.ImageDto;
+import com.ll.lion.common.entity.Image;
 import com.ll.lion.community.entity.Like;
 import com.ll.lion.product.entity.CartItem;
 import com.ll.lion.product.entity.Product;
 import com.ll.lion.product.entity.ProductStatus;
 import com.ll.lion.user.entity.User;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 
@@ -12,11 +15,13 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
+@Builder(toBuilder = true)
+@AllArgsConstructor
 public class ProductDto {
     private Long id;
     private String title;
     private Long price;
-    private String imageUrl;
+    private List<ImageDto> images;
     private String description;
     private ProductStatus status;
     private LocalDateTime createdAt;
@@ -24,24 +29,10 @@ public class ProductDto {
     private List<Like> likes;
     private List<CartItem> cartItems;
 
-    @Builder
-    public ProductDto(Long id, String title, Long price, String imageUrl, String description, ProductStatus status, LocalDateTime createdAt, User seller, List<Like> likes, List<CartItem> cartItems) {
-        this.id = id;
-        this.title = title;
-        this.price = price;
-        this.imageUrl = imageUrl;
-        this.description = description;
-        this.status = status;
-        this.createdAt = createdAt;
-        this.seller = seller;
-        this.likes = likes;
-        this.cartItems = cartItems;
-    }
-
     public ProductDto(final ProductRequestDto dto) {
         this.title = dto.getTitle();
         this.price = dto.getPrice();
-        this.imageUrl = dto.getImageUrl();
+        this.images = dto.getImages();
         this.description = dto.getDescription();
         this.status = dto.getStatus();
         this.seller = dto.getSeller();
@@ -51,7 +42,7 @@ public class ProductDto {
         this.id = entity.getId();
         this.title = entity.getTitle();
         this.price = entity.getPrice();
-        this.imageUrl = entity.getImageUrl();
+        this.images = entity.getImages().stream().map(ImageDto::new).toList();
         this.description = entity.getDescription();
         this.status = entity.getStatus();
         this.createdAt = entity.getCreatedAt();
@@ -65,9 +56,10 @@ public class ProductDto {
                 .id(dto.getId())
                 .title(dto.getTitle())
                 .price(dto.getPrice())
-                .imageUrl(dto.getImageUrl())
+                .images(dto.getImages().stream().map(ImageDto::toEntity).toList())
                 .description(dto.getDescription())
                 .status(dto.getStatus())
+                .createdAt(dto.getCreatedAt())
                 .seller(dto.getSeller())
                 .likes(dto.getLikes())
                 .cartItems(dto.getCartItems())

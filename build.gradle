@@ -41,6 +41,9 @@ dependencies {
 
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+    // Cloudinary
+    implementation 'com.cloudinary:cloudinary-http44:1.32.2'
 }
 
 tasks.named('bootBuildImage') {

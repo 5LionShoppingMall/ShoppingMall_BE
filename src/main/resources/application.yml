@@ -4,6 +4,7 @@ spring:
       dev:
         - db
         - security
+        - file
 server:
   port: 8082
 logging:

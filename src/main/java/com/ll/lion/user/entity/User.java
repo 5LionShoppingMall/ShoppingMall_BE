@@ -48,10 +48,14 @@ public class User {
     @Column(nullable = false)
     private String password;
 
-    @Column(name = "phone_number")
+    @Column(name = "phone_number", nullable = false)
     private String phoneNumber;
 
+    @Column(nullable = false)
     private String address;
+
+    @Column(name = "profile_url")
+    private String profilePhotoUrl;
 
     @Column(name = "provider_id")
     private String providerId;
@@ -72,6 +76,8 @@ public class User {
     @Column(nullable = false)
     private String role;
 
+    private boolean emailVerified;
+
     @OneToMany(mappedBy = "seller")
     private List<Product> products;
 
@@ -91,4 +97,8 @@ public class User {
 
     @OneToMany(mappedBy = "user")
     private List<Post> posts;
+
+    public void verifyEmail() {
+        this.emailVerified = true;
+    }
 }
