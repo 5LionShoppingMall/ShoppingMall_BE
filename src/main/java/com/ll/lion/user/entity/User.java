@@ -52,6 +52,9 @@ public class User {
     @Column(nullable = false)
     private String address;
 
+    @Column(nullable = false)
+    private String nickname;
+
     @Column(name = "profile_url")
     private String profilePhotoUrl;
 

@@ -15,5 +15,8 @@ public class UserRegisterDto {
     @NotEmpty
     private String address;
 
+    @NotEmpty
+    private String nickname;
+
     private String profilePictureUrl;
 }

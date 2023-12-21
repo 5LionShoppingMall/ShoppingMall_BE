@@ -22,6 +22,7 @@ repositories {
 }
 
 dependencies {
+
     // Spring Security
     implementation 'org.springframework.boot:spring-boot-starter-security'
     testImplementation 'org.springframework.security:spring-security-test'
@@ -34,17 +35,31 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-mail'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
+    // DB
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     runtimeOnly 'com.mysql:mysql-connector-j'
     testRuntimeOnly 'com.mysql:mysql-connector-j'
 
-
+    // WEB
     implementation 'org.springframework.boot:spring-boot-starter-web'
+
+    // VALIDATION
     implementation 'org.springframework.boot:spring-boot-starter-validation'
-    compileOnly 'org.projectlombok:lombok'
+
+    // DEVTOOL
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
 
+    //WEB SOCKET
+    implementation 'org.springframework.boot:spring-boot-starter-websocket'
+
+    //LOMBOK
+    compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
+
+    implementation 'org.json:json:20231013'
+
+
+    // TEST
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 

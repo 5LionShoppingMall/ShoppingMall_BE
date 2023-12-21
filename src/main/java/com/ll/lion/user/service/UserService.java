@@ -33,6 +33,7 @@ public class UserService {
         User user = User.builder()
                 .email(userRegisterDto.getEmail())
                 .password(passwordEncoder.encode(userRegisterDto.getPassword()))
+                .nickname(userRegisterDto.getNickname())
                 .phoneNumber(userRegisterDto.getPhoneNumber())
                 .address(userRegisterDto.getAddress())
                 .profilePhotoUrl(userRegisterDto.getProfilePictureUrl())
@@ -90,6 +91,7 @@ public class UserService {
         if (userByEmail.isPresent()){
             User user = userByEmail.get();
             userDTO.setEmail(user.getEmail());
+            userDTO.setNickname(user.getNickname());
             userDTO.setAddress(user.getAddress());
             userDTO.setPhoneNumber(user.getPhoneNumber());
             userDTO.setProfileImageUrl(user.getProfilePhotoUrl());
