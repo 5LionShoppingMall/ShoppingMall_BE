@@ -19,11 +19,7 @@ public class ProductRequestDto {
 
     private Long price;
 
-    private List<ImageDto> images;
-
     private String description;
 
     private ProductStatus status;
-
-    private User seller;
 }

@@ -28,15 +28,18 @@ public class SecurityConfig {
         JwtAuthenticationFilter jwtAuthenticationFilter = new JwtAuthenticationFilter(jwtTokenUtil);
         http
                 .cors(c -> c.configure(http))
-                .csrf(c -> c.disable());
-                /*.sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .csrf(c -> c.disable())
+                .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .authorizeHttpRequests(a -> a
                         .requestMatchers(
-                                "/api/users/register", "/api/auth/login", "/api/auth/logout", "/api/auth/token/refresh"
+                                /*"/ws/**", "/chatroom/public", "/private-message",
+                                "/api/users/register", "/api/auth/login", "/api/auth/logout","/api/auth/token/refresh",
+                                "/api/auth/confirm-account", "/api/auth/email-exists"*/
+                                "/**"
                         ).permitAll()
                         .anyRequest().authenticated()
-                );*/
+                );
         return http.build();
     }
 

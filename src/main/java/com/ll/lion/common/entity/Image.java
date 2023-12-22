@@ -17,9 +17,13 @@ public class Image extends DateEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private String imageId;
+
     private String name;
 
     private String url;
+
+    private Long size;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id")

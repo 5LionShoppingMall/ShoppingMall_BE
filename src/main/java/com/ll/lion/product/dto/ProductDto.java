@@ -32,10 +32,8 @@ public class ProductDto {
     public ProductDto(final ProductRequestDto dto) {
         this.title = dto.getTitle();
         this.price = dto.getPrice();
-        this.images = dto.getImages();
         this.description = dto.getDescription();
         this.status = dto.getStatus();
-        this.seller = dto.getSeller();
     }
 
     public ProductDto(final Product entity) {

@@ -1,11 +1,15 @@
 package com.ll.lion.product.controller;
 
 import com.ll.lion.common.dto.ResponseDto;
+import com.ll.lion.common.service.CloudinaryService;
 import com.ll.lion.product.dto.ProductDto;
 import com.ll.lion.product.dto.ProductPageDto;
 import com.ll.lion.product.dto.ProductRequestDto;
 import com.ll.lion.product.entity.Product;
 import com.ll.lion.product.service.ProductService;
+import com.ll.lion.user.dto.UserInfoDto;
+import com.ll.lion.user.entity.User;
+import com.ll.lion.user.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -13,10 +17,18 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 @Log4j2
 @RestController
@@ -24,6 +36,8 @@ import java.util.List;
 @RequestMapping("/product")
 public class ProductController {
     private final ProductService productService;
+    private final CloudinaryService cloudinaryService;
+    private final UserService userService;
 
     @GetMapping("/list")
     public ResponseEntity<?> productMain(Pageable pageable) {
@@ -47,11 +61,39 @@ public class ProductController {
         }
     }
 
-    @PostMapping("/register")
-    public ResponseEntity<?> registerProduct(@Valid @RequestBody ProductRequestDto reqDto) {
+    /*@PostMapping("/register")
+    public ResponseEntity<?> registerProduct(@AuthenticationPrincipal UserDetails userDetails,
+                                             @RequestParam MultipartFile[] files,
+                                             @Valid @RequestBody ProductRequestDto reqDto) {*/
+    @PostMapping(value = "/register", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<?> registerProduct(@AuthenticationPrincipal UserDetails userDetails,
+                                             @RequestPart(value = "files") MultipartFile[] files,
+                                             @RequestPart(value = "productInfo") @Valid ProductRequestDto reqDto) {
+        log.info("상품등록컨트롤러");
         log.info(reqDto.toString());
+        log.info("인증유저? : {}", userDetails.getUsername());
+        log.info("파일? : {}", Arrays.toString(files));
         try {
-            Product productEntity = productService.create(ProductDto.toEntity(new ProductDto(reqDto)));
+            if (userDetails.getUsername().isEmpty()) {
+                throw new UsernameNotFoundException("로그인 정보가 없습니다.");
+            }
+
+            UserInfoDto userInfoDto = userService.getUserByEmailAndMakeDto(userDetails.getUsername());
+
+            User user = User.builder()
+                    .email(userInfoDto.getEmail())
+                    .phoneNumber(userInfoDto.getPhoneNumber())
+                    .address(userInfoDto.getAddress())
+                    .build();
+
+            List<Map> results = new ArrayList<>();
+
+            for (MultipartFile file : files) {
+                Map result = cloudinaryService.upload(file);
+                results.add(result);
+            }
+
+            Product productEntity = productService.create(results, ProductDto.toEntity(new ProductDto(reqDto)), user);
 
             return ResponseEntity.ok(new ResponseDto<>(
                     HttpStatus.OK.value(),

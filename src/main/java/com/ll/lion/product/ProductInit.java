@@ -37,7 +37,8 @@ public class ProductInit implements ApplicationRunner {
                             .seller(user)
                             .build();
 
-                    productService.create(product);
+                    //productService.create(product);
+                    productRepository.save(product);
                 });
             });
         }
