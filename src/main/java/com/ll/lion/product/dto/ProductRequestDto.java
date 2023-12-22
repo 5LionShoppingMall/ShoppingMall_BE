@@ -1,5 +1,6 @@
 package com.ll.lion.product.dto;
 
+import com.ll.lion.common.dto.ImageDto;
 import com.ll.lion.product.entity.ProductStatus;
 import com.ll.lion.user.entity.User;
 import jakarta.validation.constraints.NotBlank;
@@ -7,6 +8,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Data;
 
+import java.util.List;
 import java.util.Optional;
 
 @Data
@@ -17,11 +19,9 @@ public class ProductRequestDto {
 
     private Long price;
 
-    private String imageUrl;
-
     private String description;
 
     private ProductStatus status;
 
-    private User seller;
+    private List<ImageDto> images; // 추가된 필드
 }

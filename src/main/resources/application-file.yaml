@@ -1,0 +1,16 @@
+spring:
+  config:
+    activate:
+      on-profile: file
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 5242880
+      max-request-size: 5242880
+cloudinary:
+  cloud:
+    name: dpj91vazp
+  api:
+    key: 258898951939142
+    secret: x47h7r7x8o005NdeP8iIScwZAKs
+  url: cloudinary://258898951939142:x47h7r7x8o005NdeP8iIScwZAKs@dpj91vazp

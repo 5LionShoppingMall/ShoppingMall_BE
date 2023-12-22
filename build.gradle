@@ -61,6 +61,16 @@ dependencies {
 
     // TEST
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+    // Cloudinary
+    // https://mvnrepository.com/artifact/com.cloudinary/cloudinary-core
+    implementation 'com.cloudinary:cloudinary-core:1.36.0'
+
+    // https://mvnrepository.com/artifact/com.cloudinary/cloudinary-http44
+    implementation 'com.cloudinary:cloudinary-http44:1.36.0'
+
+    // https://mvnrepository.com/artifact/com.cloudinary/cloudinary-taglib
+    implementation 'com.cloudinary:cloudinary-taglib:1.36.0'
 }
 
 tasks.named('bootBuildImage') {

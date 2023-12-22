@@ -21,7 +21,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-
     private final JwtTokenUtil jwtTokenUtil;
     private final UserDetailsServiceImpl userDetailsService;
 
@@ -35,9 +34,11 @@ public class SecurityConfig {
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .authorizeHttpRequests(a -> a
                         .requestMatchers(
+                                "/**",
                                 "/ws/**", "/chatroom/public", "/private-message","api/users/nickname-exists",
                                 "/api/users/register", "/api/auth/login", "/api/auth/logout","/api/auth/token/refresh",
                                 "/api/auth/confirm-account", "/api/users/email-exists"
+
                         ).permitAll()
                         .anyRequest().authenticated()
                 );

@@ -3,7 +3,9 @@ package com.ll.lion.common.config;
 import com.ll.lion.user.entity.User;
 import com.ll.lion.user.repository.UserRepository;
 import jakarta.transaction.Transactional;
+
 import java.util.stream.IntStream;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
