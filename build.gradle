@@ -58,6 +58,12 @@ dependencies {
 
     implementation 'org.json:json:20231013'
 
+    //Oauth2
+    implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+    //WebFlux
+    implementation 'org.springframework.boot:spring-boot-starter-webflux'
+    //Reactor Core
+    implementation 'io.projectreactor:reactor-core'
 
     // TEST
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
