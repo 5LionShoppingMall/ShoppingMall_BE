@@ -47,20 +47,6 @@ public class ProductService {
 
         finalProduct = productRepository.save(finalProduct);
 
-        List<Image> images = new ArrayList<>();
-
-        for (Map map : maps) {
-            Image image = Image.builder()
-                    .imageId((String) map.get("public_id"))
-                    .name((String) map.get("original_filename"))
-                    .url((String) map.get("url"))
-                    .size(Long.parseLong(map.get("bytes").toString()))
-                    .product(finalProduct) // 이미 저장된 finalProduct를 참조
-                    .build();
-
-            images.add(imageRepository.save(image));
-        }
-
         return finalProduct;
     }
 }
