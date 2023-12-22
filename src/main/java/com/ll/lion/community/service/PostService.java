@@ -48,7 +48,7 @@ public class PostService {
         List<Sort.Order> sorts = new ArrayList<>();
         sorts.add(Sort.Order.desc("createdAt"));
         // 페이지 나누는 기준 객체 생성
-        Pageable pageable = PageRequest.of(page, 10, Sort.by(sorts));
+        Pageable pageable = PageRequest.of(page, 15, Sort.by(sorts));
         return Optional.of(postRepository.findAll(pageable))
                 .orElseThrow(() -> new DataNotFoundException("등록된 게시글이 없습니다."));
     }

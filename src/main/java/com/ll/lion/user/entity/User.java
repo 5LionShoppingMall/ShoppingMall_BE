@@ -20,13 +20,11 @@ import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
-
 import java.time.LocalDateTime;
 import java.util.List;
-
-import lombok.Getter;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -48,10 +46,17 @@ public class User {
     @Column(nullable = false)
     private String password;
 
-    @Column(name = "phone_number")
+    @Column(name = "phone_number", nullable = false)
     private String phoneNumber;
 
+    @Column(nullable = false)
     private String address;
+
+    @Column(nullable = false)
+    private String nickname;
+
+    @Column(name = "profile_url")
+    private String profilePhotoUrl;
 
     @Column(name = "provider_id")
     private String providerId;
@@ -72,6 +77,8 @@ public class User {
     @Column(nullable = false)
     private String role;
 
+    private boolean emailVerified;
+
     @OneToMany(mappedBy = "seller")
     private List<Product> products;
 
@@ -91,4 +98,8 @@ public class User {
 
     @OneToMany(mappedBy = "user")
     private List<Post> posts;
+
+    public void verifyEmail() {
+        this.emailVerified = true;
+    }
 }

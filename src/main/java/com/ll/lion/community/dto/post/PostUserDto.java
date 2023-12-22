@@ -9,11 +9,13 @@ import lombok.Getter;
 public class PostUserDto {
     private Long id;
     private String email;
+    private String nickname;
     private String role;
 
     public PostUserDto(User user) {
         this.id = user.getId();
         this.email = user.getEmail();
+        this.nickname = user.getNickname();
         this.role = user.getRole();
     }
 }
