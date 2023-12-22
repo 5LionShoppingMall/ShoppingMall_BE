@@ -78,13 +78,13 @@ public class ProductController {
                 throw new UsernameNotFoundException("로그인 정보가 없습니다.");
             }
 
-            UserInfoDto userInfoDto = userService.getUserByEmailAndMakeDto(userDetails.getUsername());
+            User user = userService.getUserByEmail(userDetails.getUsername()).get();
 
-            User user = User.builder()
+            /*User user = User.builder()
                     .email(userInfoDto.getEmail())
                     .phoneNumber(userInfoDto.getPhoneNumber())
                     .address(userInfoDto.getAddress())
-                    .build();
+                    .build();*/
 
             List<Map> results = new ArrayList<>();
 

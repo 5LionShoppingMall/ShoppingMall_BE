@@ -5,6 +5,7 @@ spring:
         - db
         - security
         - file
+        - mail
 server:
   port: 8082
 logging:

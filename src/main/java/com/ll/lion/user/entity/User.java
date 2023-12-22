@@ -24,9 +24,9 @@ import jakarta.persistence.TemporalType;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import lombok.Getter;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -53,6 +53,9 @@ public class User {
 
     @Column(nullable = false)
     private String address;
+
+    @Column(nullable = false)
+    private String nickname;
 
     @Column(name = "profile_url")
     private String profilePhotoUrl;

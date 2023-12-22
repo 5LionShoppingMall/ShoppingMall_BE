@@ -10,5 +10,7 @@ import lombok.NoArgsConstructor;
 public class UserInfoDto {
     private String email;
     private String phoneNumber;
+    private String nickname;
     private String address;
+    private String profileImageUrl;
 }

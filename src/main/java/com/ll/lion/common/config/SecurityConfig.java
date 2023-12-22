@@ -33,10 +33,10 @@ public class SecurityConfig {
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .authorizeHttpRequests(a -> a
                         .requestMatchers(
-                                /*"/ws/**", "/chatroom/public", "/private-message",
-                                "/api/users/register", "/api/auth/login", "/api/auth/logout","/api/auth/token/refresh",
-                                "/api/auth/confirm-account", "/api/auth/email-exists"*/
-                                "/**"
+                                "/ws/**", "/chatroom/public", "/private-message",
+                                "/api/users/register", "/api/auth/login", "/api/auth/logout", "/api/auth/token/refresh",
+                                "/api/auth/confirm-account", "/api/auth/email-exists"
+                                //"/**"
                         ).permitAll()
                         .anyRequest().authenticated()
                 );

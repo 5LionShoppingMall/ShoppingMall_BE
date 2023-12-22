@@ -12,6 +12,7 @@ import java.util.List;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseCookie;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -29,6 +30,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
 
+
         String accessToken = jwtTokenUtil.resolveToken(request, "accessToken");
         String refreshToken = jwtTokenUtil.resolveToken(request, "refreshToken");
 
@@ -43,13 +45,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             if (refreshToken != null && jwtTokenUtil.validateToken(refreshToken)) {
                 String email = jwtTokenUtil.getEmail(refreshToken);
                 String newAccessToken = jwtTokenUtil.createAccessToken(email, List.of("USER"));
-                Cookie newAccessTokenCookie = new Cookie("accessToken", newAccessToken);
-                newAccessTokenCookie.setHttpOnly(true);
-                newAccessTokenCookie.setPath("/");
-                newAccessTokenCookie.setSecure(true);
-                String accessTokenCookieHeader = newAccessTokenCookie.getName() + "=" + newAccessTokenCookie.getValue()
-                        + "; HttpOnly; Secure; SameSite=None"; // SameSite 설정
-                response.addHeader("Set-Cookie", accessTokenCookieHeader);
+                ResponseCookie newAccessTokenCookie = ResponseCookie.from("accessToken", newAccessToken)
+                        .httpOnly(true)
+                        .path("/")
+                        .secure(true)
+                        .sameSite("None") // SameSite 설정
+                        .build();
+
+                response.addHeader("Set-Cookie", newAccessTokenCookie.toString());
 
 
                 Authentication auth = jwtTokenUtil.getAuthentication(newAccessToken, tokenSecret);
