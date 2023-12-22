@@ -99,4 +99,9 @@ public class PostService {
             throw new IllegalArgumentException("해당 게시글에 대한 권한이 없습니다.");
         }
     }
+
+    // 게시글 수 - 테스트용
+    public long count() {
+        return postRepository.count();
+    }
 }
