@@ -6,6 +6,7 @@ import com.ll.lion.community.entity.Like;
 import com.ll.lion.community.entity.Post;
 import com.ll.lion.product.entity.Cart;
 import com.ll.lion.product.entity.Product;
+import com.ll.lion.user.dto.UserUpdateDto;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -101,5 +102,13 @@ public class User {
 
     public void verifyEmail() {
         this.emailVerified = true;
+    }
+
+    public void update(UserUpdateDto userUpdateDto) {
+        this.password = userUpdateDto.getPassword();
+        this.nickname = userUpdateDto.getNickname();
+        this.phoneNumber = userUpdateDto.getPhoneNumber();
+        this.address = userUpdateDto.getAddress();
+        this.profilePhotoUrl = userUpdateDto.getProfilePictureUrl();
     }
 }

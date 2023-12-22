@@ -20,6 +20,4 @@ public class WebConfig implements WebMvcConfigurer {
                         "Content-MD5", "Content-Type", "Date", "X-Api-Version")
                 .allowCredentials(true);
     }
-
-
 }
