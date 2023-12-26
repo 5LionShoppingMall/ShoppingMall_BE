@@ -6,6 +6,7 @@ import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -16,6 +17,7 @@ public class EmailService {
     private final JavaMailSender javaMailSender;
 
 
+    @Async
     public void sendVerificationEmail(String email, String token) {
         MimeMessage mail = javaMailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(mail, "utf-8");
@@ -35,4 +37,29 @@ public class EmailService {
 
         javaMailSender.send(mail);
     }
+
+    @Async
+    public void sendPasswordResetEmail(String email, String token) {
+        MimeMessage mail = javaMailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(mail, "utf-8");
+
+        String resetUrl = "http://localhost:3000/auth/reset-password?token=" + token;
+        String htmlMsg = "<h3>오지는사자 중고 쇼핑몰 비밀번호 재설정</h3>"
+                + "<p>비밀번호를 재설정하려면 아래 링크를 클릭해주세요 :</p>"
+                + "<a href='" + resetUrl + "'>비밀번호 재설정하기</a>";
+
+        try {
+            helper.setTo(email);
+            helper.setSubject("오지는사자 중고 쇼핑몰 비밀번호 재설정");
+            helper.setText(htmlMsg, true); // HTML 형식의 메일
+            helper.setFrom(mailProperties.getUsername());
+        } catch (MessagingException e) {
+            e.printStackTrace();
+            // 오류 처리 로직 추가 가능
+        }
+
+        javaMailSender.send(mail);
+    }
+
+
 }

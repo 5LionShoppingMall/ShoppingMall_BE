@@ -4,10 +4,18 @@ import com.ll.lion.user.dto.CheckEmailExistDto;
 import com.ll.lion.user.dto.CheckNicknameExistDto;
 import com.ll.lion.user.dto.LoginRequestDto;
 import com.ll.lion.user.dto.LoginResponseDto;
+import com.ll.lion.user.dto.PasswordResetDto;
+import com.ll.lion.user.dto.PasswordResetRequestDto;
+import com.ll.lion.user.entity.PasswordResetToken;
+import com.ll.lion.user.entity.User;
 import com.ll.lion.user.service.AuthService;
+import com.ll.lion.user.service.EmailService;
+import com.ll.lion.user.service.PasswordResetTokenService;
+import com.ll.lion.user.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -28,6 +36,9 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthController {
 
     private final AuthService authService;
+    private final UserService userService;
+    private final EmailService emailService;
+    private final PasswordResetTokenService passwordResetTokenService;
 
     @PostMapping("/login")
     public ResponseEntity<LoginResponseDto> login(@Valid @RequestBody LoginRequestDto loginRequestDto,
@@ -71,6 +82,33 @@ public class AuthController {
             String failureHtml = authService.generateHtmlResponse("이메일 인증에 실패하였습니다.", "https://us.123rf.com/450wm/marconi/marconi0807/marconi080700010/3322493-%EC%9A%B0%EB%8A%94-%EC%82%AC%EC%9E%90.jpg");
             return new ResponseEntity<>(failureHtml, headers, HttpStatus.BAD_REQUEST);
         }
+    }
+
+    @PostMapping("/request-reset-password")
+    public ResponseEntity<?> requestResetPassword(@RequestBody PasswordResetRequestDto passwordResetRequestDto) {
+        Optional<User> user = userService.getUserByEmail(passwordResetRequestDto.getEmail());
+        if (user.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("사용자를 찾을 수 없습니다.");
+        }
+        PasswordResetToken resetToken = passwordResetTokenService.createTokenForUser(user.get());
+        String tokenValue = resetToken.getToken(); // 실제 토큰 문자열을 가져옵니다.
+        emailService.sendPasswordResetEmail(passwordResetRequestDto.getEmail(), tokenValue);
+
+        return ResponseEntity.ok("비밀번호 재설정 링크가 이메일로 발송되었습니다.");
+    }
+
+    @PostMapping("/reset-password")
+    public ResponseEntity<?> resetPassword(@RequestBody PasswordResetDto resetRequest) {
+        PasswordResetToken resetToken = passwordResetTokenService.getTokenByToken(resetRequest.getToken());
+        if (resetToken == null || resetToken.isExpired()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("유효하지 않거나 만료된 토큰입니다.");
+        }
+
+        User user = resetToken.getUser();
+        authService.updatePassword(user, resetRequest.getNewPassword());
+        passwordResetTokenService.deleteToken(resetToken);
+
+        return ResponseEntity.ok("비밀번호가 성공적으로 변경되었습니다.");
     }
 
 }

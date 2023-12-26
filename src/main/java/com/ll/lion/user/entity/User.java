@@ -106,6 +106,10 @@ public class User {
         this.emailVerified = true;
     }
 
+    public void changePassword(String newPassword) {
+        this.password = newPassword;
+    }
+
     public void update(UserUpdateDto userUpdateDto) {
         this.password = userUpdateDto.getPassword();
         this.nickname = userUpdateDto.getNickname();
