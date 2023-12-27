@@ -7,7 +7,6 @@ import com.ll.lion.community.entity.Post;
 import com.ll.lion.community.service.PostService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -37,10 +36,10 @@ public class PostController {
 
     // 게시글 모두 조회
     @GetMapping("/list")
-    public ResponseEntity<?> postList(@RequestParam(value = "page", defaultValue = "0") int page) {
+    public ResponseEntity<?> postList() {
         ResponseDto<PostRespDto> responseDto;
         try {
-            Page<Post> postList = postService.postList(page);
+            List<Post> postList = postService.postList();
             List<PostRespDto> postDtos = postList.stream().map(PostRespDto::new).toList();
             responseDto = ResponseDto.<PostRespDto>builder().listData(postDtos).build();
             return ResponseEntity.ok(responseDto);
