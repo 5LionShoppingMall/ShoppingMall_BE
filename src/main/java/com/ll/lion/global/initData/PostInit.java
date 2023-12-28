@@ -5,14 +5,11 @@ import com.ll.lion.community.repository.PostRepository;
 import com.ll.lion.community.service.PostService;
 import com.ll.lion.user.entity.User;
 import com.ll.lion.user.repository.UserRepository;
-import com.ll.lion.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Lazy;
-import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
