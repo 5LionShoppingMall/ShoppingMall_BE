@@ -38,7 +38,7 @@ public class PostService {
 
     // 게시글 모두 조회
     public List<Post> postList() {
-        return Optional.of(postRepository.findAll())
+        return Optional.of(postRepository.findAllByOrderByCreatedAtDesc())
                 .orElseThrow(() -> new DataNotFoundException("등록된 게시글이 없습니다."));
     }
 
