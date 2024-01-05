@@ -22,7 +22,7 @@ public class CartController {
 
 
     @GetMapping("")
-    public void showCart(){
+    public void showCart() {
         List<CartItem> testCart; //테스트용 카트
         CartDto cartDto = new CartDto();
         // 유저 정보를 받아와야함

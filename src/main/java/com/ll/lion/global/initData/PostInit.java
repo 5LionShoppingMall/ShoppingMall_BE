@@ -36,11 +36,11 @@ public class PostInit {
     public void work1() {
         if (postService.count() > 0) return;
 
-        IntStream.rangeClosed(1,5).forEach(i -> {
+        IntStream.rangeClosed(1, 5).forEach(i -> {
             String username = "test" + i + "@test.com";
             User user = userRepository.findByEmail(username).orElse(null);
 
-            IntStream.rangeClosed(1,5).forEach(j->{
+            IntStream.rangeClosed(1, 5).forEach(j -> {
                 Post post = Post.builder()
                         .title("제목" + j)
                         .content("내용" + j)

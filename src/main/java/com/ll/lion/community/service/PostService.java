@@ -49,7 +49,7 @@ public class PostService {
                 .orElseThrow(() -> new DataNotFoundException("등록된 게시글이 없습니다."));
 
         // 조회수
-        post.setViewCount(post.getViewCount() +1);
+        post.setViewCount(post.getViewCount() + 1);
 
         return post;
     }

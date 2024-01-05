@@ -2,12 +2,9 @@ package com.ll.lion.product.dto;
 
 import com.ll.lion.product.entity.ProductStatus;
 import com.ll.lion.user.entity.User;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Data;
-
-import java.util.Optional;
 
 @Data
 @Builder

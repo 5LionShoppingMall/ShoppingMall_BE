@@ -30,7 +30,7 @@ public class AuthController {
 
         // 로그인 인증 및 Access Token, Refresh Token 발급
         LoginResponseDto loginResp = authService.authenticate(email, password);
-        if (loginResp == null){
+        if (loginResp == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
         String accessToken = loginResp.getAccessToken();
@@ -52,7 +52,7 @@ public class AuthController {
 
 
     @PostMapping("/check")
-    public String check(){
+    public String check() {
         return "JWT SUCCESS";
     }
 }

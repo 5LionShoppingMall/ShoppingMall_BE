@@ -1,19 +1,15 @@
 package com.ll.lion.user.controller;
 
+import com.ll.lion.user.dto.UserInfoDto;
 import com.ll.lion.user.dto.UserRegisterDto;
 import com.ll.lion.user.entity.User;
+import com.ll.lion.user.security.JwtTokenUtil;
 import com.ll.lion.user.service.UserService;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import com.ll.lion.user.dto.UserInfoDto;
-import com.ll.lion.user.security.JwtTokenUtil;
-import jakarta.servlet.http.HttpServletRequest;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
 @RestController
