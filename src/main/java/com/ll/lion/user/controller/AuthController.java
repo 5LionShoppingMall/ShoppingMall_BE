@@ -1,7 +1,5 @@
 package com.ll.lion.user.controller;
 
-import com.ll.lion.user.dto.CheckEmailExistDto;
-import com.ll.lion.user.dto.CheckNicknameExistDto;
 import com.ll.lion.user.dto.LoginRequestDto;
 import com.ll.lion.user.dto.LoginResponseDto;
 import com.ll.lion.user.dto.PasswordResetDto;
@@ -47,8 +45,12 @@ public class AuthController {
         String password = loginRequestDto.getPassword();
 
         try {
+
             // 로그인 인증 및 Access Token, Refresh Token 발급
             LoginResponseDto loginResp = authService.authenticate(email, password);
+            if (loginResp == null) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+            }
 
             String accessToken = loginResp.getAccessToken();
             // 클라이언트에게 Access Token과 Refresh Token을 전달
@@ -76,12 +78,20 @@ public class AuthController {
         try {
             authService.confirmAccount(token);
 
-            String successHtml = authService.generateHtmlResponse("이메일 인증이 완료되었습니다!", "https://previews.123rf.com/images/lineartestpilot/lineartestpilot1803/lineartestpilot180307030/96672834-%EC%9B%83%EB%8A%94-%EC%82%AC%EC%9E%90-%EB%A7%8C%ED%99%94.jpg");
+            String successHtml = authService.generateHtmlResponse("이메일 인증이 완료되었습니다!",
+                    "https://previews.123rf.com/images/lineartestpilot/lineartestpilot1803/lineartestpilot180307030/96672834-%EC%9B%83%EB%8A%94-%EC%82%AC%EC%9E%90-%EB%A7%8C%ED%99%94.jpg");
             return new ResponseEntity<>(successHtml, headers, HttpStatus.OK);
         } catch (IllegalArgumentException e) {
-            String failureHtml = authService.generateHtmlResponse("이메일 인증에 실패하였습니다.", "https://us.123rf.com/450wm/marconi/marconi0807/marconi080700010/3322493-%EC%9A%B0%EB%8A%94-%EC%82%AC%EC%9E%90.jpg");
+            String failureHtml = authService.generateHtmlResponse("이메일 인증에 실패하였습니다.",
+                    "https://us.123rf.com/450wm/marconi/marconi0807/marconi080700010/3322493-%EC%9A%B0%EB%8A%94-%EC%82%AC%EC%9E%90.jpg");
             return new ResponseEntity<>(failureHtml, headers, HttpStatus.BAD_REQUEST);
         }
+    }
+
+    @PostMapping("/check")
+    public String check() {
+        return "JWT SUCCESS";
+
     }
 
     @PostMapping("/request-reset-password")

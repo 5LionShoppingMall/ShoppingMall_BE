@@ -3,13 +3,11 @@ package com.ll.lion.product.dto;
 import com.ll.lion.common.dto.ImageDto;
 import com.ll.lion.product.entity.ProductStatus;
 import com.ll.lion.user.entity.User;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import java.util.List;
 import lombok.Builder;
 import lombok.Data;
 
-import java.util.List;
-import java.util.Optional;
 
 @Data
 @Builder
