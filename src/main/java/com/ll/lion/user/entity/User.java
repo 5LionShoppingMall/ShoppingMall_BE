@@ -6,28 +6,16 @@ import com.ll.lion.community.entity.Like;
 import com.ll.lion.community.entity.Post;
 import com.ll.lion.product.entity.Cart;
 import com.ll.lion.product.entity.Product;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.Table;
-import jakarta.persistence.Temporal;
-import jakarta.persistence.TemporalType;
-import java.time.LocalDateTime;
-import java.util.List;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
+
+import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "users")
@@ -40,16 +28,15 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, unique = true)
+    @Column(unique = true)
     private String email;
 
     @Column(nullable = false)
     private String password;
 
-    @Column(name = "phone_number", nullable = false)
+    @Column(name = "phone_number")
     private String phoneNumber;
 
-    @Column(nullable = false)
     private String address;
 
     @Column(nullable = false)
@@ -58,11 +45,11 @@ public class User {
     @Column(name = "profile_url")
     private String profilePhotoUrl;
 
+    @Column(name = "social_provider")
+    private String socialProvider;
+
     @Column(name = "provider_id")
     private String providerId;
-
-    @Enumerated(EnumType.STRING)
-    private SocialProvider provider;
 
     @Column(name = "created_at")
     @Temporal(TemporalType.TIMESTAMP)

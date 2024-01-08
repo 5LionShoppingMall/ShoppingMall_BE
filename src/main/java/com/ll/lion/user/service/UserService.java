@@ -8,12 +8,13 @@ import com.ll.lion.user.entity.VerificationToken;
 import com.ll.lion.user.repository.RefreshTokenRepository;
 import com.ll.lion.user.repository.UserRepository;
 import com.ll.lion.user.repository.VerificationTokenRepository;
-import java.time.LocalDateTime;
-import java.util.Optional;
-import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
+import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -88,7 +89,7 @@ public class UserService {
         Optional<User> userByEmail = getUserByEmail(email);
         UserInfoDto userDTO = new UserInfoDto();
 
-        if (userByEmail.isPresent()){
+        if (userByEmail.isPresent()) {
             User user = userByEmail.get();
             userDTO.setEmail(user.getEmail());
             userDTO.setNickname(user.getNickname());
@@ -98,4 +99,22 @@ public class UserService {
         }
         return userDTO;
     }
+
+    public User whenSocialLogin(String providerTypeCode, String providerId, String nickname, String profileImgUrl) {
+        Optional<User> opMember = getUserByProviderId(providerId);
+
+        if (opMember.isPresent()) return opMember.get();
+
+        return new User().toBuilder()
+                .socialProvider(providerTypeCode)
+                .providerId(providerId)
+                .nickname(nickname)
+                .profilePhotoUrl(profileImgUrl)
+                .build();
+    }
+
+    public Optional<User> getUserByProviderId(String providerId) {
+        return userRepository.findByProviderId(providerId);
+    }
+
 }

@@ -1,5 +1,6 @@
 package com.ll.lion.common.config;
 
+import com.ll.lion.user.security.CustomAuthenticationSuccessHandler;
 import com.ll.lion.user.security.JwtAuthenticationFilter;
 import com.ll.lion.user.security.JwtTokenUtil;
 import com.ll.lion.user.security.UserDetailsServiceImpl;
@@ -25,6 +26,8 @@ public class SecurityConfig {
     private final JwtTokenUtil jwtTokenUtil;
     private final UserDetailsServiceImpl userDetailsService;
 
+    private final CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler;
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         JwtAuthenticationFilter jwtAuthenticationFilter = new JwtAuthenticationFilter(jwtTokenUtil);
@@ -36,10 +39,18 @@ public class SecurityConfig {
                 .authorizeHttpRequests(a -> a
                         .requestMatchers(
                                 "/ws/**", "/chatroom/public", "/private-message",
-                                "/api/users/register", "/api/auth/login", "/api/auth/logout","/api/auth/token/refresh",
+                                "/api/users/register", "/api/auth/login", "/api/auth/logout", "/api/auth/token/refresh",
                                 "/api/auth/confirm-account", "/api/auth/email-exists"
                         ).permitAll()
                         .anyRequest().authenticated()
+                )
+
+
+                .oauth2Login(
+                        oauth2Login ->
+                                oauth2Login
+                                        .successHandler(customAuthenticationSuccessHandler)
+
                 );
         return http.build();
     }
