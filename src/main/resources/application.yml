@@ -5,7 +5,7 @@ spring:
         - db
         - security
       test:
-        - db
+        - test
         - security
 server:
   port: 8082

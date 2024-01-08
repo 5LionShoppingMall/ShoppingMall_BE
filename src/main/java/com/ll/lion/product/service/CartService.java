@@ -19,10 +19,11 @@ public class CartService {
 
     private final CartRepository cartRepository;
 
-    public Optional<Cart> getCart(CartDto cartDto) {
+    public CartDto getCart(CartDto cartDto) {
         final User user = cartDto.getCartOwner();
-        return cartRepository.findByUser(user)
+        Optional<Cart> cart = cartRepository.findByUser(user)
                 .or(() -> Optional.of(save(user)));
+        return new CartDto(cart.get());
     }
 
     private Cart save(final User user) {
