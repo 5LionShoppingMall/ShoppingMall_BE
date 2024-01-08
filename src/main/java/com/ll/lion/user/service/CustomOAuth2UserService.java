@@ -1,5 +1,6 @@
 package com.ll.lion.user.service;
 
+import com.ll.lion.user.dto.SocialLoginDto;
 import com.ll.lion.user.entity.User;
 import com.ll.lion.user.security.SecurityUser;
 import lombok.RequiredArgsConstructor;
@@ -40,4 +41,30 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         return new SecurityUser(user.getId(), providerId, "",
                 Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + user.getRole())));
         } //providerId가 username으로 등록됨
+
+    public SocialLoginDto extractGoogleData(OAuth2User oAuth2User, String providerTypeCode) {
+        Map<String, Object> attributes = oAuth2User.getAttributes();
+
+        String email = (String) attributes.get("email");
+        String profileImageUrl = (String) attributes.get("picture");
+        String oauthId = oAuth2User.getName();
+        String nickname = (String) attributes.get("name");
+
+        return new SocialLoginDto(email, profileImageUrl, providerTypeCode, oauthId, nickname);
     }
+
+    public SocialLoginDto extractGitHubData(OAuth2User oAuth2User, String providerTypeCode) {
+        Map<String, Object> attributes = oAuth2User.getAttributes();
+
+        String email = null;
+        if (attributes.containsKey("email")) {
+            email = (String) attributes.get("email");
+        }
+        String profileImageUrl = (String) attributes.get("avatar_url");
+        String oauthId = oAuth2User.getName();
+        String nickname = (String) attributes.get("login");
+
+        return new SocialLoginDto(email, profileImageUrl, providerTypeCode, oauthId, nickname);
+    }
+}
+
