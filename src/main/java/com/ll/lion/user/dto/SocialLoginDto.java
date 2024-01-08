@@ -8,7 +8,6 @@ import lombok.Data;
 public class SocialLoginDto {
     private String email;
     private String profileImageUrl;
-    private String providerTypeCode;
     private String oauthId;
     private String nickname;
 }

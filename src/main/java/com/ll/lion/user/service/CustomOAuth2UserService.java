@@ -28,13 +28,20 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
         OAuth2User oAuth2User = super.loadUser(userRequest);
 
-        String oauthId = oAuth2User.getName(); //provider마다 unique한 식별자
-        Map<String, Object> attributes = oAuth2User.getAttributes();
-        Map attributesProperties = (Map) attributes.get("properties");
-
-        String nickname = (String) attributesProperties.get("nickname");
-        String profileImgUrl = (String) attributesProperties.get("profile_image");
         String providerTypeCode = userRequest.getClientRegistration().getRegistrationId().toUpperCase();
+
+        SocialLoginDto socialLoginDto = null;
+
+        switch (providerTypeCode){
+            case "GOOGLE" : socialLoginDto = extractGoogleData(oAuth2User);
+            case "GITHUB" : socialLoginDto = extractGitHubData(oAuth2User);
+        }
+
+        String email = socialLoginDto.getEmail();
+        String oauthId = socialLoginDto.getOauthId(); //provider마다 unique한 식별자
+        String nickname = socialLoginDto.getNickname();
+        String profileImgUrl = socialLoginDto.getProfileImageUrl();
+
         String providerId = providerTypeCode + "__%s".formatted(oauthId);
         User user = oauthService.whenSocialLogin(providerTypeCode, providerId, nickname, profileImgUrl);
 
@@ -42,7 +49,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
                 Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + user.getRole())));
         } //providerId가 username으로 등록됨
 
-    public SocialLoginDto extractGoogleData(OAuth2User oAuth2User, String providerTypeCode) {
+    public SocialLoginDto extractGoogleData(OAuth2User oAuth2User) {
         Map<String, Object> attributes = oAuth2User.getAttributes();
 
         String email = (String) attributes.get("email");
@@ -50,10 +57,10 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         String oauthId = oAuth2User.getName();
         String nickname = (String) attributes.get("name");
 
-        return new SocialLoginDto(email, profileImageUrl, providerTypeCode, oauthId, nickname);
+        return new SocialLoginDto(email, profileImageUrl, oauthId, nickname);
     }
 
-    public SocialLoginDto extractGitHubData(OAuth2User oAuth2User, String providerTypeCode) {
+    public SocialLoginDto extractGitHubData(OAuth2User oAuth2User) {
         Map<String, Object> attributes = oAuth2User.getAttributes();
 
         String email = null;
@@ -64,7 +71,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         String oauthId = oAuth2User.getName();
         String nickname = (String) attributes.get("login");
 
-        return new SocialLoginDto(email, profileImageUrl, providerTypeCode, oauthId, nickname);
+        return new SocialLoginDto(email, profileImageUrl, oauthId, nickname);
     }
 }
 
