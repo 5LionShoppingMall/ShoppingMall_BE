@@ -41,13 +41,16 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @RequestMapping("/product")
 public class ProductController {
+    private final ObjectMapper objectMapper;
     private final ProductService productService;
     private final UserService userService;
 
     @DeleteMapping("/{id}/delete")
     public ResponseEntity<?> productDelete(@PathVariable("id") Long productId,
                                            @AuthenticationPrincipal UserDetails userDetails) {
-        User userEntity = userService.getUserByEmail(userDetails.getUsername()).orElseThrow(() -> new UsernameNotFoundException("인증 정보를 찾을 수 없습니다."));
+
+        User userEntity = userService.getUserByEmail(userDetails.getUsername())
+                .orElseThrow(() -> new UsernameNotFoundException("인증 정보를 찾을 수 없습니다."));
         Product productEntity = productService.findProduct(productId);
 
         productService.deleteProduct(productEntity, userEntity.getEmail());
@@ -68,33 +71,41 @@ public class ProductController {
                                            @RequestParam(value = "imagesJson", required = false) String imagesJson,
                                            @RequestParam(value = "deletedImages", required = false) String deletedImagesJson,
                                            @RequestPart(value = "productInfo") @Valid ProductRequestDto reqDto) throws JsonProcessingException {
-        ObjectMapper mapper = new ObjectMapper();
-        List<ImageDto> reqImages = mapper.readValue(imagesJson, new TypeReference<>() {
-        });
-        List<ImageDto> reqDeletedImages = mapper.readValue(deletedImagesJson, new TypeReference<>() {
-        });
 
+        List<Image> images = parseImagesJson(imagesJson);
+        List<Image> deletedImages = parseImagesJson(deletedImagesJson);
 
         Product productEntity = productService.findProduct(productId);
 
-        productEntity = productEntity.toBuilder()
-                .title(reqDto.getTitle())
-                .price(reqDto.getPrice())
-                .description(reqDto.getDescription())
-                .status(reqDto.getStatus())
-                .build();
-
-        List<Image> images = reqImages.stream().map(ImageDto::toEntity).collect(Collectors.toList());
-        List<Image> deletedImages = reqDeletedImages.stream().map(ImageDto::toEntity).toList();
-        productEntity = productService.modifyProduct(userDetails.getUsername(), productEntity, multipartFiles, images, deletedImages);
-
-        return ResponseEntity.ok(
-                new ResponseDto<>(
-                        HttpStatus.OK.value(),
-                        "상품 수정 성공", null,
-                        null, ProductDetailDto.from(productEntity)
-                )
+        productEntity = productService.modifyProduct(
+                userDetails.getUsername(),
+                productEntity.toBuilder()
+                        .title(reqDto.getTitle())
+                        .price(reqDto.getPrice())
+                        .description(reqDto.getDescription())
+                        .status(reqDto.getStatus())
+                        .build(),
+                multipartFiles,
+                images,
+                deletedImages
         );
+
+        return ResponseEntity.ok(new ResponseDto<>(
+                HttpStatus.OK.value(),
+                "상품 수정 성공",
+                null,
+                null,
+                ProductDetailDto.from(productEntity)
+        ));
+    }
+
+    private List<Image> parseImagesJson(String imagesJson) throws JsonProcessingException {
+        if (imagesJson == null || imagesJson.isBlank()) {
+            return Collections.emptyList();
+        }
+        List<ImageDto> imageDtos = objectMapper.readValue(imagesJson, new TypeReference<>() {
+        });
+        return imageDtos.stream().map(ImageDto::toEntity).collect(Collectors.toList());
     }
 
     @GetMapping("/{id}")
@@ -108,8 +119,6 @@ public class ProductController {
 
     @GetMapping("/list")
     public ResponseEntity<?> productMain(Pageable pageable) {
-        log.info(pageable.toString());
-
         Page<Product> productEntities = productService.findPageList(pageable);
         List<ProductListDto> productDtos = productEntities.stream().map(ProductListDto::from).collect(Collectors.toList());
         Page<ProductListDto> pageProduct = new PageImpl<>(productDtos, pageable, productEntities.getTotalElements());
@@ -124,7 +133,7 @@ public class ProductController {
     public ResponseEntity<?> registerProduct(@AuthenticationPrincipal UserDetails userDetails,
                                              @RequestPart(value = "files", required = false) List<MultipartFile> multipartFile,
                                              @RequestPart(value = "productInfo") @Valid ProductRequestDto reqDto) {
-        log.info("상품 등록 컨트롤러");
+
         if (userDetails.getUsername().isEmpty()) {
             return handleUsernameNotFoundException();
         }
