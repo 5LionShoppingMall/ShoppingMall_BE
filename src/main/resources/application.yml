@@ -4,9 +4,15 @@ spring:
       dev:
         - db
         - security
+<<<<<<< HEAD
       test:
         - test
         - security
+=======
+  jackson:
+    serialization:
+      fail-on-empty-beans: false
+>>>>>>> heeyeong
 server:
   port: 8082
 logging:

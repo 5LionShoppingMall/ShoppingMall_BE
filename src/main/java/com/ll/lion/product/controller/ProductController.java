@@ -1,6 +1,5 @@
 package com.ll.lion.product.controller;
 
-
 import com.ll.lion.common.dto.ResponseDto;
 import com.ll.lion.product.dto.ProductDto;
 import com.ll.lion.product.dto.ProductRequestDto;
@@ -37,7 +36,6 @@ public class ProductController {
 
     @PostMapping("/register")
     public ResponseEntity<?> registerProduct(@Valid @RequestBody ProductRequestDto reqDto) {
-        log.info(reqDto.toString());
         ResponseDto<ProductDto> responseDto;
         try {
             Product productEntity = productService.create(ProductDto.toEntity(new ProductDto(reqDto)));

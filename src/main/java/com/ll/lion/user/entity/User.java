@@ -6,9 +6,30 @@ import com.ll.lion.community.entity.Like;
 import com.ll.lion.community.entity.Post;
 import com.ll.lion.product.entity.Cart;
 import com.ll.lion.product.entity.Product;
+<<<<<<< HEAD
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+=======
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
+
+import java.time.LocalDateTime;
+import java.util.List;
+
+>>>>>>> heeyeong
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
@@ -58,7 +79,7 @@ public class User {
     @Column(nullable = false)
     private String role;
 
-    @OneToMany(mappedBy = "seller")
+    @OneToMany(mappedBy = "seller", cascade = CascadeType.ALL)
     private List<Product> products;
 
     @OneToMany(mappedBy = "user")
@@ -77,8 +98,11 @@ public class User {
 
     @OneToMany(mappedBy = "user")
     private List<Post> posts;
+<<<<<<< HEAD
 
     private Long email_verified = (long) 0;
 
     private String nickname = "nickname" + this.id;
+=======
+>>>>>>> heeyeong
 }

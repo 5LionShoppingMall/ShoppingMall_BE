@@ -27,7 +27,10 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         JwtAuthenticationFilter jwtAuthenticationFilter = new JwtAuthenticationFilter(jwtTokenUtil);
         http
+<<<<<<< HEAD:src/main/java/com/ll/lion/common/config/SecurityConfig.java
                 .cors(c -> c.configure(http))
+=======
+>>>>>>> heeyeong:src/main/java/com/ll/lion/user/security/SecurityConfig.java
                 .csrf(c -> c.disable());
                 /*.sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)

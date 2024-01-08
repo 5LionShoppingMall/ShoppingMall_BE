@@ -12,16 +12,20 @@ import java.util.Optional;
 @Data
 @Builder
 public class ProductRequestDto {
-    @NotNull
+
+    @NotBlank(message = "상품 이름은 비워둘 수 없습니다.")
     private String title;
 
+    @NotBlank(message = "상품 이름은 비워둘 수 없습니다.")
     private Long price;
 
     private String imageUrl;
 
+    @NotNull
     private String description;
 
     private ProductStatus status;
 
+    @NotBlank(message = "판매자는 비워둘 수 없습니다.")
     private User seller;
 }
