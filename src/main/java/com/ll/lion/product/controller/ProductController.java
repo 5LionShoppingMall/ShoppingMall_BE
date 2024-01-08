@@ -54,22 +54,6 @@ public class ProductController {
         List<ImageDto> reqImages = mapper.readValue(imagesJson, new TypeReference<>() {
         });
 
-        log.info("수정 컨트롤러");
-        log.info("productId: {}", productId);
-        log.info("userDetail username: {}", userDetails.getUsername());
-
-        if (multipartFiles != null) {
-            for (MultipartFile mFile : multipartFiles) {
-                log.info("multipartFile: {}", mFile == null ? "비었음" : mFile.getOriginalFilename());
-            }
-        }
-
-        if (reqImages != null) {
-            for (ImageDto iDto : reqImages) {
-                log.info("reqImages: {}", iDto == null ? "비었음" : iDto);
-            }
-        }
-
         Product productEntity = productService.findProduct(productId);
 
         productEntity = productEntity.toBuilder()
