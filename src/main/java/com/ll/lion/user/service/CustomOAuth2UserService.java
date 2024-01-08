@@ -20,7 +20,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 @Slf4j
 public class CustomOAuth2UserService extends DefaultOAuth2UserService {
-    private final UserService userService;
+    private final OAuthService oauthService;
     // 카카오톡 로그인이 성공할 때 마다 이 함수가 실행된다.
     @Override
     @Transactional
@@ -35,7 +35,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         String profileImgUrl = (String) attributesProperties.get("profile_image");
         String providerTypeCode = userRequest.getClientRegistration().getRegistrationId().toUpperCase();
         String providerId = providerTypeCode + "__%s".formatted(oauthId);
-        User user = userService.whenSocialLogin(providerTypeCode, providerId, nickname, profileImgUrl);
+        User user = oauthService.whenSocialLogin(providerTypeCode, providerId, nickname, profileImgUrl);
 
         return new SecurityUser(user.getId(), providerId, "",
                 Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + user.getRole())));

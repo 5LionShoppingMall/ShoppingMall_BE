@@ -9,8 +9,6 @@ import com.ll.lion.user.security.JwtTokenUtil;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.util.List;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +16,9 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Optional;
 
 
 @Service
@@ -123,4 +124,7 @@ public class AuthService {
         Optional<User> userByEmail = userService.getUserByEmail(email);
         return userByEmail.isPresent();
     }
+
+
+
 }

@@ -1,8 +1,8 @@
 package com.ll.lion.user.security;
 
-import com.ll.lion.user.entity.RefreshToken;
 import com.ll.lion.user.entity.User;
 import com.ll.lion.user.repository.RefreshTokenRepository;
+import com.ll.lion.user.service.AuthService;
 import jakarta.persistence.EntityManager;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
@@ -27,6 +27,7 @@ public class CustomAuthenticationSuccessHandler extends SavedRequestAwareAuthent
     private final JwtTokenUtil jwtTokenUtil;
     private final RefreshTokenRepository refreshTokenRepository;
     private final EntityManager entityManager;
+    private final AuthService authService;
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws ServletException, IOException {
@@ -42,17 +43,18 @@ public class CustomAuthenticationSuccessHandler extends SavedRequestAwareAuthent
         }
 
         if (redirectUrlAfterSocialLogin.startsWith("http://localhost:3000")) {
-            String accessToken = jwtTokenUtil.createAccessToken("", List.of("USER"));
-
             Long userId = ((SecurityUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId();
-            User user = entityManager.getReference()
-            String refreshToken;
-            if()
+            User user = entityManager.getReference(User.class,userId);
+            String providerId = user.getProviderId();
 
-            rq.destroySession();
-            rq.setCrossDomainCookie("accessToken", accessToken);
-            rq.setCrossDomainCookie("refreshToken", refreshToken);
-            rq.removeCookie("redirectUrlAfterSocialLogin");
+            String accessToken = jwtTokenUtil.createAccessToken(providerId, List.of("USER"));
+            String refreshToken = user.getRefreshToken().getKeyValue();
+
+            Cookie cookie = optCookie.get();
+            cookie.setPath("/");
+            cookie.setMaxAge(0);
+            response.addCookie(cookie);
+            authService.setTokenInCookie(accessToken,refreshToken,response);
 
             response.sendRedirect(redirectUrlAfterSocialLogin);
             return;
@@ -60,4 +62,5 @@ public class CustomAuthenticationSuccessHandler extends SavedRequestAwareAuthent
 
         super.onAuthenticationSuccess(request, response, authentication);
     }
+
 }

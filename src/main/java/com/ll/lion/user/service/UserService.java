@@ -8,6 +8,7 @@ import com.ll.lion.user.entity.VerificationToken;
 import com.ll.lion.user.repository.RefreshTokenRepository;
 import com.ll.lion.user.repository.UserRepository;
 import com.ll.lion.user.repository.VerificationTokenRepository;
+import com.ll.lion.user.security.JwtTokenUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -25,6 +26,7 @@ public class UserService {
     private final RefreshTokenRepository refreshTokenRepository;
     private final EmailService emailService; // 가상의 이메일 서비스
     private final VerificationTokenRepository verificationTokenRepository;
+    private final JwtTokenUtil jwtTokenUtil;
 
     public User register(UserRegisterDto userRegisterDto) {
         if (userRepository.existsByEmail(userRegisterDto.getEmail())) {
@@ -100,18 +102,7 @@ public class UserService {
         return userDTO;
     }
 
-    public User whenSocialLogin(String providerTypeCode, String providerId, String nickname, String profileImgUrl) {
-        Optional<User> opMember = getUserByProviderId(providerId);
 
-        if (opMember.isPresent()) return opMember.get();
-
-        return new User().toBuilder()
-                .socialProvider(providerTypeCode)
-                .providerId(providerId)
-                .nickname(nickname)
-                .profilePhotoUrl(profileImgUrl)
-                .build();
-    }
 
     public Optional<User> getUserByProviderId(String providerId) {
         return userRepository.findByProviderId(providerId);
