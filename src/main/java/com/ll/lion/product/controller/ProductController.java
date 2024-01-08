@@ -44,6 +44,23 @@ public class ProductController {
     private final ProductService productService;
     private final UserService userService;
 
+    @DeleteMapping("/{id}/delete")
+    public ResponseEntity<?> productDelete(@PathVariable("id") Long productId,
+                                           @AuthenticationPrincipal UserDetails userDetails) {
+        User userEntity = userService.getUserByEmail(userDetails.getUsername()).orElseThrow(() -> new UsernameNotFoundException("인증 정보를 찾을 수 없습니다."));
+        Product productEntity = productService.findProduct(productId);
+
+        productService.deleteProduct(productEntity, userEntity.getEmail());
+
+        return ResponseEntity.ok(
+                new ResponseDto<>(
+                        HttpStatus.OK.value(),
+                        "성공적으로 삭제되었습니다.", null,
+                        null, null
+                )
+        );
+    }
+
     @PutMapping("/{id}/modify")
     public ResponseEntity<?> productModify(@PathVariable("id") Long productId,
                                            @AuthenticationPrincipal UserDetails userDetails,
@@ -114,7 +131,7 @@ public class ProductController {
 
         User user = userService.getUserByEmail(userDetails.getUsername()).get();
         ProductDetailDto requestProductDto = ProductDetailDto.from(reqDto);
-        Product productEntity = productService.create(requestProductDto.toEntity(), multipartFile, user);
+        Product productEntity = productService.createProduct(requestProductDto.toEntity(), multipartFile, user);
 
         ProductDetailDto productEntityToDto = ProductDetailDto.from(productEntity);
 
