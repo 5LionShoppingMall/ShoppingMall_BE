@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.stream.IntStream;
 
-@Component
+/*@Component
 @RequiredArgsConstructor
 @Profile("dev")
 public class ProductInit implements ApplicationRunner {
@@ -43,4 +43,4 @@ public class ProductInit implements ApplicationRunner {
             });
         }
     }
-}
+}*/

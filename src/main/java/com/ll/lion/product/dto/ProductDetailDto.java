@@ -1,4 +1,3 @@
-/*
 package com.ll.lion.product.dto;
 
 import com.ll.lion.common.dto.ImageDto;
@@ -8,38 +7,32 @@ import com.ll.lion.product.entity.CartItem;
 import com.ll.lion.product.entity.Product;
 import com.ll.lion.product.entity.ProductStatus;
 import com.ll.lion.user.dto.UserInfoDto;
-import com.ll.lion.user.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Data
-@Builder(toBuilder = true)
+@Builder
 @AllArgsConstructor
-public class ProductDto {
+public class ProductDetailDto {
     private Long id;
     private String title;
     private Long price;
-    @Builder.Default
-    private List<ImageDto> images = new ArrayList<>();
+    private List<ImageDto> images;
     private String description;
     private ProductStatus status;
     private LocalDateTime createdAt;
     private UserInfoDto seller;
-    @Builder.Default
-    private List<Like> likes = new ArrayList<>();
-    @Builder.Default
-    private List<CartItem> cartItems = new ArrayList<>();
+    private List<Like> likes;
+    private List<CartItem> cartItems;
 
-    public static ProductDto from(final ProductRequestDto dto) {
-        return ProductDto.builder()
+    public static ProductDetailDto from(final ProductRequestDto dto) {
+        return ProductDetailDto.builder()
                 .title(dto.getTitle())
                 .price(dto.getPrice())
                 .description(dto.getDescription())
@@ -47,36 +40,41 @@ public class ProductDto {
                 .build();
     }
 
-    public static ProductDto from(final Product entity) {
+    public static ProductDetailDto from(Product product) {
         UserInfoDto seller = null;
-        if (entity.getSeller() != null) {
-            seller = UserInfoDto.from(entity.getSeller());
+        if (product.getSeller() != null) {
+            seller = UserInfoDto.from(product.getSeller());
         }
 
-        return ProductDto.builder()
-                .id(entity.getId())
-                .title(entity.getTitle())
-                .price(entity.getPrice())
-                .images(entity.getImages().stream()
-                        .map(image -> new ImageDto(image, entity.getId()))
+        return ProductDetailDto.builder()
+                .id(product.getId())
+                .title(product.getTitle())
+                .price(product.getPrice())
+                .images(product.getImages().stream()
+                        .map(image -> new ImageDto(image, product.getId()))
                         .collect(Collectors.toList()))
-                .description(entity.getDescription())
-                .status(entity.getStatus())
-                .createdAt(entity.getCreatedAt())
+                .description(product.getDescription())
+                .status(product.getStatus())
+                .createdAt(product.getCreatedAt())
                 .seller(seller)
-                .likes(entity.getLikes())
-                .cartItems(entity.getCartItems())
+                .likes(product.getLikes())
+                .cartItems(product.getCartItems())
                 .build();
     }
 
     public Product toEntity() {
+        List<Image> imageEntities = new ArrayList<>();
+        if (this.images != null) {
+            imageEntities = this.images.stream()
+                    .map(ImageDto::toEntity)
+                    .toList();
+        }
+
         return Product.builder()
                 .id(this.id)
                 .title(this.title)
                 .price(this.price)
-                .images(this.images.stream()
-                        .map(ImageDto::toEntity)
-                        .collect(Collectors.toList()))
+                .images(imageEntities)
                 .description(this.description)
                 .status(this.status)
                 .createdAt(this.createdAt)
@@ -86,4 +84,3 @@ public class ProductDto {
                 .build();
     }
 }
-*/

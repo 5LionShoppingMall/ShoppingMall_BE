@@ -7,6 +7,7 @@ import com.ll.lion.community.entity.Like;
 import com.ll.lion.user.entity.User;
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import lombok.*;
@@ -42,8 +43,9 @@ public class Product extends DateEntity {
     @Column(nullable = false)
     private Long price;
 
+    @Setter
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Image> images;
+    private List<Image> images = new ArrayList<>();
 
     @Column(length = 2000)
     private String description;
@@ -61,4 +63,9 @@ public class Product extends DateEntity {
 
     @OneToMany(mappedBy = "product")
     private List<CartItem> cartItems;
+    
+    public void addImage(Image image) {
+        this.images.add(image);
+        image.setProduct(this);
+    }
 }
