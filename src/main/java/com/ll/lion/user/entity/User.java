@@ -6,6 +6,8 @@ import com.ll.lion.community.entity.Like;
 import com.ll.lion.community.entity.Post;
 import com.ll.lion.product.entity.Cart;
 import com.ll.lion.product.entity.Product;
+
+import com.ll.lion.user.dto.UserUpdateDto;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -23,10 +25,9 @@ import jakarta.persistence.TemporalType;
 
 import java.time.LocalDateTime;
 import java.util.List;
-
-import lombok.Getter;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -48,10 +49,17 @@ public class User {
     @Column(nullable = false)
     private String password;
 
-    @Column(name = "phone_number")
+    @Column(name = "phone_number", nullable = false)
     private String phoneNumber;
 
+    @Column(nullable = false)
     private String address;
+
+    @Column(nullable = false)
+    private String nickname;
+
+    @Column(name = "profile_url")
+    private String profilePhotoUrl;
 
     @Column(name = "provider_id")
     private String providerId;
@@ -72,13 +80,15 @@ public class User {
     @Column(nullable = false)
     private String role;
 
-    @OneToMany(mappedBy = "seller")
+    private boolean emailVerified;
+
+    @OneToMany(mappedBy = "seller", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Product> products;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> comments;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Like> likes;
 
     @OneToOne(cascade = CascadeType.ALL)
@@ -89,6 +99,24 @@ public class User {
     @JoinColumn(name = "refresh_token_id", referencedColumnName = "id")
     private RefreshToken refreshToken;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Post> posts;
+
+    public void verifyEmail() {
+        this.emailVerified = true;
+    }
+
+
+    public void changePassword(String newPassword) {
+        this.password = newPassword;
+    }
+
+    public void update(UserUpdateDto userUpdateDto) {
+        this.password = userUpdateDto.getPassword();
+        this.nickname = userUpdateDto.getNickname();
+        this.phoneNumber = userUpdateDto.getPhoneNumber();
+        this.address = userUpdateDto.getAddress();
+        this.profilePhotoUrl = userUpdateDto.getProfilePictureUrl();
+    }
 }
+
