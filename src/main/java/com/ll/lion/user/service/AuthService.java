@@ -25,6 +25,8 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class AuthService {
     private final JwtTokenUtil jwtTokenUtil;
+
+
     private final PasswordEncoder passwordEncoder;
     private final UserService userService;
     private final VerificationTokenRepository verificationTokenRepository;
