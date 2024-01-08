@@ -8,5 +8,5 @@ public class CorsCheckController {
     @GetMapping("/check")
     String corsCheck() {
         return "Hello World";
-}
+    }
 }

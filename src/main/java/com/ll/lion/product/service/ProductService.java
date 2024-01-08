@@ -36,9 +36,6 @@ public class ProductService {
     private final ImageRepository imageRepository;
     private final FileService fileService;
 
-    @PersistenceContext
-    private EntityManager entityManager;
-
     public Product findProduct(Long id) {
         return productRepository.findById(id)
                 .orElseThrow(() -> new DataNotFoundException("해당 글을 찾을 수 없습니다."));

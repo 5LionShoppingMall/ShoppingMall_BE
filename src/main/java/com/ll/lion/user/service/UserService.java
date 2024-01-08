@@ -2,20 +2,21 @@ package com.ll.lion.user.service;
 
 import com.ll.lion.user.dto.UserInfoDto;
 import com.ll.lion.user.dto.UserRegisterDto;
+import com.ll.lion.user.dto.UserUpdateDto;
 import com.ll.lion.user.entity.RefreshToken;
 import com.ll.lion.user.entity.User;
 import com.ll.lion.user.entity.VerificationToken;
 import com.ll.lion.user.repository.RefreshTokenRepository;
 import com.ll.lion.user.repository.UserRepository;
 import com.ll.lion.user.repository.VerificationTokenRepository;
-
 import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.UUID;
-
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 
 @Service
 @RequiredArgsConstructor
@@ -82,10 +83,28 @@ public class UserService {
         userRepository.save(user);
     }
 
+    public boolean isNicknameExist(String nickname) {
+        return userRepository.existsByNickname(nickname);
+
+    }
+
+    public boolean checkIfEmailExist(String email) {
+        return userRepository.existsByEmail(email);
+    }
+
+
     public Optional<User> getUserByEmail(String email) {
         return userRepository.findByEmail(email);
     }
 
+    @Transactional
+    public User updateUserInfo(String email, UserUpdateDto userUpdateDto) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new IllegalArgumentException("유저가 존재하지 않습니다."));
+
+        user.update(userUpdateDto);
+        return user;
+    }
     public UserInfoDto userToUserDTO(String email) {
         Optional<User> userByEmail = getUserByEmail(email);
         UserInfoDto userDTO = new UserInfoDto();
@@ -100,4 +119,6 @@ public class UserService {
         }
         return userDTO;
     }
+
+
 }

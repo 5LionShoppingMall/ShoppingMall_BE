@@ -2,14 +2,15 @@ package com.ll.lion.user.security;
 
 import com.ll.lion.user.entity.User;
 import com.ll.lion.user.repository.UserRepository;
-import java.util.Collections;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+
+import java.util.Collections;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
