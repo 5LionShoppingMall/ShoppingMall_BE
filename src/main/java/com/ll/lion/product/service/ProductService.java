@@ -68,7 +68,7 @@ public class ProductService {
                 .build();
 
         try {
-            return saveProduct(productRepository.save(registeredProduct), files, null);
+            return saveProduct(productRepository.save(registeredProduct), files, null, null);
         } catch (DataAccessException e) {
             log.error("DataAccessException occurred while creating Product: " + e.getMessage());
             throw new DataInsertionFailureException("데이터 등록에 실패했습니다.", e);
@@ -76,20 +76,20 @@ public class ProductService {
     }
 
     @Transactional
-    public Product modifyProduct(String email, Product product, List<MultipartFile> multipartFiles, List<Image> images) {
+    public Product modifyProduct(String email, Product product, List<MultipartFile> multipartFiles, List<Image> images, List<Image> deletedImages) {
         if (!product.getSeller().getEmail().equals(email)) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "수정 권한이 없습니다.");
         }
 
         try {
-            return saveProduct(product, multipartFiles, images);
+            return saveProduct(product, multipartFiles, images, deletedImages);
         } catch (DataAccessException e) {
             log.error("DataAccessException occurred while creating Product: " + e.getMessage());
             throw new DataInsertionFailureException("데이터 수정에 실패했습니다.", e);
         }
     }
 
-    private Product saveProduct(Product product, List<MultipartFile> multipartFiles, List<Image> images) {
+    private Product saveProduct(Product product, List<MultipartFile> multipartFiles, List<Image> images, List<Image> deletedImages) {
         List<Image> newImages = new ArrayList<>();
 
         if (multipartFiles != null && !multipartFiles.isEmpty()) {
@@ -106,8 +106,20 @@ public class ProductService {
             }
         }
 
-        for (Image image : newImages) {
-            product.addImage(image);
+        for (Image newImage : newImages) {
+            product.addImage(newImage);
+        }
+
+        if (deletedImages != null && !deletedImages.isEmpty()) {
+            for (Image deletedImage : deletedImages) {
+                Image image = imageRepository.findById(deletedImage.getId()).orElseThrow(() -> new IllegalArgumentException("Invalid image ID: " + deletedImage.getId()));
+                fileService.deleteImage(image.getImageId());
+                imageRepository.delete(image);
+            }
+
+            // 이미지 삭제 후 남은 이미지로 업데이트
+            List<Image> remainingImages = imageRepository.findByProductId(product.getId());
+            product.updateImages(remainingImages);
         }
 
         return productRepository.save(product);

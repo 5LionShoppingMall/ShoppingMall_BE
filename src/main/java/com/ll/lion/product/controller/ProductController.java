@@ -49,10 +49,14 @@ public class ProductController {
                                            @AuthenticationPrincipal UserDetails userDetails,
                                            @RequestPart(value = "files", required = false) List<MultipartFile> multipartFiles,
                                            @RequestParam(value = "imagesJson", required = false) String imagesJson,
+                                           @RequestParam(value = "deletedImages", required = false) String deletedImagesJson,
                                            @RequestPart(value = "productInfo") @Valid ProductRequestDto reqDto) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
         List<ImageDto> reqImages = mapper.readValue(imagesJson, new TypeReference<>() {
         });
+        List<ImageDto> reqDeletedImages = mapper.readValue(deletedImagesJson, new TypeReference<>() {
+        });
+
 
         Product productEntity = productService.findProduct(productId);
 
@@ -64,7 +68,8 @@ public class ProductController {
                 .build();
 
         List<Image> images = reqImages.stream().map(ImageDto::toEntity).collect(Collectors.toList());
-        productEntity = productService.modifyProduct(userDetails.getUsername(), productEntity, multipartFiles, images);
+        List<Image> deletedImages = reqDeletedImages.stream().map(ImageDto::toEntity).toList();
+        productEntity = productService.modifyProduct(userDetails.getUsername(), productEntity, multipartFiles, images, deletedImages);
 
         return ResponseEntity.ok(
                 new ResponseDto<>(
