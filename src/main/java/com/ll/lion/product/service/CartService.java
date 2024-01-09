@@ -4,8 +4,6 @@ import com.ll.lion.product.dto.CartDto;
 import com.ll.lion.product.entity.Cart;
 import com.ll.lion.product.entity.CartItem;
 import com.ll.lion.product.repository.CartRepository;
-import com.ll.lion.user.dto.UserInfoDto;
-import com.ll.lion.user.dto.UserRegisterDto;
 import com.ll.lion.user.entity.User;
 import com.ll.lion.user.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -49,18 +47,11 @@ public class CartService {
         Optional<Cart> opCart = cartRepository.findByUserEmail(email)
                 .or(() -> {
                     // user를 찾기 필요
-                    UserInfoDto userInfoDto = userService.getUserByEmailAndMakeDto(email);
-
-                    UserRegisterDto registerDto = new UserRegisterDto();
-                    registerDto.setEmail(userInfoDto.getEmail() + "1");
-                    registerDto.setPassword("1234");
-                    registerDto.setAddress(userInfoDto.getAddress());
-                    registerDto.setPhoneNumber(userInfoDto.getPhoneNumber());
-
-                    User user = userService.register(registerDto);
+                    Optional<User> opUser = userService.getUserByEmail(email);
+                    if (opUser.isEmpty()) throw new RuntimeException("유저를 찾을 수 없습니다.");
 
                     // user의 새로운 cart생성
-                    return Optional.of(save(user));
+                    return Optional.of(save(opUser.get()));
                 });
 
         if (opCart.isEmpty()) throw new NoSuchElementException("카트가 없습니다.");
