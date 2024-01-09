@@ -1,9 +1,10 @@
 package com.ll.lion.user.entity;
 
 
-import com.ll.lion.community.entity.Comment;
-import com.ll.lion.community.entity.Like;
-import com.ll.lion.community.entity.Post;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.ll.lion.community.comment.entity.Comment;
+import com.ll.lion.community.like.entity.Like;
+import com.ll.lion.community.post.entity.Post;
 import com.ll.lion.product.entity.Cart;
 import com.ll.lion.product.entity.Product;
 
@@ -80,6 +81,11 @@ public class User {
     @Column(nullable = false)
     private String role;
 
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "refresh_token_id")
+    @JsonIgnore
+    private RefreshToken refreshToken;
+
     private boolean emailVerified;
 
     @OneToMany(mappedBy = "seller", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -94,10 +100,6 @@ public class User {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "cart_id")
     private Cart cart;
-
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "refresh_token_id", referencedColumnName = "id")
-    private RefreshToken refreshToken;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Post> posts;

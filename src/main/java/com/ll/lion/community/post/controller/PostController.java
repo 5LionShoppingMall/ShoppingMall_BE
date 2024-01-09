@@ -1,10 +1,10 @@
-package com.ll.lion.community.controller;
+package com.ll.lion.community.post.controller;
 
 import com.ll.lion.common.dto.ResponseDto;
-import com.ll.lion.community.dto.post.PostReqDto;
-import com.ll.lion.community.dto.post.PostRespDto;
-import com.ll.lion.community.entity.Post;
-import com.ll.lion.community.service.PostService;
+import com.ll.lion.community.post.dto.post.PostReqDto;
+import com.ll.lion.community.post.dto.post.PostRespDto;
+import com.ll.lion.community.post.entity.Post;
+import com.ll.lion.community.post.service.PostService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

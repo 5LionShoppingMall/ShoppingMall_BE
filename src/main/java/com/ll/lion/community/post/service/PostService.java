@@ -1,10 +1,10 @@
-package com.ll.lion.community.service;
+package com.ll.lion.community.post.service;
 
 import com.ll.lion.common.exception.DataNotFoundException;
-import com.ll.lion.community.dto.post.PostDto;
-import com.ll.lion.community.dto.post.PostReqDto;
-import com.ll.lion.community.entity.Post;
-import com.ll.lion.community.repository.PostRepository;
+import com.ll.lion.community.post.dto.post.PostDto;
+import com.ll.lion.community.post.dto.post.PostReqDto;
+import com.ll.lion.community.post.entity.Post;
+import com.ll.lion.community.post.repository.PostRepository;
 import com.ll.lion.user.entity.User;
 import com.ll.lion.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
