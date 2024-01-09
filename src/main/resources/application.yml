@@ -4,13 +4,14 @@ spring:
       dev:
         - db
         - security
-
       test:
         - test
         - security
   jackson:
     serialization:
       fail-on-empty-beans: false
+        - file
+        - mail
 server:
   port: 8082
 logging:

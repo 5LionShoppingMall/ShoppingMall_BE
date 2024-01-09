@@ -6,6 +6,7 @@ import com.ll.lion.user.security.UserDetailsServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -26,15 +27,18 @@ public class SecurityConfig {
         JwtAuthenticationFilter jwtAuthenticationFilter = new JwtAuthenticationFilter(jwtTokenUtil);
         http
                 .cors(c -> c.configure(http))
-                .csrf(c -> c.disable());
-                /*.sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .csrf(c -> c.disable())
+                .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .authorizeHttpRequests(a -> a
                         .requestMatchers(
-                                "/api/users/register", "/api/auth/login", "/api/auth/logout", "/api/auth/token/refresh"
+                                "/**",
+                                "/ws/**", "/chatroom/public", "/private-message","api/users/nickname-exists",
+                                "/api/users/register", "/api/auth/login", "/api/auth/logout","/api/auth/token/refresh",
+                                "/api/auth/confirm-account", "/api/users/email-exists",  "/api/posts/list", "/api/posts/detail/**"
                         ).permitAll()
                         .anyRequest().authenticated()
-                );*/
+                );
         return http.build();
     }
 

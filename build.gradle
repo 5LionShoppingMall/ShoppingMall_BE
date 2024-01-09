@@ -32,20 +32,52 @@ dependencies {
     implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
     runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.2', 'io.jsonwebtoken:jjwt-jackson:0.11.2'
 
+    // Mail
+    implementation 'org.springframework.boot:spring-boot-starter-mail'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+    // DB
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     runtimeOnly 'com.mysql:mysql-connector-j'
     testRuntimeOnly 'com.mysql:mysql-connector-j'
 
+    // WEB
     implementation 'org.springframework.boot:spring-boot-starter-web'
+
+    // VALIDATION
     implementation 'org.springframework.boot:spring-boot-starter-validation'
-    compileOnly 'org.projectlombok:lombok'
+
+    // DEVTOOL
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
 
+    //WEB SOCKET
+    implementation 'org.springframework.boot:spring-boot-starter-websocket'
+
+    //LOMBOK
+    compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
+
+    implementation 'org.json:json:20231013'
+
+
+    // TEST
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
     // assertJ test
     testImplementation 'org.assertj:assertj-core:3.24.2'
+    // Cloudinary
+    // https://mvnrepository.com/artifact/com.cloudinary/cloudinary-core
+    implementation 'com.cloudinary:cloudinary-core:1.36.0'
+
+    // https://mvnrepository.com/artifact/com.cloudinary/cloudinary-http44
+    implementation 'com.cloudinary:cloudinary-http44:1.36.0'
+
+    // https://mvnrepository.com/artifact/com.cloudinary/cloudinary-taglib
+    implementation 'com.cloudinary:cloudinary-taglib:1.36.0'
+
+    // Aws Java Sdk S3
+    // https://mvnrepository.com/artifact/com.amazonaws/aws-java-sdk-s3
+    implementation 'com.amazonaws:aws-java-sdk-s3:1.12.630'
 
 }
 
