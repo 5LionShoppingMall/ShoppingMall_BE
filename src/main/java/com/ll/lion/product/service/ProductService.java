@@ -139,7 +139,6 @@ public class ProductService {
             Image image = imageRepository.findById(deletedImage.getId()).orElseThrow(() -> new IllegalArgumentException("Invalid image ID: " + deletedImage.getId()));
             fileService.deleteImage(image.getImageId());
             imageRepository.delete(image);
-
         }
     }
 }
