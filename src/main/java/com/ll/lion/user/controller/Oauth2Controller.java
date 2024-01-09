@@ -1,6 +1,5 @@
 package com.ll.lion.user.controller;
 
-import com.ll.lion.user.service.UserService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -14,8 +13,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class Oauth2Controller {
     //TODO 배포할 때 사이트 이름으로 로그인 리다이렉트 url 추가해야함 현재는 localhost만 되있음
-
-    private final UserService userService;
 
     @GetMapping("/socialLogin/{providerTypeCode}")
     public String socialLogin(String redirectUrl, @PathVariable String providerTypeCode

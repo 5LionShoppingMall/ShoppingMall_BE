@@ -58,15 +58,27 @@ dependencies {
 
     implementation 'org.json:json:20231013'
 
-    //Oauth2
-    implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
-    //WebFlux
-    implementation 'org.springframework.boot:spring-boot-starter-webflux'
-    //Reactor Core
-    implementation 'io.projectreactor:reactor-core'
 
     // TEST
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+    // Cloudinary
+    // https://mvnrepository.com/artifact/com.cloudinary/cloudinary-core
+    implementation 'com.cloudinary:cloudinary-core:1.36.0'
+
+    // https://mvnrepository.com/artifact/com.cloudinary/cloudinary-http44
+    implementation 'com.cloudinary:cloudinary-http44:1.36.0'
+
+    // https://mvnrepository.com/artifact/com.cloudinary/cloudinary-taglib
+    implementation 'com.cloudinary:cloudinary-taglib:1.36.0'
+
+    // Aws Java Sdk S3
+    // https://mvnrepository.com/artifact/com.amazonaws/aws-java-sdk-s3
+    implementation 'com.amazonaws:aws-java-sdk-s3:1.12.630'
+
+    // OAUTH2
+    implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+
 }
 
 tasks.named('bootBuildImage') {

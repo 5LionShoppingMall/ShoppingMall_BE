@@ -30,6 +30,7 @@ spring:
       dev:
         - db
         - security
+        - file
         - mail
 server:
   port: 8082

@@ -14,6 +14,7 @@ import java.util.Optional;
 public class CartService {
 
     private final CartRepository cartRepository;
+
     public Optional<Cart> getCart(User user) {
         return Optional.ofNullable(cartRepository.findByUser(user));
     }

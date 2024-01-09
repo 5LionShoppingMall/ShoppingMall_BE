@@ -9,6 +9,8 @@ import com.ll.lion.user.security.JwtTokenUtil;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
@@ -16,17 +18,15 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 
 @Service
 @RequiredArgsConstructor
 public class AuthService {
     private final JwtTokenUtil jwtTokenUtil;
-
-
     private final PasswordEncoder passwordEncoder;
     private final UserService userService;
     private final VerificationTokenRepository verificationTokenRepository;
@@ -122,11 +122,10 @@ public class AuthService {
                 + "</html>";
     }
 
-    public boolean checkIfEmailExist(String email) {
-        Optional<User> userByEmail = userService.getUserByEmail(email);
-        return userByEmail.isPresent();
+
+    @Transactional
+    public void updatePassword(User user, String newPassword) {
+        String encodedPassword = passwordEncoder.encode(newPassword);
+        user.changePassword(encodedPassword); // 비밀번호 변경 메서드 호출
     }
-
-
-
 }
