@@ -1,13 +1,16 @@
 spring:
   profiles:
     group:
-      dev:
+      prod:
         - db
         - security
-        - file
         - mail
-server:
-  port: 8082
+        - file
+      dev:
+        - devdb
+        - security
+        - mail
+        - file
 logging:
   level:
     sql: debug
