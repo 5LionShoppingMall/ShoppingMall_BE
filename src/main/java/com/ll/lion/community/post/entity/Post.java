@@ -1,15 +1,18 @@
-package com.ll.lion.community.entity;
+package com.ll.lion.community.post.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.ll.lion.common.entity.DateEntity;
 import com.ll.lion.user.entity.User;
-import jakarta.persistence.*;
-import lombok.Builder;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.util.List;
 import lombok.experimental.SuperBuilder;
 
 @NoArgsConstructor
@@ -35,17 +38,13 @@ public class Post extends DateEntity {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE)
-    private List<Comment> comments;
-
 
     public Post(Long id, String title, String content,
-                Integer viewCount, User user, List<Comment> comments) {
+                Integer viewCount, User user) {
         this.id = id;
         this.title = title;
         this.content = content;
         this.viewCount = viewCount;
         this.user = user;
-        this.comments = comments;
     }
 }

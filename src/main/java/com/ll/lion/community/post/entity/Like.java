@@ -1,4 +1,4 @@
-package com.ll.lion.community.entity;
+package com.ll.lion.community.post.entity;
 
 import com.ll.lion.product.entity.Product;
 import com.ll.lion.user.entity.User;

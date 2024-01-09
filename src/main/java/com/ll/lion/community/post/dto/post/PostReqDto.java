@@ -1,4 +1,4 @@
-package com.ll.lion.community.dto.post;
+package com.ll.lion.community.post.dto.post;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;

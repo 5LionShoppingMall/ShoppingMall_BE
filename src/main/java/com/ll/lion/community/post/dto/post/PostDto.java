@@ -1,7 +1,7 @@
-package com.ll.lion.community.dto.post;
+package com.ll.lion.community.post.dto.post;
 
-import com.ll.lion.community.entity.Comment;
-import com.ll.lion.community.entity.Post;
+import com.ll.lion.community.comment.entity.Comment;
+import com.ll.lion.community.post.entity.Post;
 import com.ll.lion.user.entity.User;
 import lombok.Builder;
 import lombok.Data;
@@ -48,7 +48,6 @@ public class PostDto {
         this.content = entity.getContent();
         this.viewCount = entity.getViewCount();
         this.user = entity.getUser();
-        this.comments = entity.getComments();
         this.createdAt = entity.getCreatedAt();
         this.updatedAt = entity.getUpdatedAt();
     }
@@ -61,7 +60,6 @@ public class PostDto {
                 .content(dto.getContent())
                 .viewCount(dto.getViewCount())
                 .user(dto.getUser())
-                .comments(dto.getComments())
                 .build();
     }
 }

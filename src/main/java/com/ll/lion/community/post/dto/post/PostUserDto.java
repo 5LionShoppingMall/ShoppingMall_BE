@@ -1,4 +1,4 @@
-package com.ll.lion.community.dto.post;
+package com.ll.lion.community.post.dto.post;
 
 import com.ll.lion.user.entity.User;
 import lombok.AllArgsConstructor;

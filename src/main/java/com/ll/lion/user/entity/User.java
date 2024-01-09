@@ -1,9 +1,9 @@
 package com.ll.lion.user.entity;
 
 
-import com.ll.lion.community.entity.Comment;
-import com.ll.lion.community.entity.Like;
-import com.ll.lion.community.entity.Post;
+import com.ll.lion.community.comment.entity.Comment;
+import com.ll.lion.community.post.entity.Like;
+import com.ll.lion.community.post.entity.Post;
 import com.ll.lion.product.entity.Cart;
 import com.ll.lion.product.entity.Product;
 

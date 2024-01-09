@@ -1,6 +1,6 @@
-package com.ll.lion.community.repository;
+package com.ll.lion.community.post.repository;
 
-import com.ll.lion.community.entity.Post;
+import com.ll.lion.community.post.entity.Post;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
