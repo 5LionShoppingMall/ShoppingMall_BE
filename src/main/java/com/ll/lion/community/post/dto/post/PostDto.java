@@ -1,7 +1,7 @@
-package com.ll.lion.community.dto.post;
+package com.ll.lion.community.post.dto.post;
 
-import com.ll.lion.community.entity.Comment;
-import com.ll.lion.community.entity.Post;
+import com.ll.lion.community.comment.entity.Comment;
+import com.ll.lion.community.post.entity.Post;
 import com.ll.lion.user.entity.User;
 import lombok.Builder;
 import lombok.Data;
@@ -19,15 +19,17 @@ public class PostDto {
     private List<Comment> comments;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+    private int likesCount;
 
     @Builder
     public PostDto(Long id, String title, String content,
                    Integer viewCount, User user, List<Comment> comments,
-                   LocalDateTime createdAt, LocalDateTime updatedAt) {
+                   LocalDateTime createdAt, LocalDateTime updatedAt, int likesCount) {
         this.id = id;
         this.title = title;
         this.content = content;
         this.viewCount = viewCount;
+        this.likesCount = likesCount;
         this.user = user;
         this.comments = comments;
         this.createdAt = createdAt;
@@ -47,8 +49,8 @@ public class PostDto {
         this.title = entity.getTitle();
         this.content = entity.getContent();
         this.viewCount = entity.getViewCount();
+        this.likesCount = entity.getLikesCount();
         this.user = entity.getUser();
-        this.comments = entity.getComments();
         this.createdAt = entity.getCreatedAt();
         this.updatedAt = entity.getUpdatedAt();
     }
@@ -60,8 +62,8 @@ public class PostDto {
                 .title(dto.getTitle())
                 .content(dto.getContent())
                 .viewCount(dto.getViewCount())
+                .likesCount(dto.getLikesCount())
                 .user(dto.getUser())
-                .comments(dto.getComments())
                 .build();
     }
 }

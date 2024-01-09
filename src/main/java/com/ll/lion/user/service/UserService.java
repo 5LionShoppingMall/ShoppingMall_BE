@@ -111,6 +111,7 @@ public class UserService {
 
         if (userByEmail.isPresent()) {
             User user = userByEmail.get();
+            userDTO.setId(user.getId());
             userDTO.setEmail(user.getEmail());
             userDTO.setNickname(user.getNickname());
             userDTO.setAddress(user.getAddress());

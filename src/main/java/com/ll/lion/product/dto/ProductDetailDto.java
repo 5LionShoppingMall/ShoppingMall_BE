@@ -2,7 +2,7 @@ package com.ll.lion.product.dto;
 
 import com.ll.lion.common.dto.ImageDto;
 import com.ll.lion.common.entity.Image;
-import com.ll.lion.community.entity.Like;
+import com.ll.lion.community.like.entity.Like;
 import com.ll.lion.product.entity.CartItem;
 import com.ll.lion.product.entity.Product;
 import com.ll.lion.product.entity.ProductStatus;

@@ -1,8 +1,8 @@
 package com.ll.lion.global.initData;
 
-import com.ll.lion.community.entity.Post;
-import com.ll.lion.community.repository.PostRepository;
-import com.ll.lion.community.service.PostService;
+import com.ll.lion.community.post.entity.Post;
+import com.ll.lion.community.post.repository.PostRepository;
+import com.ll.lion.community.post.service.PostService;
 import com.ll.lion.user.entity.User;
 import com.ll.lion.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
