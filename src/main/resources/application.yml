@@ -7,7 +7,7 @@ spring:
         - mail
         - file
       dev:
-        - devdb
+        - db
         - security
         - mail
         - file
