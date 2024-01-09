@@ -21,6 +21,7 @@ public class ResponseDto<T> {
 
     public ResponseDto(int status, String success, String error, List<T> listData, T objData) {
         this.result = status >= 200 && status < 400;
+        this.status = status;
         this.success = success;
         this.error = error;
         this.listData = listData;

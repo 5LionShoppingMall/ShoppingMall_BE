@@ -71,6 +71,11 @@ dependencies {
 
     // https://mvnrepository.com/artifact/com.cloudinary/cloudinary-taglib
     implementation 'com.cloudinary:cloudinary-taglib:1.36.0'
+
+    // Aws Java Sdk S3
+    // https://mvnrepository.com/artifact/com.amazonaws/aws-java-sdk-s3
+    implementation 'com.amazonaws:aws-java-sdk-s3:1.12.630'
+
 }
 
 tasks.named('bootBuildImage') {

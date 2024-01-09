@@ -82,13 +82,13 @@ public class User {
 
     private boolean emailVerified;
 
-    @OneToMany(mappedBy = "seller")
+    @OneToMany(mappedBy = "seller", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Product> products;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> comments;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Like> likes;
 
     @OneToOne(cascade = CascadeType.ALL)
@@ -99,7 +99,7 @@ public class User {
     @JoinColumn(name = "refresh_token_id", referencedColumnName = "id")
     private RefreshToken refreshToken;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Post> posts;
 
     public void verifyEmail() {

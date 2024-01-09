@@ -5,7 +5,13 @@ import com.ll.lion.common.entity.DateEntity;
 import com.ll.lion.common.entity.Image;
 import com.ll.lion.community.entity.Like;
 import com.ll.lion.user.entity.User;
-import jakarta.persistence.CascadeType;
+import jakarta.persistence.*;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import lombok.*;
+import lombok.experimental.SuperBuilder;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -17,9 +23,6 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import java.util.List;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
@@ -41,6 +44,10 @@ public class Product extends DateEntity {
     @Column(nullable = false)
     private Long price;
 
+    @Setter
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Image> images = new ArrayList<>();
+
     @Column(length = 2000)
     private String description;
 
@@ -61,6 +68,9 @@ public class Product extends DateEntity {
 
     @OneToMany(mappedBy = "product")
     private List<CartItem> cartItems;
-
-
+    
+    public void addImage(Image image) {
+        this.images.add(image);
+        image.setProduct(this);
+    }
 }

@@ -8,8 +8,5 @@ import java.io.IOException;
 import java.util.Map;
 
 public interface CloudinaryService {
-    public Map upload(MultipartFile file) throws IOException;
-    //public Image upload(MultipartFile file, Product product) throws IOException;
-    //public String upload(MultipartFile file) throws IOException;
-    //public Map upload(MultipartFile multipartFile) throws IOException;
+    Map upload(MultipartFile file) throws IOException;
 }
