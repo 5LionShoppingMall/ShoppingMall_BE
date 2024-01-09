@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.stream.IntStream;
 
-/*@Component
+@Component
 @RequiredArgsConstructor
 @Profile("dev")
 public class ProductInit implements ApplicationRunner {
@@ -29,7 +29,7 @@ public class ProductInit implements ApplicationRunner {
                 String username = "test" + i + "@test.com";
                 User user = userRepository.findByEmail(username).orElse(null);
 
-                IntStream.rangeClosed(1, 30).forEach(j -> {
+                IntStream.rangeClosed(1, 50).forEach(j -> {
                     Product product = Product.builder()
                             .title("상품 test" + j)
                             .price(20000L)
@@ -43,4 +43,4 @@ public class ProductInit implements ApplicationRunner {
             });
         }
     }
-}*/
+}

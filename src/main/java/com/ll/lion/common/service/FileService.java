@@ -82,6 +82,18 @@ public class FileService {
         return year + "/" + month;
     }
 
+    public void deleteImage(String keyName) {
+        try {
+            amazonS3Client.deleteObject(ncpS3Properties.getS3().getBucketName(), keyName);
+        } catch (AmazonS3Exception e) {
+            e.printStackTrace();
+            throw new AmazonS3Exception(e.getMessage());
+        } catch (SdkClientException e) {
+            e.printStackTrace();
+            throw new SdkClientException(e.getMessage());
+        }
+    }
+
     // Cloudinary
     /*public List<Image> uploadImages(List<MultipartFile> files) throws IOException {
         List<Image> images = new ArrayList<>();

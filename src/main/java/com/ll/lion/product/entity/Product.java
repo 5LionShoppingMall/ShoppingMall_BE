@@ -63,9 +63,16 @@ public class Product extends DateEntity {
 
     @OneToMany(mappedBy = "product")
     private List<CartItem> cartItems;
-    
+
     public void addImage(Image image) {
         this.images.add(image);
         image.setProduct(this);
+    }
+
+    public void updateImages(List<Image> updatedImages) {
+        this.images.clear();
+        for (Image image : updatedImages) {
+            addImage(image);
+        }
     }
 }
