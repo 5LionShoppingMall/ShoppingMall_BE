@@ -2,10 +2,12 @@ package com.ll.lion;
 
 import com.ll.lion.product.dto.CartDto;
 import com.ll.lion.product.dto.CartItemDto;
+import com.ll.lion.product.entity.CartItem;
 import com.ll.lion.product.entity.Product;
 import com.ll.lion.product.service.CartItemService;
 import com.ll.lion.product.service.CartService;
 import com.ll.lion.product.service.ProductService;
+import com.ll.lion.user.dto.UserInfoDto;
 import com.ll.lion.user.dto.UserRegisterDto;
 import com.ll.lion.user.entity.User;
 import com.ll.lion.user.service.UserService;
@@ -16,6 +18,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -53,6 +57,7 @@ public class CartServiceTest {
 
     @Test
     @DisplayName("cart만들기")
+    @Rollback(value = false)
     public void t3(){
         UserRegisterDto userRegisterDto = new UserRegisterDto();
         userRegisterDto.setEmail("tempouser1@user.com");
@@ -86,6 +91,19 @@ public class CartServiceTest {
         assertThat(dto1.getId()).isEqualTo(1L);
         assertThat(dto1.getProduct().getPrice()).isEqualTo(1000L);
     }
+
+    @Test
+    @DisplayName("cartItem제거")
+    public void t5(){
+        UserInfoDto user1 = userService.getUserByEmailAndMakeDto("tempouser1@user.com");
+        CartDto cart = cartService.getCartByEmail(user1.getEmail());
+        List<CartItem> items = cart.getCartItems();
+        CartItemDto cartItemDto = new CartItemDto(items.get(0));
+        cartItemService.deleteItem(cartItemDto);
+        System.out.println("complete delete");
+
+    }
+
 
 
     @Test
