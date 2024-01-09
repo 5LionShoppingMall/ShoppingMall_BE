@@ -3,7 +3,7 @@ package com.ll.lion.product.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.ll.lion.common.entity.DateEntity;
 import com.ll.lion.common.entity.Image;
-import com.ll.lion.community.post.entity.Like;
+import com.ll.lion.community.like.entity.Like;
 import com.ll.lion.user.entity.User;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
