@@ -43,7 +43,7 @@ public class EmailService {
         MimeMessage mail = javaMailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(mail, "utf-8");
 
-        String resetUrl = "https://api.lionshop.me/auth/reset-password?token=" + token;
+        String resetUrl = "https://www.lionshop.me/auth/reset-password?token=" + token;
         String htmlMsg = "<h3>오지는사자 중고 쇼핑몰 비밀번호 재설정</h3>"
                 + "<p>비밀번호를 재설정하려면 아래 링크를 클릭해주세요 :</p>"
                 + "<a href='" + resetUrl + "'>비밀번호 재설정하기</a>";
