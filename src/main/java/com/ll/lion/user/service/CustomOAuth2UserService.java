@@ -64,14 +64,12 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
     public SocialLoginDto extractGitHubData(String providerTypeCode, OAuth2User oAuth2User) {
         Map<String, Object> attributes = oAuth2User.getAttributes();
 
-        String email = null;
-        if (attributes.containsKey("email")) {
-            email = (String) attributes.get("email");
-        }
         String profileImageUrl = (String) attributes.get("avatar_url");
         String oauthId = oAuth2User.getName();
         String nickname = (String) attributes.get("login");
-        String providerId = "GITHUB" + "__%s".formatted(oauthId); // 비밀번호로 설정
+        String providerId = providerTypeCode + "__%s".formatted(oauthId); // 비밀번호로 설정
+        String email = (String) attributes.get("email");
+        if(email == null) email = nickname + "@" + providerTypeCode;
 
         return new SocialLoginDto(providerTypeCode, email, profileImageUrl, providerId, nickname);
     }
