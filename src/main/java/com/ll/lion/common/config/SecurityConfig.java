@@ -11,6 +11,8 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
@@ -34,9 +36,10 @@ public class SecurityConfig {
                 .authorizeHttpRequests(a -> a
                         .requestMatchers(
                                 "/**",
-                                "/ws/**", "/chatroom/public", "/private-message","api/users/nickname-exists",
-                                "/api/users/register", "/api/auth/login", "/api/auth/logout","/api/auth/token/refresh",
-                                "/api/auth/confirm-account", "/api/users/email-exists",  "/api/posts/list", "/api/posts/detail/**"
+                                "/ws/**", "/chatroom/public", "/private-message", "api/users/nickname-exists",
+                                "/api/users/register", "/api/auth/login", "/api/auth/logout", "/api/auth/token/refresh",
+                                "/api/auth/confirm-account", "/api/users/email-exists", "/api/posts/list", "/api/posts/detail/**",
+                                "/api/oauth/socialLogin/**"
                         ).permitAll()
                         .anyRequest().authenticated()
                 )
@@ -46,7 +49,6 @@ public class SecurityConfig {
                         oauth2Login ->
                                 oauth2Login
                                         .successHandler(customAuthenticationSuccessHandler)
-
                 );
         return http.build();
     }
@@ -54,6 +56,11 @@ public class SecurityConfig {
     @Bean
     public UserDetailsService userDetailsService() {
         return userDetailsService;
+    }
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
     }
 
 }
