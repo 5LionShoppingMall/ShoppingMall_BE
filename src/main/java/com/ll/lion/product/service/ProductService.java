@@ -36,12 +36,12 @@ public class ProductService {
     private final ImageRepository imageRepository;
     private final FileService fileService;
 
-    public Product findProduct(Long id) {
+    public Product findProduct(final Long id) {
         return productRepository.findById(id)
                 .orElseThrow(() -> new DataNotFoundException("해당 글을 찾을 수 없습니다."));
     }
 
-    public Page<Product> findPageList(Pageable pageable) {
+    public Page<Product> findPageList(final Pageable pageable) {
         Pageable sortedPageable = PageRequest.of(
                 pageable.getPageNumber(),
                 pageable.getPageSize(),
@@ -61,14 +61,14 @@ public class ProductService {
     }
 
     @Transactional
-    public Product create(final Product product, final List<MultipartFile> files, final User user) {
+    public Product createProduct(final Product product, final List<MultipartFile> files, final User user) {
         log.info("상품 등록 서비스");
         Product registeredProduct = product.toBuilder()
                 .seller(user)
                 .build();
 
         try {
-            return saveProduct(productRepository.save(registeredProduct), files, null);
+            return saveProduct(productRepository.save(registeredProduct), files, null, null);
         } catch (DataAccessException e) {
             log.error("DataAccessException occurred while creating Product: " + e.getMessage());
             throw new DataInsertionFailureException("데이터 등록에 실패했습니다.", e);
@@ -76,20 +76,20 @@ public class ProductService {
     }
 
     @Transactional
-    public Product modifyProduct(String email, Product product, List<MultipartFile> multipartFiles, List<Image> images) {
+    public Product modifyProduct(final String email, final Product product, final List<MultipartFile> multipartFiles, final List<Image> images, final List<Image> deletedImages) {
         if (!product.getSeller().getEmail().equals(email)) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "수정 권한이 없습니다.");
         }
 
         try {
-            return saveProduct(product, multipartFiles, images);
+            return saveProduct(product, multipartFiles, images, deletedImages);
         } catch (DataAccessException e) {
             log.error("DataAccessException occurred while creating Product: " + e.getMessage());
             throw new DataInsertionFailureException("데이터 수정에 실패했습니다.", e);
         }
     }
 
-    private Product saveProduct(Product product, List<MultipartFile> multipartFiles, List<Image> images) {
+    private Product saveProduct(Product product, List<MultipartFile> multipartFiles, List<Image> images, List<Image> deletedImages) {
         List<Image> newImages = new ArrayList<>();
 
         if (multipartFiles != null && !multipartFiles.isEmpty()) {
@@ -106,10 +106,39 @@ public class ProductService {
             }
         }
 
-        for (Image image : newImages) {
-            product.addImage(image);
+        for (Image newImage : newImages) {
+            product.addImage(newImage);
+        }
+
+        if (deletedImages != null && !deletedImages.isEmpty()) {
+            deletedImages(deletedImages);
+
+            // 이미지 삭제 후 남은 이미지로 업데이트
+            List<Image> remainingImages = imageRepository.findByProductId(product.getId());
+            product.updateImages(remainingImages);
         }
 
         return productRepository.save(product);
+    }
+
+    @Transactional
+    public void deleteProduct(final Product product, final String email) {
+        if (!product.getSeller().getEmail().equals(email)) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "삭제 권한이 없습니다.");
+        }
+
+        if (product.getImages() != null && !product.getImages().isEmpty()) {
+            deletedImages(product.getImages());
+        }
+
+        productRepository.delete(product);
+    }
+
+    private void deletedImages(List<Image> images) {
+        for (Image deletedImage : images) {
+            Image image = imageRepository.findById(deletedImage.getId()).orElseThrow(() -> new IllegalArgumentException("Invalid image ID: " + deletedImage.getId()));
+            fileService.deleteImage(image.getImageId());
+            imageRepository.delete(image);
+        }
     }
 }

@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ImageDto {
     private Long id;
-    private String imageId;
+    private String imageId; // ncp 사용시 keyName이 들어감
     private String name;
     private String url;
     private Long size;
