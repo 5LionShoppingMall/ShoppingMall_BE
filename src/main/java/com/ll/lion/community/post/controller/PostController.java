@@ -1,14 +1,15 @@
 package com.ll.lion.community.post.controller;
 
 import com.ll.lion.common.dto.ResponseDto;
-import com.ll.lion.community.post.dto.post.PostDto;
 import com.ll.lion.community.post.dto.post.PostReqDto;
 import com.ll.lion.community.post.dto.post.PostRespDto;
 import com.ll.lion.community.post.entity.Post;
 import com.ll.lion.community.post.service.PostService;
+import com.ll.lion.product.dto.ProductPageDto;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @RestController
@@ -102,4 +104,29 @@ public class PostController {
         return ResponseEntity.ok(posts);
     }
 
+    // 인기 게시글
+    @GetMapping("/popularList")
+    public ResponseEntity<?> popularPosts(Pageable pageable) {
+        Page<Post> postEntities = postService.findPopularList(pageable);
+        List<PostRespDto> postDtos = postEntities.stream().map(PostRespDto::new).collect(Collectors.toList());
+        Page<PostRespDto> pagePost = new PageImpl<>(postDtos, pageable, postEntities.getTotalElements());
+
+        return ResponseEntity.ok(new ResponseDto<>(
+                HttpStatus.OK.value(),
+                "인기 게시글 리스트 조회 성공", null,
+                null, new ProductPageDto<>(pagePost)));
+    }
+
+    // 최신 게시글
+    @GetMapping("/recentList")
+    public ResponseEntity<?> recentPosts(Pageable pageable) {
+        Page<Post> postEntities = postService.findRecentList(pageable);
+        List<PostRespDto> postDtos = postEntities.stream().map(PostRespDto::new).collect(Collectors.toList());
+        Page<PostRespDto> pagePost = new PageImpl<>(postDtos, pageable, postEntities.getTotalElements());
+
+        return ResponseEntity.ok(new ResponseDto<>(
+                HttpStatus.OK.value(),
+                "최신 게시글 리스트 조회 성공", null,
+                null, postDtos));
+    }
 }

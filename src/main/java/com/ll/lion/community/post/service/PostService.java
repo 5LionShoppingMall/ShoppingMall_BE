@@ -8,8 +8,7 @@ import com.ll.lion.community.post.repository.PostRepository;
 import com.ll.lion.user.entity.User;
 import com.ll.lion.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -100,4 +99,33 @@ public class PostService {
          return postRepository.findAllByKeyword(pageable, keyword);
     }
 
+    // 인기 게시글
+    public Page<Post> findPopularList(Pageable pageable) {
+        Pageable sortedPageable = PageRequest.of(
+                pageable.getPageNumber(),
+                pageable.getPageSize(),
+                Sort.by("likesCount").descending()
+        );
+
+        Page<Post> pagePost = postRepository.findAllByOrderByLikesCountDesc(sortedPageable);
+
+        return Optional.of(pagePost)
+                .filter(Slice::hasContent)
+                .orElseThrow(() -> new DataNotFoundException("등록된 게시글이 없습니다."));
+    }
+
+    // 최신 게시글
+    public Page<Post> findRecentList(Pageable pageable) {
+        Pageable sortedPageable = PageRequest.of(
+                pageable.getPageNumber(),
+                pageable.getPageSize(),
+                Sort.by("createdAt").descending()
+        );
+
+        Page<Post> pagePost = postRepository.findAllByOrderByCreatedAtDesc(sortedPageable);
+
+        return Optional.of(pagePost)
+                .filter(Slice::hasContent)
+                .orElseThrow(() -> new DataNotFoundException("등록된 게시글이 없습니다."));
+    }
 }
