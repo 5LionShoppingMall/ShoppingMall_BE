@@ -71,14 +71,14 @@ public class AuthService {
                 .httpOnly(true)
                 .path("/")
                 .secure(true)
-                .sameSite("None") // SameSite 설정
+                .domain(".lionshop.me")
                 .build();
 
         ResponseCookie refreshTokenCookie = ResponseCookie.from("refreshToken", refreshToken)
                 .httpOnly(true)
                 .path("/")
+                .domain(".lionshop.me")
                 .secure(true)
-                .sameSite("None") // SameSite 설정
                 .build();
 
         response.addHeader("Set-Cookie", accessTokenCookie.toString());
@@ -95,7 +95,7 @@ public class AuthService {
                             .httpOnly(true)
                             .path("/")
                             .secure(true)
-                            .sameSite("None") // SameSite 설정
+                            .domain(".lionshop.me")
                             .maxAge(0) // 쿠키의 유효기간을 0으로 설정하여 쿠키를 삭제
                             .build();
 
