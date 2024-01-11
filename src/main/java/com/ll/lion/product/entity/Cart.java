@@ -30,8 +30,17 @@ public class Cart {
         this.user = user;
     }
 
-    public Cart addItem(CartItem item){
+    public CartItem addItem(Product product, int quantity){
+        CartItem item = CartItem.builder()
+                .cart(this)
+                .product(product)
+                .quantity(quantity)
+                .build();
         cartItems.add(item);
-        return this;
+        return item;
+    }
+
+    public void removeItem(CartItem cartItem) {
+        cartItems.removeIf(item -> item.getId().equals(cartItem.getId()));
     }
 }

@@ -92,7 +92,7 @@ public class CartController {
                 throw new RuntimeException("사용자가 일치하지 않습니다.");
             }
 
-            cartItemService.deleteItem(itemId);
+            cartItemService.deleteItem(email, itemId);
             ResponseDto<CartItem> responseDto = new ResponseDto<>(HttpStatus.OK.value(),
                     "아이템 삭제 완료", null, null,
                     null);

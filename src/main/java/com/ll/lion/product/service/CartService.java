@@ -62,12 +62,6 @@ public class CartService {
             return cart.orElseGet(() -> createCart(user));
     }
 
-    @Transactional
-    public void addItem(CartItem item) {
-        Cart cart = item.getCart();
-        cartRepository.save(cart.addItem(item));
-    }
-
     // 불필요.
 //    @Transactional
 //    public void deleteItem(CartItem item) {
