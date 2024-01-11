@@ -50,6 +50,7 @@ public class CartItemService {
     public List<CartItem> getCartItems(CartDto cartDto) {
         Cart cart = cartDto.toEntity();
         return cartItemRepository.findAllByCart(cart);
+
     }
 
     @Transactional

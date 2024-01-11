@@ -12,20 +12,27 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/cart")
+@RequestMapping("/products/cart")
 public class CartController {
 
     private final CartService cartService;
     private final CartItemService cartItemService;
 
+    public String decodedURL(String encodedEmail){
+        return URLDecoder.decode(encodedEmail, StandardCharsets.UTF_8);
+    }
+
     @GetMapping("/{email}")
-    public ResponseEntity<?> showCart(@PathVariable("email") String email) {
+    public ResponseEntity<?> showCart(@PathVariable("email") String encodedEmail) {
 
         try {
+            String email = decodedURL(encodedEmail);
             CartDto cartDto1 = cartService.getCartByEmail(email);
             List<CartItem> list = cartItemService.getCartItems(cartDto1);
             ResponseDto<CartItem> responseDto = new ResponseDto<CartItem>(
@@ -40,11 +47,12 @@ public class CartController {
     }
 
     @PostMapping("/{email}")
-    public ResponseEntity<?> addCartItem(@PathVariable("email") String email,
+    public ResponseEntity<?> addCartItem(@PathVariable("email") String encodedEmail,
                                          @RequestParam(value = "proId") Long proId,
                                          @RequestParam(value = "q") int quantity,
                                          HttpServletRequest req){
         try{
+            String email = decodedURL(encodedEmail);
             if(!cartService.confirmUser(req, email)){
                 throw new RuntimeException("사용자가 일치하지 않습니다.");
             }
@@ -61,12 +69,13 @@ public class CartController {
     }
 
     @PutMapping("/{email}")
-    public ResponseEntity<?> modifyCartItem(@PathVariable("email") String email,
+    public ResponseEntity<?> modifyCartItem(@PathVariable("email") String encodedEmail,
                                          @RequestParam(value = "itemId") Long itemId,
                                          @RequestParam(value = "q") int quantity,
                                             HttpServletRequest req){
 
         try{
+            String email = decodedURL(encodedEmail);
             if(!cartService.confirmUser(req, email)){
                 throw new RuntimeException("사용자가 일치하지 않습니다.");
             }
@@ -83,11 +92,12 @@ public class CartController {
     }
 
     @DeleteMapping("/{email}")
-    public ResponseEntity<?> deleteCartItem(@PathVariable("email") String email,
+    public ResponseEntity<?> deleteCartItem(@PathVariable("email") String encodedEmail,
                                             @RequestParam(value = "itemId") Long itemId,
                                             HttpServletRequest req){
 
         try{
+            String email = decodedURL(encodedEmail);
             if(!cartService.confirmUser(req, email)){
                 throw new RuntimeException("사용자가 일치하지 않습니다.");
             }
