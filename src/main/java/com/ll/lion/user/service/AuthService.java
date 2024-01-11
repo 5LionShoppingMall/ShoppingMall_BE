@@ -9,8 +9,6 @@ import com.ll.lion.user.security.JwtTokenUtil;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.util.List;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
@@ -20,14 +18,17 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+import java.util.Optional;
+
 
 @Service
 @RequiredArgsConstructor
 public class AuthService {
     private final JwtTokenUtil jwtTokenUtil;
-    private final PasswordEncoder passwordEncoder;
     private final UserService userService;
     private final VerificationTokenRepository verificationTokenRepository;
+    private final PasswordEncoder passwordEncoder;
 
     public LoginResponseDto authenticate(String email, String password) {
         Optional<User> userByEmail = userService.getUserByEmail(email);
@@ -71,13 +72,13 @@ public class AuthService {
                 .httpOnly(true)
                 .path("/")
                 .secure(true)
-                .domain(".lionshop.me")
+                .sameSite("None")
                 .build();
 
         ResponseCookie refreshTokenCookie = ResponseCookie.from("refreshToken", refreshToken)
                 .httpOnly(true)
                 .path("/")
-                .domain(".lionshop.me")
+                .sameSite("None")
                 .secure(true)
                 .build();
 
@@ -95,7 +96,7 @@ public class AuthService {
                             .httpOnly(true)
                             .path("/")
                             .secure(true)
-                            .domain(".lionshop.me")
+                            .sameSite("None")
                             .maxAge(0) // 쿠키의 유효기간을 0으로 설정하여 쿠키를 삭제
                             .build();
 
@@ -119,7 +120,6 @@ public class AuthService {
                 + "</body>"
                 + "</html>";
     }
-
 
     @Transactional
     public void updatePassword(User user, String newPassword) {

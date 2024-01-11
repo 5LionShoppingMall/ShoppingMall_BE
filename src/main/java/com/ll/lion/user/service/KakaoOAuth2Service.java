@@ -6,7 +6,6 @@ import com.ll.lion.user.dto.KakaoPropertiesDto;
 import com.ll.lion.user.dto.KakaoTokenResponseDto;
 import com.ll.lion.user.dto.KakaoUserInfoDto;
 import com.ll.lion.user.entity.RefreshToken;
-import com.ll.lion.user.entity.SocialProvider;
 import com.ll.lion.user.entity.User;
 import com.ll.lion.user.repository.RefreshTokenRepository;
 import com.ll.lion.user.repository.UserRepository;
@@ -99,7 +98,7 @@ public class KakaoOAuth2Service {
                     .role("USER")
                     .emailVerified(true)
                     .profilePhotoUrl(profileImageUrl)
-                    .provider(SocialProvider.KAKAO)
+                    .socialProvider("Kakao")
                     .refreshToken(createdRefreshToken)
                     .build();
 

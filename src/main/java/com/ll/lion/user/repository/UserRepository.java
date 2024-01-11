@@ -9,6 +9,7 @@ import org.yaml.snakeyaml.events.Event.ID;
 public interface UserRepository extends JpaRepository<User, Long> {
     boolean existsByNickname(String nickname);
     boolean existsByEmail(String email);
+    Optional<User> findByProviderId(String providerId);
 
     Optional<User> findByEmail(String email);
 

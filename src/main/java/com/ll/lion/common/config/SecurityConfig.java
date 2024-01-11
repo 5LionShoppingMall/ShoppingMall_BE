@@ -1,12 +1,12 @@
 package com.ll.lion.common.config;
 
+import com.ll.lion.user.security.CustomAuthenticationSuccessHandler;
 import com.ll.lion.user.security.JwtAuthenticationFilter;
 import com.ll.lion.user.security.JwtTokenUtil;
 import com.ll.lion.user.security.UserDetailsServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -23,6 +23,7 @@ public class SecurityConfig {
 
     private final JwtTokenUtil jwtTokenUtil;
     private final UserDetailsServiceImpl userDetailsService;
+    private final CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -40,18 +41,25 @@ public class SecurityConfig {
                                 "/api/auth/confirm-account", "/api/users/email-exists",  "/api/posts/list", "/api/posts/detail/**"
                         ).permitAll()
                         .anyRequest().authenticated()
+                )
+
+
+                .oauth2Login(
+                        oauth2Login ->
+                                oauth2Login
+                                        .successHandler(customAuthenticationSuccessHandler)
                 );
         return http.build();
     }
 
     @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
+    public UserDetailsService userDetailsService() {
+        return userDetailsService;
     }
 
     @Bean
-    public UserDetailsService userDetailsService() {
-        return userDetailsService;
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
     }
 
 }

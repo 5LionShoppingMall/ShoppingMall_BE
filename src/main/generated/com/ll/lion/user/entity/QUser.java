@@ -50,13 +50,13 @@ public class QUser extends EntityPathBase<User> {
 
     public final StringPath profilePhotoUrl = createString("profilePhotoUrl");
 
-    public final EnumPath<SocialProvider> provider = createEnum("provider", SocialProvider.class);
-
     public final StringPath providerId = createString("providerId");
 
     public final QRefreshToken refreshToken;
 
     public final StringPath role = createString("role");
+
+    public final StringPath socialProvider = createString("socialProvider");
 
     public final DateTimePath<java.time.LocalDateTime> updatedAt = createDateTime("updatedAt", java.time.LocalDateTime.class);
 

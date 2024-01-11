@@ -7,7 +7,6 @@ import com.ll.lion.community.like.entity.Like;
 import com.ll.lion.community.post.entity.Post;
 import com.ll.lion.product.entity.Cart;
 import com.ll.lion.product.entity.Product;
-
 import com.ll.lion.user.dto.UserUpdateDto;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -33,6 +32,9 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
+import java.time.LocalDateTime;
+import java.util.List;
+
 @Entity
 @Table(name = "users")
 @Builder(toBuilder = true)
@@ -53,7 +55,6 @@ public class User {
     @Column(name = "phone_number")
     private String phoneNumber;
 
-
     private String address;
 
     @Column(nullable = false)
@@ -62,11 +63,11 @@ public class User {
     @Column(name = "profile_url")
     private String profilePhotoUrl;
 
+    @Column(name = "social_provider")
+    private String socialProvider;
+
     @Column(name = "provider_id")
     private String providerId;
-
-    @Enumerated(EnumType.STRING)
-    private SocialProvider provider;
 
     @Column(name = "created_at")
     @Temporal(TemporalType.TIMESTAMP)
@@ -107,7 +108,6 @@ public class User {
     public void verifyEmail() {
         this.emailVerified = true;
     }
-
 
     public void changePassword(String newPassword) {
         this.password = newPassword;

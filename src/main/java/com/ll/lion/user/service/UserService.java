@@ -122,4 +122,11 @@ public class UserService {
     }
 
 
+
+    public Optional<User> getUserByProviderId(String providerId) {
+        return userRepository.findByProviderId(providerId);
+    }
+
+
+
 }
