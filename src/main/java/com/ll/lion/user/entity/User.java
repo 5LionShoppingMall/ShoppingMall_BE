@@ -1,13 +1,30 @@
 package com.ll.lion.user.entity;
 
 
-import com.ll.lion.community.entity.Comment;
-import com.ll.lion.community.entity.Like;
-import com.ll.lion.community.entity.Post;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.ll.lion.community.comment.entity.Comment;
+import com.ll.lion.community.like.entity.Like;
+import com.ll.lion.community.post.entity.Post;
 import com.ll.lion.product.entity.Cart;
 import com.ll.lion.product.entity.Product;
 import com.ll.lion.user.dto.UserUpdateDto;
-import jakarta.persistence.*;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
+
+import java.time.LocalDateTime;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -29,10 +46,10 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, unique = true)
+    @Column( unique = true)
     private String email;
 
-    @Column(nullable = false)
+
     private String password;
 
     @Column(name = "phone_number")
@@ -65,6 +82,11 @@ public class User {
     @Column(nullable = false)
     private String role;
 
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "refresh_token_id")
+    @JsonIgnore
+    private RefreshToken refreshToken;
+
     private boolean emailVerified;
 
     @OneToMany(mappedBy = "seller", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -79,10 +101,6 @@ public class User {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "cart_id")
     private Cart cart;
-
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "refresh_token_id", referencedColumnName = "id")
-    private RefreshToken refreshToken;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Post> posts;

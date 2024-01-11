@@ -27,11 +27,16 @@ spring:
             user-name-attribute: id
   profiles:
     group:
+      prod:
+        - db
+        - security
+        - mail
+        - file
       dev:
         - db
         - security
-        - file
         - mail
+        - file
 server:
   port: 8082
 logging:

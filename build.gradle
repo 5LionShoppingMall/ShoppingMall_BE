@@ -39,6 +39,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     runtimeOnly 'com.mysql:mysql-connector-j'
     testRuntimeOnly 'com.mysql:mysql-connector-j'
+    runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
 
     // WEB
     implementation 'org.springframework.boot:spring-boot-starter-web'
@@ -48,6 +49,9 @@ dependencies {
 
     // DEVTOOL
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
+
+    // WebFlux
+    implementation 'org.springframework.boot:spring-boot-starter-webflux'
 
     //WEB SOCKET
     implementation 'org.springframework.boot:spring-boot-starter-websocket'

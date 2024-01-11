@@ -36,10 +36,9 @@ public class SecurityConfig {
                 .authorizeHttpRequests(a -> a
                         .requestMatchers(
                                 "/**",
-                                "/ws/**", "/chatroom/public", "/private-message", "api/users/nickname-exists",
-                                "/api/users/register", "/api/auth/login", "/api/auth/logout", "/api/auth/token/refresh",
-                                "/api/auth/confirm-account", "/api/users/email-exists", "/api/posts/list", "/api/posts/detail/**",
-                                "/api/oauth/socialLogin/**"
+                                "/ws/**", "/chatroom/public", "/private-message","api/users/nickname-exists",
+                                "/api/users/register", "/api/auth/login", "/api/auth/logout","/api/auth/token/refresh",
+                                "/api/auth/confirm-account", "/api/users/email-exists",  "/api/posts/list", "/api/posts/detail/**"
                         ).permitAll()
                         .anyRequest().authenticated()
                 )
