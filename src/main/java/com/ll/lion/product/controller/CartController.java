@@ -30,7 +30,6 @@ public class CartController {
 
     @GetMapping("/{email}")
     public ResponseEntity<?> showCart(@PathVariable("email") String encodedEmail) {
-
         try {
             String email = decodedURL(encodedEmail);
             CartDto cartDto1 = cartService.getCartByEmail(email);

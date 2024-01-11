@@ -3,7 +3,7 @@ package com.ll.lion.product.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.ll.lion.common.entity.DateEntity;
 import com.ll.lion.common.entity.Image;
-import com.ll.lion.community.entity.Like;
+import com.ll.lion.community.like.entity.Like;
 import com.ll.lion.user.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
@@ -52,9 +52,16 @@ public class Product extends DateEntity {
     @Builder.Default
     @OneToMany(mappedBy = "product")
     private List<CartItem> cartItems = new ArrayList<>();
-    
+
     public void addImage(Image image) {
         this.images.add(image);
         image.setProduct(this);
+    }
+
+    public void updateImages(List<Image> updatedImages) {
+        this.images.clear();
+        for (Image image : updatedImages) {
+            addImage(image);
+        }
     }
 }

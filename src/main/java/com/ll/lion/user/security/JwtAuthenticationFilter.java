@@ -46,9 +46,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 String newAccessToken = jwtTokenUtil.createAccessToken(email, List.of("USER"));
                 ResponseCookie newAccessTokenCookie = ResponseCookie.from("accessToken", newAccessToken)
                         .httpOnly(true)
+                        .domain(".lionshop.me")
                         .path("/")
                         .secure(true)
-                        .sameSite("None") // SameSite 설정
                         .build();
 
                 response.addHeader("Set-Cookie", newAccessTokenCookie.toString());

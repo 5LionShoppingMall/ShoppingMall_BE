@@ -18,7 +18,7 @@ public class Image extends DateEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String imageId;
+    private String imageId; // ncp 사용시 keyName이 들어감
 
     private String name;
 

@@ -1,9 +1,10 @@
 spring:
   profiles:
     group:
-      dev:
+      prod:
         - db
         - security
+<<<<<<< HEAD
         - file
         - mail
       test:
@@ -14,6 +15,15 @@ spring:
   jackson:
     serialization:
       fail-on-empty-beans: false
+=======
+        - mail
+        - file
+      dev:
+        - devdb
+        - security
+        - mail
+        - file
+>>>>>>> main
 server:
   port: 8082
 logging:
