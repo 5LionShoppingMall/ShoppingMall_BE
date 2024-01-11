@@ -139,6 +139,8 @@ public class CartServiceTest {
         assertThat(items1.size()).as("cart 상품 확인").isEqualTo(1);
 
         cartItemService.modifyItem(item.getId(), 3);
+
+        assertThat(cart.getCartItems().get(0).getQuantity()).as("변경된 수량 확인").isEqualTo(3);
     }
 }
 

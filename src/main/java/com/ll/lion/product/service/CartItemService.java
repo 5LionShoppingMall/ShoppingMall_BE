@@ -60,10 +60,16 @@ public class CartItemService {
         return cartItemRepository.findAllByCart(cart);
     }
 
-    public CartItem modifyItem(Long id, int i) throws RuntimeException {
+    @Transactional
+    public CartItem modifyItem(Long id, int quantity) throws RuntimeException {
+        // 수량입력 오류 처리
+        if (quantity < 0 ){
+            throw new IllegalArgumentException("잘못된 수량입니다.");
+        }
+
         CartItem cartItem = cartItemRepository.findById(id)
                 .orElseThrow(()-> new RuntimeException("상품이 없습니다."));
-        cartItem.setQuantity(i);
+        cartItem.setQuantity(quantity);
         return cartItemRepository.save(cartItem);
     }
 }
