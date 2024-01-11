@@ -91,4 +91,14 @@ public class PostController {
             return ResponseEntity.badRequest().body(responseDto);
         }
     }
+    @GetMapping("/search")
+    public ResponseEntity<List<Post>> findPostsByKeyword(
+            @RequestParam String keyword,
+            @RequestParam(required = false) Long lastId,
+            @RequestParam(defaultValue = "10") int limit) {
+
+        List<Post> posts = postService.findPostsByKeywordAfterId(keyword, lastId, limit);
+        return ResponseEntity.ok(posts);
+    }
+
 }

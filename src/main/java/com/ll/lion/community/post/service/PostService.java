@@ -93,4 +93,8 @@ public class PostService {
     public long count() {
         return postRepository.count();
     }
+
+    public List<Post> findPostsByKeywordAfterId(String keyword, Long lastId, int limit) {
+        return postRepository.findPostsByKeywordAfterId(keyword, lastId, limit);
+    }
 }
