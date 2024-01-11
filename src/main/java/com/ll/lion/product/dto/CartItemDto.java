@@ -33,4 +33,13 @@ public class CartItemDto {
                 .quantity(dto.getQuantity())
                 .build();
     }
+
+    public CartItem toEntity() {
+        return CartItem.builder()
+                .id(this.id)
+                .cart(this.cart)
+                .product(this.product)
+                .quantity(this.quantity)
+                .build();
+    }
 }

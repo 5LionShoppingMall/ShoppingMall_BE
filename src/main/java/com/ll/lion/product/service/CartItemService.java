@@ -23,11 +23,11 @@ public class CartItemService {
     private final ProductService productService;
     private final UserService userService;
 
-    @Transactional
-    public CartItemDto addCartItem(CartItemDto dto){
-        CartItem item = cartItemRepository.save(CartItemDto.dtoToEntity(dto));
-        return new CartItemDto(item);
-    }
+//    @Transactional
+//    public CartItemDto addCartItem(CartItemDto dto){
+//        CartItem item = cartItemRepository.save(CartItemDto.dtoToEntity(dto));
+//        return new CartItemDto(item);
+//    }
 
     @Transactional
     public CartItemDto addCartItem(String userEmail,
@@ -42,8 +42,7 @@ public class CartItemService {
         Product product = productService.findProduct(productId);
         CartItem item = new CartItem(cartDto.toEntity(), product, 1);
         cartService.addItem(item);
-//        CartItem item = cartItemRepository.save(cartItem);
-
+//        CartItem item = cartItemRepository.save(cartItem); // 불필요
         return new CartItemDto(item);
     }
 
@@ -51,8 +50,7 @@ public class CartItemService {
     public void deleteItem(CartItemDto item) {
         CartItem cartItem = cartItemRepository.findById(item.getId())
                 .orElseThrow(RuntimeException::new);
-        cartItemRepository.delete(cartItem);
-        cartService.deleteItem(cartItem);
+        cartItemRepository.delete(cartItem); // delete는 ophanremoval 설정해둠.
     }
 
     public List<CartItem> getCartItems(CartDto cartDto) {
@@ -61,15 +59,16 @@ public class CartItemService {
     }
 
     @Transactional
-    public CartItem modifyItem(Long id, int quantity) throws RuntimeException {
+    public CartItemDto modifyItem(Long id, int quantity) throws RuntimeException {
         // 수량입력 오류 처리
         if (quantity < 0 ){
             throw new IllegalArgumentException("잘못된 수량입니다.");
         }
 
         CartItem cartItem = cartItemRepository.findById(id)
-                .orElseThrow(()-> new RuntimeException("상품이 없습니다."));
+                .orElseThrow(()-> new IllegalArgumentException("상품이 없습니다."));
         cartItem.setQuantity(quantity);
-        return cartItemRepository.save(cartItem);
+        CartItem item =cartItemRepository.save(cartItem);
+        return new CartItemDto(item);
     }
 }

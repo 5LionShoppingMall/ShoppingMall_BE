@@ -29,4 +29,9 @@ public class Cart {
     public Cart(User user){
         this.user = user;
     }
+
+    public Cart addItem(CartItem item){
+        cartItems.add(item);
+        return this;
+    }
 }

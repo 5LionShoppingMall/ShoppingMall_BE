@@ -5,7 +5,9 @@ import com.ll.lion.product.entity.Cart;
 import com.ll.lion.product.entity.CartItem;
 import com.ll.lion.product.repository.CartRepository;
 import com.ll.lion.user.entity.User;
+import com.ll.lion.user.security.JwtTokenUtil;
 import com.ll.lion.user.service.UserService;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,6 +23,7 @@ public class CartService {
 
     private final CartRepository cartRepository;
     private final UserService userService;
+    private final JwtTokenUtil jwtTokenUtil;
 
 //    미사용
 //    public CartDto getCart(CartDto cartDto) {
@@ -60,8 +63,7 @@ public class CartService {
     @Transactional
     public void addItem(CartItem item) {
         Cart cart = item.getCart();
-        cart.getCartItems().add(item);
-        cartRepository.save(cart);
+        cartRepository.save(cart.addItem(item));
     }
 
     @Transactional
@@ -69,5 +71,12 @@ public class CartService {
         Cart cart = item.getCart();
         cart.getCartItems().remove(item);
         cartRepository.save(cart);
+    }
+
+    //현재 사용자와 email이 일치하는지 확인
+    public boolean confirmUser(HttpServletRequest request, String email){
+        String refreshToken = jwtTokenUtil.resolveToken(request, "refreshToken");
+        String emailInToken = jwtTokenUtil.getEmail(refreshToken);
+        return emailInToken.equals(email);
     }
 }
