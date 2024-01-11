@@ -24,11 +24,11 @@ public class CartDto {
 
     }
 
-    public static Cart dtoToEntity(CartDto dto){
+    public Cart toEntity(){
         return Cart.builder()
-                .id(dto.getId())
-                .user(dto.getCartOwner())
-                .cartItems(dto.getCartItems())
+                .id(this.id)
+                .user(this.cartOwner)
+                .cartItems(this.cartItems)
                 .build();
     }
 }

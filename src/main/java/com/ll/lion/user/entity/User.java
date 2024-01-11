@@ -7,23 +7,7 @@ import com.ll.lion.community.entity.Post;
 import com.ll.lion.product.entity.Cart;
 import com.ll.lion.product.entity.Product;
 import com.ll.lion.user.dto.UserUpdateDto;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.Table;
-import jakarta.persistence.Temporal;
-import jakarta.persistence.TemporalType;
-
-import java.time.LocalDateTime;
-import java.util.List;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -119,6 +103,10 @@ public class User {
         this.phoneNumber = userUpdateDto.getPhoneNumber();
         this.address = userUpdateDto.getAddress();
         this.profilePhotoUrl = userUpdateDto.getProfilePictureUrl();
+    }
+
+    public void createCart(Cart cart){
+        this.cart = cart;
     }
 }
 
