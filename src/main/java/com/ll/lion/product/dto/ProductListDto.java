@@ -32,7 +32,9 @@ public class ProductListDto {
                 .title(product.getTitle())
                 .price(product.getPrice())
                 .seller(seller)
-                .thumbnailImage(product.getImages().isEmpty() ? null : product.getImages().get(0).getUrl())
+                //.thumbnailImage(product.getImages().isEmpty() ? null : product.getImages().get(0).getUrl()) // 원본 이미지
+                .thumbnailImage(product.getImages().isEmpty() ? null : "https://ypj0qkoe2133.edge.naverncp.com/NcgSbfJFoQ/" +
+                        product.getImages().get(0).getImageId() + "?type=f&w=400&h=400") // 사이즈 변환 이미지
                 .createdAt(product.getCreatedAt())
                 .build();
     }
