@@ -50,6 +50,9 @@ dependencies {
     // DEVTOOL
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
 
+    // WebFlux
+    implementation 'org.springframework.boot:spring-boot-starter-webflux'
+
     //WEB SOCKET
     implementation 'org.springframework.boot:spring-boot-starter-websocket'
 

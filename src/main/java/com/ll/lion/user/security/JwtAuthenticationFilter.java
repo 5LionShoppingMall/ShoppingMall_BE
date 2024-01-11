@@ -48,7 +48,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                         .httpOnly(true)
                         .path("/")
                         .secure(true)
-                        .sameSite("None") // SameSite 설정
+                        .domain(".lionshop.me")
                         .build();
 
                 response.addHeader("Set-Cookie", newAccessTokenCookie.toString());

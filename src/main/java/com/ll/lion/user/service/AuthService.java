@@ -70,8 +70,8 @@ public class AuthService {
         ResponseCookie accessTokenCookie = ResponseCookie.from("accessToken", accessToken)
                 .httpOnly(true)
                 .path("/")
-                .domain(".lionshop.me")
                 .secure(true)
+                .domain(".lionshop.me")
                 .build();
 
         ResponseCookie refreshTokenCookie = ResponseCookie.from("refreshToken", refreshToken)
