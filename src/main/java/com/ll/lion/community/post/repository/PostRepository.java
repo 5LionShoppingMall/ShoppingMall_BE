@@ -13,4 +13,7 @@ public interface PostRepository extends JpaRepository<Post, Long>, PostRepositor
 
     // 모든 게시글 작성일시가 가장 최근인 순서로 조회
     List<Post> findAllByOrderByCreatedAtDesc();
+
+    Page<Post> findAllByOrderByCreatedAtDesc(Pageable sortedPageable);
+    Page<Post> findAllByOrderByLikesCountDesc(Pageable sortedPageable);
 }
