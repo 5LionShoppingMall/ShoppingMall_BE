@@ -15,7 +15,7 @@ import java.util.stream.IntStream;
 
 @Component
 @RequiredArgsConstructor
-@Profile("dev")
+//@Profile("dev")
 public class ProductInit implements ApplicationRunner {
     private final ProductService productService;
     private final ProductRepository productRepository;
