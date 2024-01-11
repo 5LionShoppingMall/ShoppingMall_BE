@@ -2,7 +2,6 @@ package com.ll.lion;
 
 import com.ll.lion.product.dto.CartDto;
 import com.ll.lion.product.dto.CartItemDto;
-import com.ll.lion.product.entity.CartItem;
 import com.ll.lion.product.entity.Product;
 import com.ll.lion.product.service.CartItemService;
 import com.ll.lion.product.service.CartService;
@@ -92,11 +91,11 @@ public class CartServiceTest {
         CartItemDto dto1 = cartItemService.addCartItem(email ,10L,2);
 
         System.out.println(dto1.getId());
-        System.out.println(dto1.getCart());
+        System.out.println(dto1.getCartId());
 
 //        assertThat(dto1.getId()).as("아이템 생성 확인")
 //                .isEqualTo(1L);
-        assertThat(dto1.getProduct().getPrice()).as("아이템 가격확인")
+        assertThat(dto1.getProductListDto().getPrice()).as("아이템 가격확인")
                 .isEqualTo(1000L);
 
         CartDto cartDto = cartService.getCartByEmail(email);
@@ -113,15 +112,15 @@ public class CartServiceTest {
 
         CartItemDto item = cartItemService.addCartItem(email, 13L, 1);
 
-        List<CartItem> items1 = cartItemService.getCartItems(cart);
+        List<CartItemDto> items1 = cartItemService.getCartItems(cart);
 
         assertThat(items1.size()).as("cart 상품 확인").isEqualTo(1);
 
-        CartItemDto cartItemDto = new CartItemDto(items1.get(0));
+        CartItemDto cartItemDto = items1.get(0);
         cartItemService.deleteItem(email, cartItemDto.getId());
         System.out.printf("delete item id : %d", 1);
 
-        List<CartItem> items2 = cartItemService.getCartItems(cart);
+        List<CartItemDto> items2 = cartItemService.getCartItems(cart);
         assertThat(items2.size()).as("삭제여부 확인 size로 체크").isEqualTo(0);
     }
 
@@ -132,11 +131,11 @@ public class CartServiceTest {
 
         CartItemDto item = cartItemService.addCartItem(email, 16L, 1);
         CartDto cart = cartService.getCartByEmail(email);
-        List<CartItem> items1 = cartItemService.getCartItems(cart);
+        List<CartItemDto> items1 = cartItemService.getCartItems(cart);
 
         assertThat(items1.size()).as("cart 상품 확인").isEqualTo(1);
 
-        CartItemDto item0 = new CartItemDto(items1.get(0));
+        CartItemDto item0 = items1.get(0);
         cartItemService.modifyItem(item0.getId(), 3);
 
         assertThat(cart.getCartItems().get(0).getQuantity()).as("변경된 수량 확인").isEqualTo(3);

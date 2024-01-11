@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -22,6 +23,7 @@ public class CartItemService {
     private final CartItemRepository cartItemRepository;
     private final ProductService productService;
     private final UserService userService;
+
 
     @Transactional
     public CartItemDto addCartItem(String userEmail,
@@ -47,9 +49,11 @@ public class CartItemService {
         cart.removeItem(cartItem);
     }
 
-    public List<CartItem> getCartItems(CartDto cartDto) {
+    public List<CartItemDto> getCartItems(CartDto cartDto) {
         Cart cart = cartDto.toEntity();
-        return cartItemRepository.findAllByCart(cart);
+        return cartItemRepository.findAllByCart(cart).stream()
+                .map(CartItemDto::new)
+                .collect(Collectors.toList());
 
     }
 

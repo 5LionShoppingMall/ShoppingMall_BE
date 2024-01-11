@@ -76,4 +76,8 @@ public class CartService {
         String emailInToken = jwtTokenUtil.getEmail(refreshToken);
         return emailInToken.equals(email);
     }
+
+    public Optional<Cart> getCartById(Long cartId) {
+        return cartRepository.findById(cartId);
+    }
 }

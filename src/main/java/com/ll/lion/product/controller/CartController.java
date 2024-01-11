@@ -34,8 +34,8 @@ public class CartController {
         try {
             String email = decodedURL(encodedEmail);
             CartDto cartDto1 = cartService.getCartByEmail(email);
-            List<CartItem> list = cartItemService.getCartItems(cartDto1);
-            ResponseDto<CartItem> responseDto = new ResponseDto<CartItem>(
+            List<CartItemDto> list = cartItemService.getCartItems(cartDto1);
+            ResponseDto<CartItemDto> responseDto = new ResponseDto<CartItemDto>(
                     HttpStatus.OK.value(),
                     "카트 및 카트 아이템 불러오기 성공",
                     null, list, null);
@@ -81,9 +81,9 @@ public class CartController {
             }
 
             CartItemDto cartItemDto = cartItemService.modifyItem(itemId, quantity);
-            ResponseDto<CartItem> responseDto = new ResponseDto<>(HttpStatus.OK.value(),
+            ResponseDto<CartItemDto> responseDto = new ResponseDto<>(HttpStatus.OK.value(),
                     "아이템 수정 완료", null, null,
-                    cartItemDto.toEntity());
+                    cartItemDto);
             return ResponseEntity.ok(responseDto);
         }catch(Exception e){
             ResponseDto<CartItem> responseDto = ResponseDto.<CartItem>builder().error(e.getMessage()).build();
