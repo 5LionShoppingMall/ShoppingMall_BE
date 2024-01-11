@@ -9,6 +9,7 @@ import com.ll.lion.common.dto.ResponseDto;
 import com.ll.lion.common.entity.Image;
 import com.ll.lion.common.service.CloudinaryService;
 import com.ll.lion.common.service.FileService;
+import com.ll.lion.community.post.entity.Post;
 import com.ll.lion.product.dto.*;
 import com.ll.lion.product.entity.Product;
 import com.ll.lion.product.service.ProductService;
@@ -21,6 +22,7 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -70,7 +72,8 @@ public class ProductController {
                                            @RequestPart(value = "files", required = false) List<MultipartFile> multipartFiles,
                                            @RequestParam(value = "imagesJson", required = false) String imagesJson,
                                            @RequestParam(value = "deletedImages", required = false) String deletedImagesJson,
-                                           @RequestPart(value = "productInfo") @Valid ProductRequestDto reqDto) throws JsonProcessingException {
+                                           @RequestPart(value = "productInfo") @Valid ProductRequestDto reqDto)
+            throws JsonProcessingException {
 
         List<Image> images = parseImagesJson(imagesJson);
         List<Image> deletedImages = parseImagesJson(deletedImagesJson);
@@ -120,7 +123,8 @@ public class ProductController {
     @GetMapping("/list")
     public ResponseEntity<?> productMain(Pageable pageable) {
         Page<Product> productEntities = productService.findPageList(pageable);
-        List<ProductListDto> productDtos = productEntities.stream().map(ProductListDto::from).collect(Collectors.toList());
+        List<ProductListDto> productDtos = productEntities.stream().map(ProductListDto::from)
+                .collect(Collectors.toList());
         Page<ProductListDto> pageProduct = new PageImpl<>(productDtos, pageable, productEntities.getTotalElements());
 
         return ResponseEntity.ok(new ResponseDto<>(
@@ -156,5 +160,21 @@ public class ProductController {
                         HttpStatus.UNAUTHORIZED.value(),
                         null, "로그인 정보가 없습니다.",
                         null, null));
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<?> getPostsByKeyword(@RequestParam String keyword,
+                                                           @PageableDefault(size = 9) Pageable pageable) {
+        Page<Product> products = productService.findPostsByKeyword(keyword, pageable);
+
+        List<ProductListDto> productDtos = products.stream().map(ProductListDto::from)
+                .collect(Collectors.toList());
+
+        Page<ProductListDto> pageProduct = new PageImpl<>(productDtos, pageable, products.getTotalElements());
+
+        return ResponseEntity.ok(new ResponseDto<>(
+                HttpStatus.OK.value(),
+                "리스트 조회 성공", null,
+                null, new ProductPageDto<>(pageProduct)));
     }
 }

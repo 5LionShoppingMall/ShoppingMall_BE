@@ -6,6 +6,7 @@ import com.ll.lion.common.exception.DataNotFoundException;
 import com.ll.lion.common.exception.FileHandlingException;
 import com.ll.lion.common.repository.ImageRepository;
 import com.ll.lion.common.service.FileService;
+import com.ll.lion.community.post.entity.Post;
 import com.ll.lion.product.entity.Product;
 import com.ll.lion.product.exception.DataInsertionFailureException;
 import com.ll.lion.product.repository.ProductRepository;
@@ -140,5 +141,9 @@ public class ProductService {
             fileService.deleteImage(image.getImageId());
             imageRepository.delete(image);
         }
+    }
+
+    public Page<Product> findPostsByKeyword(String keyword, Pageable pageable) {
+        return productRepository.findAllByKeyword(pageable, keyword);
     }
 }
