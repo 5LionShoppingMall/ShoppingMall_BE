@@ -3,6 +3,7 @@ package com.ll.lion.user.security;
 import io.jsonwebtoken.JwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -47,7 +48,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                         .httpOnly(true)
                         .path("/")
                         .secure(true)
-                        .domain(".lionshop.me")
+                        .sameSite("None") // SameSite 설정
                         .build();
 
                 response.addHeader("Set-Cookie", newAccessTokenCookie.toString());
