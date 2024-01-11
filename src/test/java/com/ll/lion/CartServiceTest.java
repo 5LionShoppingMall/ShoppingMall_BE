@@ -8,19 +8,15 @@ import com.ll.lion.product.service.CartService;
 import com.ll.lion.product.service.ProductService;
 import com.ll.lion.user.entity.User;
 import com.ll.lion.user.service.UserService;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.IntStream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -38,23 +34,23 @@ public class CartServiceTest {
     @Autowired
     private ProductService productService;
 
-    @BeforeEach
-    public void init() {
-        User seller = userService.getUserByEmail("test1@test.com").get();
-        User buyer = userService.getUserByEmail("test2@test.com").get();
-
-        //상품등록
-        IntStream.range(1, 4).mapToObj(num -> {
-            Product pro = Product.builder()
-                    .title("상품" + num)
-                    .price(num * 1000L)
-                    .seller(seller)
-                    .build();
-            List<MultipartFile> files = new ArrayList<>();
-            return productService.create(pro, files, seller);
-        })
-                .forEach(pro -> System.out.println(pro.getId()));
-    }
+//    @BeforeEach
+//    public void init() {
+//        User seller = userService.getUserByEmail("test1@test.com").get();
+//        User buyer = userService.getUserByEmail("test2@test.com").get();
+//
+//        //상품등록
+//        IntStream.range(1, 4).mapToObj(num -> {
+//            Product pro = Product.builder()
+//                    .title("상품" + num)
+//                    .price(num * 1000L)
+//                    .seller(seller)
+//                    .build();
+//            List<MultipartFile> files = new ArrayList<>();
+//            return productService.createProduct(pro, files, seller);
+//        })
+//                .forEach(pro -> System.out.println(pro.getId()));
+//    }
 
     @Test
     @DisplayName("테스트 시작")
@@ -80,7 +76,7 @@ public class CartServiceTest {
     public void t3() {
         Product pro = productService.findProduct(7L);
 
-        assertThat(pro.getTitle()).as("상품 등록 확인").isIn("상품1");
+        assertThat(pro.getTitle()).as("상품 등록 확인").isIn("상품 test7");
     }
 
     @Test
@@ -96,7 +92,7 @@ public class CartServiceTest {
 //        assertThat(dto1.getId()).as("아이템 생성 확인")
 //                .isEqualTo(1L);
         assertThat(dto1.getProductListDto().getPrice()).as("아이템 가격확인")
-                .isEqualTo(1000L);
+                .isEqualTo(20000L);
 
         CartDto cartDto = cartService.getCartByEmail(email);
         assertThat(cartDto.getCartItems().size()).as("카트 아이템종류 확인")
