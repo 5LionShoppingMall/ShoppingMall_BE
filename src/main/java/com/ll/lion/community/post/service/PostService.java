@@ -8,6 +8,8 @@ import com.ll.lion.community.post.repository.PostRepository;
 import com.ll.lion.user.entity.User;
 import com.ll.lion.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -93,4 +95,9 @@ public class PostService {
     public long count() {
         return postRepository.count();
     }
+
+    public Page<Post> findPostsByKeyword(String keyword, Pageable pageable) {
+         return postRepository.findAllByKeyword(pageable, keyword);
+    }
+
 }

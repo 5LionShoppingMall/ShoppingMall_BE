@@ -1,12 +1,16 @@
 package com.ll.lion.community.post.controller;
 
 import com.ll.lion.common.dto.ResponseDto;
+import com.ll.lion.community.post.dto.post.PostDto;
 import com.ll.lion.community.post.dto.post.PostReqDto;
 import com.ll.lion.community.post.dto.post.PostRespDto;
 import com.ll.lion.community.post.entity.Post;
 import com.ll.lion.community.post.service.PostService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -91,4 +95,11 @@ public class PostController {
             return ResponseEntity.badRequest().body(responseDto);
         }
     }
+
+    @GetMapping("/search")
+    public ResponseEntity<Page<Post>> getPostsByKeyword(@RequestParam String keyword, @PageableDefault(size = 9) Pageable pageable) {
+        Page<Post> posts = postService.findPostsByKeyword(keyword, pageable);
+        return ResponseEntity.ok(posts);
+    }
+
 }
