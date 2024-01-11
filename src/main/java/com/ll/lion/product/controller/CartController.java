@@ -6,10 +6,10 @@ import com.ll.lion.product.dto.CartItemDto;
 import com.ll.lion.product.entity.CartItem;
 import com.ll.lion.product.service.CartItemService;
 import com.ll.lion.product.service.CartService;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,7 +22,6 @@ public class CartController {
     private final CartService cartService;
     private final CartItemService cartItemService;
 
-    @PreAuthorize("isAuthenticated()")
     @GetMapping("/{email}")
     public ResponseEntity<?> showCart(@PathVariable("email") String email) {
 
@@ -40,15 +39,41 @@ public class CartController {
         }
     }
 
-    @PreAuthorize("isAuthenticated()")
     @PostMapping("/{email}")
     public ResponseEntity<?> addCartItem(@PathVariable("email") String email,
                                          @RequestParam(value = "proId") Long proId,
-                                         @RequestParam(value = "q") int quantity){
+                                         @RequestParam(value = "q") int quantity,
+                                         HttpServletRequest req){
         try{
+            if(!cartService.confirmUser(req, email)){
+                throw new RuntimeException("사용자가 일치하지 않습니다.");
+            }
+
             CartItemDto cartItemDto = cartItemService.addCartItem(email, proId, quantity);
-            ResponseDto<CartItem> responseDto = new ResponseDto<>(HttpStatus.OK.value(),
+            ResponseDto<CartItemDto> responseDto = new ResponseDto<>(HttpStatus.OK.value(),
                     "아이템 카트에 추가 완료", null, null,
+                    cartItemDto);
+            return ResponseEntity.ok(responseDto);
+        }catch(Exception e){
+            ResponseDto<CartItemDto> responseDto = ResponseDto.<CartItemDto>builder().error(e.getMessage()).build();
+            return ResponseEntity.badRequest().body(responseDto);
+        }
+    }
+
+    @PutMapping("/{email}")
+    public ResponseEntity<?> modifyCartItem(@PathVariable("email") String email,
+                                         @RequestParam(value = "itemId") Long itemId,
+                                         @RequestParam(value = "q") int quantity,
+                                            HttpServletRequest req){
+
+        try{
+            if(!cartService.confirmUser(req, email)){
+                throw new RuntimeException("사용자가 일치하지 않습니다.");
+            }
+
+            CartItemDto cartItemDto = cartItemService.modifyItem(itemId, quantity);
+            ResponseDto<CartItem> responseDto = new ResponseDto<>(HttpStatus.OK.value(),
+                    "아이템 수정 완료", null, null,
                     cartItemDto.toEntity());
             return ResponseEntity.ok(responseDto);
         }catch(Exception e){
@@ -57,17 +82,20 @@ public class CartController {
         }
     }
 
-    @PreAuthorize("isAuthenticated()")
-    @PutMapping("/{email}")
-    public ResponseEntity<?> modifyCartItem(@PathVariable("email") String email,
-                                         @RequestParam(value = "proId") Long proId,
-                                         @RequestParam(value = "q") int quantity){
+    @DeleteMapping("/{email}")
+    public ResponseEntity<?> deleteCartItem(@PathVariable("email") String email,
+                                            @RequestParam(value = "itemId") Long itemId,
+                                            HttpServletRequest req){
 
         try{
-            CartItemDto cartItemDto = cartItemService.modifyItem(proId, quantity);
+            if(!cartService.confirmUser(req, email)){
+                throw new RuntimeException("사용자가 일치하지 않습니다.");
+            }
+
+            cartItemService.deleteItem(itemId);
             ResponseDto<CartItem> responseDto = new ResponseDto<>(HttpStatus.OK.value(),
-                    "아이템 수정 완료", null, null,
-                    cartItemDto.toEntity());
+                    "아이템 삭제 완료", null, null,
+                    null);
             return ResponseEntity.ok(responseDto);
         }catch(Exception e){
             ResponseDto<CartItem> responseDto = ResponseDto.<CartItem>builder().error(e.getMessage()).build();

@@ -40,16 +40,16 @@ public class CartItemService {
 
         CartDto cartDto = cartService.getCartByEmail(userEmail);
         Product product = productService.findProduct(productId);
-        CartItem item = new CartItem(cartDto.toEntity(), product, 1);
+        CartItem item = new CartItem(cartDto.toEntity(), product, quantity);
         cartService.addItem(item);
 //        CartItem item = cartItemRepository.save(cartItem); // 불필요
         return new CartItemDto(item);
     }
 
     @Transactional
-    public void deleteItem(CartItemDto item) {
-        CartItem cartItem = cartItemRepository.findById(item.getId())
-                .orElseThrow(RuntimeException::new);
+    public void deleteItem(Long cartItemId) {
+        CartItem cartItem = cartItemRepository.findById(cartItemId)
+                .orElseThrow(() -> new IllegalArgumentException("잘못된 입력입니다."));
         cartItemRepository.delete(cartItem); // delete는 ophanremoval 설정해둠.
     }
 
@@ -59,13 +59,13 @@ public class CartItemService {
     }
 
     @Transactional
-    public CartItemDto modifyItem(Long id, int quantity) throws RuntimeException {
+    public CartItemDto modifyItem(Long cartItemId, int quantity){
         // 수량입력 오류 처리
         if (quantity < 0 ){
             throw new IllegalArgumentException("잘못된 수량입니다.");
         }
 
-        CartItem cartItem = cartItemRepository.findById(id)
+        CartItem cartItem = cartItemRepository.findById(cartItemId)
                 .orElseThrow(()-> new IllegalArgumentException("상품이 없습니다."));
         cartItem.setQuantity(quantity);
         CartItem item =cartItemRepository.save(cartItem);

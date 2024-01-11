@@ -47,6 +47,7 @@ public class CartService {
                 .orElseThrow(() -> new NoSuchElementException("카트에 아이템이 없습니다."));
     }
 
+    @Transactional
     public CartDto getCartByEmail(String email) throws RuntimeException {
         User user = userService.getUserByEmail(email)
                 .orElseThrow(() -> new RuntimeException("유저가 없습니다."));
@@ -54,6 +55,7 @@ public class CartService {
         return new CartDto(createCartIfEmpty(user));
     }
 
+    @Transactional
     public Cart createCartIfEmpty(User user){
             // 카트가 안 만들어져 있을 경우 새로 생성
             Optional<Cart> cart = cartRepository.findByUser(user);
@@ -66,12 +68,13 @@ public class CartService {
         cartRepository.save(cart.addItem(item));
     }
 
-    @Transactional
-    public void deleteItem(CartItem item) {
-        Cart cart = item.getCart();
-        cart.getCartItems().remove(item);
-        cartRepository.save(cart);
-    }
+    // 불필요.
+//    @Transactional
+//    public void deleteItem(CartItem item) {
+//        Cart cart = item.getCart();
+//        cart.getCartItems().remove(item);
+//        cartRepository.save(cart);
+//    }
 
     //현재 사용자와 email이 일치하는지 확인
     public boolean confirmUser(HttpServletRequest request, String email){

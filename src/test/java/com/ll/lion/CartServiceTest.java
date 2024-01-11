@@ -120,7 +120,7 @@ public class CartServiceTest {
         assertThat(items1.size()).as("cart 상품 확인").isEqualTo(1);
 
         CartItemDto cartItemDto = new CartItemDto(items1.get(0));
-        cartItemService.deleteItem(cartItemDto);
+        cartItemService.deleteItem(cartItemDto.getId());
         System.out.printf("delete item id : %d", 1);
 
         List<CartItem> items2 = cartItemService.getCartItems(cart);
