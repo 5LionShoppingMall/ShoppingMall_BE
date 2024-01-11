@@ -49,10 +49,6 @@ public class OAuth2Controller {
 
         String redirectUrl = oAuthService.getUrlAndRemoveCookie(request, response);
 
-        if (oAuthService.isNullExistInProfile(email)) {
-           return "redirect:" + redirectUrl + "/mypage/profile/edit";//수정폼으로 redirect
-        }
-
         return "redirect:" + redirectUrl;
     }
 

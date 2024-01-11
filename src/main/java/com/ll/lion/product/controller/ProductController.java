@@ -157,4 +157,15 @@ public class ProductController {
                         null, "로그인 정보가 없습니다.",
                         null, null));
     }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<Product>> findProductsByKeyword(
+            @RequestParam String keyword,
+            @RequestParam(required = false) Long lastId,
+            @RequestParam(defaultValue = "10") int limit) {
+
+        List<Product> products = productService.findProductsByKeywordAfterId(keyword, lastId, limit);
+        return ResponseEntity.ok(products);
+    }
+
 }

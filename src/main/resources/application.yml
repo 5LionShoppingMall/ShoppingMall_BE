@@ -4,11 +4,11 @@ spring:
       client:
         registration:
           kakao:
-            clientId: ON_SECRET
+            client-id: ON_SECRET
             scope: profile_nickname, profile_image
             client-name: Kakao
             authorization-grant-type: authorization_code
-            redirect-uri: '${custom.site.baseUrl}/{action}/oauth2/code/{registrationId}'
+            redirect-uri: 'http://localhost:8082/{action}/oauth2/code/{registrationId}'
           google:
             client-id: ON_SECRET
             client-secret: ON_SECRET
@@ -25,6 +25,7 @@ spring:
             token-uri: https://kauth.kakao.com/oauth/token
             user-info-uri: https://kapi.kakao.com/v2/user/me
             user-name-attribute: id
+
   profiles:
     group:
       prod:

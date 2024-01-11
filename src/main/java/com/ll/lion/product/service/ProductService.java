@@ -141,4 +141,8 @@ public class ProductService {
             imageRepository.delete(image);
         }
     }
+
+    public List<Product> findProductsByKeywordAfterId(String keyword, Long lastId, int limit) {
+        return productRepository.findProductsByKeywordAfterId(keyword, lastId, limit);
+    }
 }

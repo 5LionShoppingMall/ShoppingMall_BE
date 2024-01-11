@@ -34,6 +34,9 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         SocialLoginDto socialLoginDto = null;
 
         switch (providerTypeCode) {
+            case "KAKAO" :
+                socialLoginDto = extractKakaoData(providerTypeCode, oAuth2User);
+                break;
             case "GOOGLE":
                 socialLoginDto = extractGoogleData(providerTypeCode, oAuth2User);
                 break;
@@ -70,6 +73,19 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         String providerId = providerTypeCode + "__%s".formatted(oauthId); // 비밀번호로 설정
         String email = (String) attributes.get("email");
         if(email == null) email = nickname + "@" + providerTypeCode;
+
+        return new SocialLoginDto(providerTypeCode, email, profileImageUrl, providerId, nickname);
+    }
+
+    public SocialLoginDto extractKakaoData(String providerTypeCode, OAuth2User oAuth2User) {
+        String oauthId = oAuth2User.getName();
+        Map<String, Object> attributes = oAuth2User.getAttributes();
+        Map attributesProperties = (Map) attributes.get("properties");
+
+        String nickname = (String) attributesProperties.get("nickname");
+        String profileImageUrl = (String) attributesProperties.get("profile_image");
+        String providerId = providerTypeCode + "__" + oauthId;
+        String email = nickname + "@" + providerTypeCode;
 
         return new SocialLoginDto(providerTypeCode, email, profileImageUrl, providerId, nickname);
     }
