@@ -52,7 +52,7 @@
 <hr>
 
 - **프론트엔드 : Vercel, 백엔드: NCP**</br>
-- [미디엄 클론 배포 링크](https://www.lionshop.me)
+- [LION 배포 링크](https://www.lionshop.me)
 - **테스트용 아이디** : <br>
  test1 ~ test5 : 유저
  / ex) 아이디 : test1@test.com / 비밀번호 : test1
