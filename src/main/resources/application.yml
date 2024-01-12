@@ -6,6 +6,11 @@ spring:
         - security
         - file
         - mail
+      dev:
+        - db
+        - security
+        - file
+        - m
       test:
         - test
         - security
