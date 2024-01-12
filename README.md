@@ -26,9 +26,7 @@
 <hr>
 
 ## ERD
-
-![image](https://github.com/Son-Gyeongi/readmeTest/assets/78200199/8bec32b9-3e72-46a8-9ed3-abf56503ebe7)
-
+![LION_ERD.png](LION_ERD.png)
 
 ## 4. 기능
 
@@ -45,6 +43,7 @@
 #### :heavy_check_mark: 댓글 CRUD
 #### :heavy_check_mark: 채팅 기능
 #### :heavy_check_mark: 이메일 인증 기능
+#### :heavy_check_mark: 회원 찾기 기능
 #### :heavy_check_mark: 게시글 및 상품 검색 기능
 #### :heavy_check_mark: 게시글 조회수/추천수 기능
 
