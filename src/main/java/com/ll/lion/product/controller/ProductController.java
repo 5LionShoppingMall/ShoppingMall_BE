@@ -133,6 +133,7 @@ public class ProductController {
                 null, new ProductPageDto<>(pageProduct)));
     }
 
+
     @PostMapping(value = "/register", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> registerProduct(@AuthenticationPrincipal UserDetails userDetails,
                                              @RequestPart(value = "files", required = false) List<MultipartFile> multipartFile,

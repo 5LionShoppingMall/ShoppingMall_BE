@@ -4,13 +4,22 @@ spring:
       prod:
         - db
         - security
-        - mail
         - file
+        - mail
       dev:
-        - devdb
+        - db
         - security
-        - mail
         - file
+        - m
+      test:
+        - test
+        - security
+        - file
+        - mail
+  jackson:
+    serialization:
+      fail-on-empty-beans: false
+
 server:
   port: 8082
 logging:

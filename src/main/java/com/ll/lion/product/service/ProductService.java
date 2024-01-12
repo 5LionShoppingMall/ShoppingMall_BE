@@ -3,16 +3,12 @@ package com.ll.lion.product.service;
 import com.ll.lion.common.entity.Image;
 import com.ll.lion.common.enums.FilePathType;
 import com.ll.lion.common.exception.DataNotFoundException;
-import com.ll.lion.common.exception.FileHandlingException;
 import com.ll.lion.common.repository.ImageRepository;
 import com.ll.lion.common.service.FileService;
-import com.ll.lion.community.post.entity.Post;
 import com.ll.lion.product.entity.Product;
 import com.ll.lion.product.exception.DataInsertionFailureException;
 import com.ll.lion.product.repository.ProductRepository;
 import com.ll.lion.user.entity.User;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.dao.DataAccessException;
@@ -23,10 +19,10 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 
 @Log4j2
 @Service

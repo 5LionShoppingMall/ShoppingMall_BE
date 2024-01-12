@@ -22,7 +22,8 @@ repositories {
 }
 
 dependencies {
-
+    //junit
+    implementation 'org.junit.jupiter:junit-jupiter:5.8.1'
     // Spring Security
     implementation 'org.springframework.boot:spring-boot-starter-security'
     testImplementation 'org.springframework.security:spring-security-test'
@@ -66,6 +67,8 @@ dependencies {
     // TEST
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
+    // assertJ test
+    testImplementation 'org.assertj:assertj-core:3.24.2'
     // Cloudinary
     // https://mvnrepository.com/artifact/com.cloudinary/cloudinary-core
     implementation 'com.cloudinary:cloudinary-core:1.36.0'

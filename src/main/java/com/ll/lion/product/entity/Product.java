@@ -5,26 +5,12 @@ import com.ll.lion.common.entity.DateEntity;
 import com.ll.lion.common.entity.Image;
 import com.ll.lion.community.like.entity.Like;
 import com.ll.lion.user.entity.User;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+import lombok.*;
+import lombok.experimental.SuperBuilder;
+
 import java.util.ArrayList;
 import java.util.List;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.experimental.SuperBuilder;
 
 @Entity
 @Getter
@@ -44,6 +30,7 @@ public class Product extends DateEntity {
     private Long price;
 
     @Setter
+    @Builder.Default
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Image> images = new ArrayList<>();
 
@@ -58,11 +45,13 @@ public class Product extends DateEntity {
     @JoinColumn(name = "seller_id", nullable = false)
     private User seller;
 
+    @Builder.Default
     @OneToMany(mappedBy = "product")
-    private List<Like> likes;
+    private List<Like> likes = new ArrayList<>();
 
+    @Builder.Default
     @OneToMany(mappedBy = "product")
-    private List<CartItem> cartItems;
+    private List<CartItem> cartItems = new ArrayList<>();
 
     public void addImage(Image image) {
         this.images.add(image);
