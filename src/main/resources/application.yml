@@ -10,15 +10,7 @@ spring:
         - db
         - security
         - file
-        - m
-      test:
-        - test
-        - security
-        - file
         - mail
-  jackson:
-    serialization:
-      fail-on-empty-beans: false
 
 server:
   port: 8082
