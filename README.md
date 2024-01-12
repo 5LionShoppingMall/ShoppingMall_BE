@@ -26,7 +26,7 @@
 <hr>
 
 ## ERD
-![LION_ERD.png](LION_ERD.png)
+![LIONERD.png](LIONERD.png)
 
 ## 4. 기능
 
