@@ -29,7 +29,7 @@ public class ProductDetailDto {
     private LocalDateTime createdAt;
     private UserInfoDto seller;
     private List<Like> likes;
-    private List<CartItem> cartItems;
+    private List<Long> cartItemsId;
 
     public static ProductDetailDto from(final ProductRequestDto dto) {
         return ProductDetailDto.builder()
@@ -58,7 +58,9 @@ public class ProductDetailDto {
                 .createdAt(product.getCreatedAt())
                 .seller(seller)
                 .likes(product.getLikes())
-                .cartItems(product.getCartItems())
+                .cartItemsId(product.getCartItems().stream()
+                        .map(CartItem::getId)
+                        .collect(Collectors.toList()))
                 .build();
     }
 
@@ -80,7 +82,7 @@ public class ProductDetailDto {
                 .createdAt(this.createdAt)
                 .seller(this.seller != null ? this.seller.toEntity() : null)
                 .likes(this.likes)
-                .cartItems(this.cartItems)
+                // cartItems 순환참조로 인해 임시 삭제
                 .build();
     }
 }

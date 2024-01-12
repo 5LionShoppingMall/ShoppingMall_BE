@@ -4,13 +4,14 @@ spring:
       prod:
         - db
         - security
-        - mail
         - file
+        - mail
       dev:
-        - devdb
+        - db
         - security
-        - mail
         - file
+        - mail
+
 server:
   port: 8082
 logging:
