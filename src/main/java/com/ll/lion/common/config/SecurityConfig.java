@@ -34,16 +34,13 @@ public class SecurityConfig {
         JwtAuthenticationFilter jwtAuthenticationFilter = new JwtAuthenticationFilter(jwtTokenUtil);
         http
                 .cors(c -> c.configure(http))
-                .csrf((csrf) -> csrf
-                        .ignoringRequestMatchers(new AntPathRequestMatcher("/h2-console/**")))
-                .headers((headers) -> headers
-                        .addHeaderWriter(new XFrameOptionsHeaderWriter(
-                                XFrameOptionsHeaderWriter.XFrameOptionsMode.SAMEORIGIN))) // h2 콘솔 사용 설정
+                .csrf(c -> c.disable())
                 .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .authorizeHttpRequests(a -> a
                         .requestMatchers(
                                 new MvcRequestMatcher(introspector, "/h2-console/**"),
+                                new AntPathRequestMatcher("/**"),
                                 new AntPathRequestMatcher("/welcome"),
                                 new AntPathRequestMatcher("/ws/**"),
                                 new AntPathRequestMatcher("/chatroom/public"),
@@ -51,7 +48,6 @@ public class SecurityConfig {
                                 new AntPathRequestMatcher("/api/users/nickname-exists"),
                                 new AntPathRequestMatcher("/api/users/register"),
                                 new AntPathRequestMatcher("/api/auth/login"),
-                                new AntPathRequestMatcher("/api/auth/logout"),
                                 new AntPathRequestMatcher("/api/auth/token/refresh"),
                                 new AntPathRequestMatcher("/api/auth/confirm-account"),
                                 new AntPathRequestMatcher("/api/users/email-exists"),
