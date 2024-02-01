@@ -1,6 +1,8 @@
 .gradle
 build/
-
+!gradle/wrapper/gradle-wrapper.jar
+!**/src/main/**/build/
+!**/src/test/**/build/
 src/main/resources/application.yml
 *.yml
 
@@ -16,7 +18,8 @@ application-db.yml
 .springBeans
 .sts4-cache
 bin/
-
+!**/src/main/**/bin/
+!**/src/test/**/bin/
 
 ### IntelliJ IDEA ###
 .idea
@@ -24,7 +27,8 @@ bin/
 *.iml
 *.ipr
 out/
-
+!**/src/main/**/out/
+!**/src/test/**/out/
 
 ### NetBeans ###
 /nbproject/private/
