@@ -42,7 +42,7 @@ public class SecurityConfig {
                                 new MvcRequestMatcher(introspector, "/h2-console/**"),
                                 new AntPathRequestMatcher("/**"),
                                 new AntPathRequestMatcher("/welcome"),
-                                new AntPathRequestMatcher("/ws/**"),
+                                new AntPathRequestMatcher("/wss/**"),
                                 new AntPathRequestMatcher("/chatroom/public"),
                                 new AntPathRequestMatcher("/private-message"),
                                 new AntPathRequestMatcher("/api/users/nickname-exists"),
