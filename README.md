@@ -16,7 +16,7 @@
 
 ## 2. 사용한 기술 스택<hr>
 
-* 수정 중
+* 수정 중11
 
 ![오지는 사자 백엔드 기술스택](https://github.com/5LionShoppingMall/ShoppingMall_BE/assets/78200199/882763a3-cd09-41a3-b6c0-d17648369fd1)
 
