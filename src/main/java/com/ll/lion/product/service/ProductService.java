@@ -96,7 +96,6 @@ public class ProductService {
         if (multipartFiles != null && !multipartFiles.isEmpty()) {
             log.info("상품 등록 파일이 있다면?");
             newImages = fileService.uploadImages(multipartFiles, FilePathType.PRODUCT.getValue(), product.getId());
-
         }
 
         if (images != null && !images.isEmpty()) {

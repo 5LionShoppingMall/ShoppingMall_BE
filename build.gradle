@@ -37,9 +37,8 @@ dependencies {
 
     // DB
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-    runtimeOnly 'com.mysql:mysql-connector-j'
-    testRuntimeOnly 'com.mysql:mysql-connector-j'
-    runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
+    implementation 'org.postgresql:postgresql:42.6.0'
+    runtimeOnly 'com.h2database:h2'
 
     // WEB
     implementation 'org.springframework.boot:spring-boot-starter-web'
@@ -86,6 +85,10 @@ dependencies {
     annotationProcessor "jakarta.annotation:jakarta.annotation-api"
     annotationProcessor "jakarta.persistence:jakarta.persistence-api"
 
+}
+
+jar {
+    enabled = false
 }
 
 def querydslSrcDir = 'src/main/generated'

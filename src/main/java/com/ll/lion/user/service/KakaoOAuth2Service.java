@@ -1,7 +1,6 @@
 package com.ll.lion.user.service;
 
 
-
 import com.ll.lion.user.dto.KakaoPropertiesDto;
 import com.ll.lion.user.dto.KakaoTokenResponseDto;
 import com.ll.lion.user.dto.KakaoUserInfoDto;
@@ -47,9 +46,9 @@ public class KakaoOAuth2Service {
     private String redirectUri;
 
 
-    public Mono<KakaoTokenResponseDto> getToken(String code) {String uri = TOKEN_URI + "?grant_type=" + GRANT_TYPE + "&client_id=" + clientId + "&redirect_uri=" + redirectUri
-            + "&code=" + code;
-
+    public Mono<KakaoTokenResponseDto> getToken(String code) {
+        String uri = TOKEN_URI + "?grant_type=" + GRANT_TYPE + "&client_id=" + clientId + "&redirect_uri=" + redirectUri
+                + "&code=" + code;
 
         return webClient.get()
                 .uri(uri)

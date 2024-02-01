@@ -4,7 +4,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ll.lion.common.dto.ImageDto;
-import com.ll.lion.common.dto.RequestImagesDto;
 import com.ll.lion.common.dto.ResponseDto;
 import com.ll.lion.common.entity.Image;
 import com.ll.lion.common.service.CloudinaryService;
